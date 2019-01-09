@@ -1,0 +1,17 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/include/assimp/Compiler
+/include/assimp/port/AndroidJNI
+/include/assimp
+/include/GL
+/include/glad
+/include/GLFW
+/include/glm/detail
+/include/glm
+/include/KHR
+/libs
+/src/deps
+/build/.vs/PracticaFinal/v15
+/build
