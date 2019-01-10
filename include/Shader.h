@@ -23,7 +23,7 @@ class Shader
 
 public:
 	Shader();
-	Shader() = delete;
+	//Shader() = delete;
 	Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
 	uint32_t CreateShader(const char *vertexPath);
 	uint32_t CreateFragment(const char *fragmentPath);

@@ -8,7 +8,6 @@
 #include "Shader.h"
 #include "Utils.h"
 #include "Window.h"
-#include "Buffer.h"
 #include "Camera.h"
 #include "Model.h"
 
@@ -20,16 +19,14 @@ Camera camera(posCamera);
 
 float lastFrame = 0.0f;
 bool firstMouse = true;
-
+Window *window;
 const uint32_t screen_width = 800, screen_height = 600;
 float lastX = (float)screen_width / 2.0f;
 float lastY = (float)screen_height / 2.0f;
 
-static Window* window;
-
 using namespace std;
 
-const char* pathProyecto = "../tests/AG09/";
+const char* pathProyecto = "../tests/PracticaFinal/";
 #pragma region Cabezeras
 void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int32_t height);
 #pragma endregion
@@ -38,45 +35,45 @@ void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int3
 #pragma region Metodos
 
 
-void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int32_t height) {
-	//redimension de pantalla 
-	//Cambio de clip scene a view scene
-	glViewport(0, 0, width, height);
-}
-
-void OnMouse(GLFWwindow* window, double xpos, double ypos) {
-	if (firstMouse) {
-		firstMouse = false;
-		lastX = xpos;
-		lastY = ypos;
-	}
-
-	float xoffset = xpos - lastX;
-	float yoffset = ypos - lastY;
-	lastX = xpos;
-	lastY = ypos;
-	camera.handleMouseMovement(xoffset, yoffset);
-}
-
-
-void OnScroll(GLFWwindow* window, double xoffset, double yoffset) {
-	camera.handleMouseScroll(yoffset);
-}
-
-void HandlerInput(GLFWwindow* window, const double deltaTime) {
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		camera.HandleKeyboard(Camera::Movement::Forward, deltaTime);
-	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-		camera.HandleKeyboard(Camera::Movement::Backward, deltaTime);
-	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		camera.HandleKeyboard(Camera::Movement::Left, deltaTime);
-	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		camera.HandleKeyboard(Camera::Movement::Right, deltaTime);
-	}
-}
+//void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int32_t height) {
+//	//redimension de pantalla 
+//	//Cambio de clip scene a view scene
+//	glViewport(0, 0, width, height);
+//}
+//
+//void OnMouse(GLFWwindow* window, double xpos, double ypos) {
+//	if (firstMouse) {
+//		firstMouse = false;
+//		lastX = xpos;
+//		lastY = ypos;
+//	}
+//
+//	float xoffset = xpos - lastX;
+//	float yoffset = ypos - lastY;
+//	lastX = xpos;
+//	lastY = ypos;
+//	camera.handleMouseMovement(xoffset, yoffset);
+//}
+//
+//
+//void OnScroll(GLFWwindow* window, double xoffset, double yoffset) {
+//	camera.handleMouseScroll(yoffset);
+//}
+//
+//void HandlerInput(GLFWwindow* window, const double deltaTime) {
+//	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+//		camera.HandleKeyboard(Camera::Movement::Forward, deltaTime);
+//	}
+//	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+//		camera.HandleKeyboard(Camera::Movement::Backward, deltaTime);
+//	}
+//	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+//		camera.HandleKeyboard(Camera::Movement::Left, deltaTime);
+//	}
+//	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+//		camera.HandleKeyboard(Camera::Movement::Right, deltaTime);
+//	}
+//}
 
 
 
@@ -86,8 +83,9 @@ int Inicializacion() {
 		glfwTerminate();
 		return -1;
 	}
-	//window = Window(screen_width, screen_height);
 	window = Window::GetInstance(screen_width, screen_height);
+
+	//window = Window(screen_width, screen_height);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		cout << "Error initializing GLAD" << endl;
 		return -1;
@@ -146,21 +144,21 @@ int main(int argc, char* argv[]) {
 
 	Shader shader = Shader(vertexpath, fragmentPath1);
 	int program = shader.GetIdProgram();
-	Model object("../assets/obj/Freigther_BI_Export.obj");
+	Model object("../assets/obj/Freighter/Freigther_BI_Export.obj");
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	//Bucle inicial donde se realiza toda la accion del motor
-	while (!glfwWindowShouldClose(window.GetWindow())) {
+	while (!glfwWindowShouldClose(window->GetWindow())) {
 		float currentFrame = glfwGetTime();
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-		HandlerInput(window.GetWindow(), deltaTime);
-		window.HandlerInput();
+		window->HandlerInput(deltaTime);
+		window->HandlerInput();
 
 		Render(shader, object);
 
-		glfwSwapBuffers(window.GetWindow());
+		glfwSwapBuffers(window->GetWindow());
 		glfwPollEvents();
 	}
 	glfwTerminate();

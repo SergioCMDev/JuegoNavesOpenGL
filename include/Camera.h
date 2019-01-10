@@ -24,7 +24,7 @@ public:
 		Left = 2,
 		Right = 3,
 	};
-	 Camera(); //Empty Constructor
+	Camera(); //Empty Constructor
 	~Camera(); //Destructor
 
 	//Constructor with Vectors
@@ -39,8 +39,6 @@ public:
 	//returns current view matrix
 	glm::mat4 GetViewMatrix() const;
 
-	//returns current view matrix
-	glm::mat4 GetViewMatrixOwnCalculate() const;
 
 	//returns the fov
 	float GetFOV() const;
@@ -68,7 +66,8 @@ private:
 	//calculate the lookAt View matrix
 	glm::mat4 LookAt() const;
 	//calculate the lookAt View matrix 
-
-	glm::mat4 LookAtOwnCalculate() const;
+	glm::vec3 positionDefault = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec3 upDefault = glm::vec3(0.0f, 1.0f, 0.0f);
+	
 };
 #endif
