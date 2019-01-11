@@ -137,6 +137,11 @@ struct Quad {
 	uint32_t* VAO;
 };
 
+struct ObjectsModels {
+	Model model;
+	Shader *shader;
+};
+
 using namespace std;
 
 #pragma endregion
@@ -148,7 +153,7 @@ void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int3
 	//Cambio de clip scene a view scene
 	glViewport(0, 0, width, height);
 }
-//
+
 void OnMouse(GLFWwindow* window, double xpos, double ypos) {
 	if (firstMouse) {
 		firstMouse = false;
@@ -162,7 +167,7 @@ void OnMouse(GLFWwindow* window, double xpos, double ypos) {
 	lastY = ypos;
 	camera.handleMouseMovement(xoffset, yoffset);
 }
-//
+
 
 void OnScroll(GLFWwindow* window, double xoffset, double yoffset) {
 	camera.handleMouseScroll(yoffset);
@@ -370,7 +375,6 @@ int Inicializacion() {
 	return 1;
 };
 
-
 void RenderFigure(const Shader & shader, glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model, const uint32_t &VAO, const uint32_t &numeroElementos)
 {
 	shader.Set("projection", projection);
@@ -380,50 +384,50 @@ void RenderFigure(const Shader & shader, glm::mat4 &projection, glm::mat4 &view,
 	glDrawElements(GL_TRIANGLES, numeroElementos, GL_UNSIGNED_INT, 0);
 }
 
-
-
 void Render(uint32_t CubeVAO, uint32_t SphereVAO,
-	const Shader& shaderCube, const Shader& shaderlight,
-	const uint32_t numberOfElements, uint32_t texture1, uint32_t texture2, Camera camera, Quad quad) {
+	const Shader& shaderCube, const Shader& shaderlight, const Shader& shaderNave,
+	const uint32_t numberOfElements, uint32_t texture1, uint32_t texture2,
+	//Quad quad, ObjectsModels modelObjs[], Model obj) {
+	Quad quad, Model obj) {
 	//Renderizamos la pantalla con un color basandonos en el esquema RGBA(transparencia)
 	//Si lo quitamos, no borra nunca la pantalla
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	uint32_t elementosParaDibujarEsfera = 121 * 8;
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	//uint32_t elementosParaDibujarEsfera = 121 * 8;
 
-	//Dibujamos esferas de luz
+	////Dibujamos esferas de luz
 	glm::mat4 view = camera.GetViewMatrix();
-	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), 800.0f / 600.0f, 0.1f, 60.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), (float)screen_width / screen_height, 0.1f, 60.0f);
 
-	shaderlight.Use();
-	mat4 model = mat4(1.0f);
-	shaderlight.Set("color", vec3(0.45f, 0.45f, 0.1f));
-	model = translate(model, pointLightPositions[0]);
-	model = scale(model, vec3(0.2f));
+	//shaderlight.Use();
+	//mat4 model = mat4(1.0f);
+	//shaderlight.Set("color", vec3(0.45f, 0.45f, 0.1f));
+	//model = translate(model, pointLightPositions[0]);
+	//model = scale(model, vec3(0.2f));
 
-	RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
+	//RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
 
-	model = mat4(1.0f);
-	shaderlight.Set("color", vec3(0.1f, 0.1f, 1.1f));
-	model = translate(model, pointLightPositions[1]);
-	model = scale(model, vec3(0.2f));
+	//model = mat4(1.0f);
+	//shaderlight.Set("color", vec3(0.1f, 0.1f, 1.1f));
+	//model = translate(model, pointLightPositions[1]);
+	//model = scale(model, vec3(0.2f));
 
-	RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
-
-
-	model = mat4(1.0f);
-	shaderlight.Set("color", vec3(0.2f, 1.0f, 0.1f));
-	model = translate(model, spotLightPositions[0]);
-	model = scale(model, vec3(0.4f));
-
-	RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
+	//RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
 
 
-	model = mat4(1.0f);
-	shaderlight.Set("color", vec3(1.0f, 0.15f, 0.1f));
-	model = translate(model, spotLightPositions[1]);
-	model = scale(model, vec3(0.4f));
+	//model = mat4(1.0f);
+	//shaderlight.Set("color", vec3(0.2f, 1.0f, 0.1f));
+	//model = translate(model, spotLightPositions[0]);
+	//model = scale(model, vec3(0.4f));
 
-	RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
+	//RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
+
+
+	//model = mat4(1.0f);
+	//shaderlight.Set("color", vec3(1.0f, 0.15f, 0.1f));
+	//model = translate(model, spotLightPositions[1]);
+	//model = scale(model, vec3(0.4f));
+
+	//RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	//Dibujamos Suelo
@@ -431,89 +435,112 @@ void Render(uint32_t CubeVAO, uint32_t SphereVAO,
 
 	quad.shader->Use();
 	quad.shader->Set("quadTexture", 4);
-	model = mat4(1.0f);
+	glm::mat4 model = mat4(1.0f);
 	model = glm::translate(model, vec3(0.0f, -4.0f, 0.0f));
 	model = glm::scale(model, vec3(10.0f));
 	//RenderFigure(quad.shader, projection, view, model, *quad.VAO, 6);
 	RenderFigure(*quad.shader, projection, view, model, *quad.VAO, quad.numeroElementosParaDibujar);
 	///////////////////////////////////////////////////////////////////////
+	//for (size_t i = 0; i < 1; i++)
+	//{
+	//	glm::mat4 model(1.0f);
+	//	modelObjs[i].shader->Use();
+	//	modelObjs[i].shader->Set("projection", projection);
+	//	modelObjs[i].shader->Set("view", view);
+	//	model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f));
+	//	model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+	//	modelObjs[i].shader->Set("model", model);
 
-	//Dibujamos los cubos 
-	shaderCube.Use();
-	shaderCube.Set("projection", projection);
-	shaderCube.Set("view", view);
+	//	modelObjs[0].model.Draw(*modelObjs[i].shader);
+	//}
 
-	shaderCube.Set("viewPos", camera.GetPosition());
+	//Dibujamos nave
+	model = mat4(1.0f);
+	shaderNave.Use();
+	shaderNave.Set("projection", projection);
+	shaderNave.Set("view", view);
+	model = glm::translate(model, vec3(0.0f, -3.0f, 0.0f));
+	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+	shaderNave.Set("model", model);
 
-	//DirectionalLight 1
-	shaderCube.Set("dirLight.direction", -0.2f, -0.1f, -0.3f);
-	shaderCube.Set("dirLight.ambient", 0.1f, 0.6f, 0.6f);
-	shaderCube.Set("dirLight.diffuse", 0.3f, 0.3f, 0.3f);
-	shaderCube.Set("dirLight.specular", 0.5f, 0.5f, 0.5f);
-
-
-	//PointLight 0
-	shaderCube.Set("pointLights[0].position", pointLightPositions[0]);
-	shaderCube.Set("pointLights[0].ambient", 0.45f, 0.45f, 0.1f);
-	shaderCube.Set("pointLights[0].diffuse", 0.5f, 0.5f, 0.5f);
-	shaderCube.Set("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
-	shaderCube.Set("pointLights[0].constant", 1.0f);
-	shaderCube.Set("pointLights[0].linear", 0.09f);
-	shaderCube.Set("pointLights[0].cuadratic", 0.032f);
-
-	//PointLight 1
-	shaderCube.Set("pointLights[1].position", pointLightPositions[1]);
-	shaderCube.Set("pointLights[1].ambient", 0.1f, 0.1f, 1.1f);
-	shaderCube.Set("pointLights[1].diffuse", 0.5f, 0.5f, 0.5f);
-	shaderCube.Set("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
-	shaderCube.Set("pointLights[1].constant", 1.0f);
-	shaderCube.Set("pointLights[1].linear", 0.09f);
-	shaderCube.Set("pointLights[1].cuadratic", 0.032f);
+	obj.Draw(shaderNave);
 
 
-	//SpotLight 0
-	shaderCube.Set("spotLights[0].position", spotLightPositions[0]);
-	shaderCube.Set("spotLights[0].direction", -1.0f, 0.0f, -1.0f);
-	shaderCube.Set("spotLights[0].cutOff", cos(radians(20.0f)));
-	shaderCube.Set("spotLights[0].outerCutOff", cos(radians(25.0f)));
-	shaderCube.Set("spotLights[0].linear", 0.09f);
-	shaderCube.Set("spotLights[0].constant", 1.0f);
-	shaderCube.Set("spotLights[0].cuadratic", 0.032f);
-	shaderCube.Set("spotLights[0].direction", -1.0f, 0.0f, -1.0f);
-	shaderCube.Set("spotLights[0].ambient", 0.2f, 1.0f, 0.1f);
-	shaderCube.Set("spotLights[0].diffuse", 0.5f, 0.5f, 0.5f);
-	shaderCube.Set("spotLights[0].specular", 1.0f, 1.0f, 1.0f);
+	//modelObjs[0].Draw();
+	////Dibujamos los cubos 
+	//shaderCube.Use();
+	//shaderCube.Set("projection", projection);
+	//shaderCube.Set("view", view);
 
-	//SpotLight 1
-	shaderCube.Set("spotLights[1].position", spotLightPositions[1]);
-	shaderCube.Set("spotLights[1].direction", -1.0f, 0.0f, -1.0f);
-	shaderCube.Set("spotLights[1].cutOff", cos(radians(20.0f)));
-	shaderCube.Set("spotLights[1].outerCutOff", cos(radians(25.0f)));
-	shaderCube.Set("spotLights[1].direction", -1.0f, 0.0f, -1.0f);
-	shaderCube.Set("spotLights[1].ambient", 1.0f, 0.15f, 0.1f);
-	shaderCube.Set("spotLights[1].diffuse", 0.5f, 0.5f, 0.5f);
-	shaderCube.Set("spotLights[1].constant", 1.0f);
-	shaderCube.Set("spotLights[1].linear", 0.09f);
-	shaderCube.Set("spotLights[1].cuadratic", 0.032f);
+	//shaderCube.Set("viewPos", camera.GetPosition());
 
-	glActiveTexture(GL_TEXTURE0);	glBindTexture(GL_TEXTURE_2D, texture1);	glActiveTexture(GL_TEXTURE1);	glBindTexture(GL_TEXTURE_2D, texture2);
-	shaderCube.Set("material.diffuse", 1);
-	shaderCube.Set("material.specular", 2);
-	shaderCube.Set("material.shininess", 25.6f);
+	////DirectionalLight 1
+	//shaderCube.Set("dirLight.direction", -0.2f, -0.1f, -0.3f);
+	//shaderCube.Set("dirLight.ambient", 0.1f, 0.6f, 0.6f);
+	//shaderCube.Set("dirLight.diffuse", 0.3f, 0.3f, 0.3f);
+	//shaderCube.Set("dirLight.specular", 0.5f, 0.5f, 0.5f);
 
-	int numeroRepeticionesElemento = 10;
 
-	for (uint32_t i = 0; i < numeroRepeticionesElemento; i++) {
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, cubePositions[i]);
-		float angle = 10.0f + (cos(glfwGetTime()) + (sin(glfwGetTime())));
-		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(angle), glm::vec3(0.5f, 1.0f, 0.0f));
-		glm::mat3 normalMat = glm::inverse(glm::transpose(glm::mat3(model)));
-		shaderCube.Set("normalMat", normalMat);
-		RenderFigure(shaderCube, projection, view, model, CubeVAO, 36);
+	////PointLight 0
+	//shaderCube.Set("pointLights[0].position", pointLightPositions[0]);
+	//shaderCube.Set("pointLights[0].ambient", 0.45f, 0.45f, 0.1f);
+	//shaderCube.Set("pointLights[0].diffuse", 0.5f, 0.5f, 0.5f);
+	//shaderCube.Set("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+	//shaderCube.Set("pointLights[0].constant", 1.0f);
+	//shaderCube.Set("pointLights[0].linear", 0.09f);
+	//shaderCube.Set("pointLights[0].cuadratic", 0.032f);
 
-		//glDrawElements(GL_TRIANGLES, numberOfElements, GL_UNSIGNED_INT, 0);
-	}
+	////PointLight 1
+	//shaderCube.Set("pointLights[1].position", pointLightPositions[1]);
+	//shaderCube.Set("pointLights[1].ambient", 0.1f, 0.1f, 1.1f);
+	//shaderCube.Set("pointLights[1].diffuse", 0.5f, 0.5f, 0.5f);
+	//shaderCube.Set("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+	//shaderCube.Set("pointLights[1].constant", 1.0f);
+	//shaderCube.Set("pointLights[1].linear", 0.09f);
+	//shaderCube.Set("pointLights[1].cuadratic", 0.032f);
+
+
+	////SpotLight 0
+	//shaderCube.Set("spotLights[0].position", spotLightPositions[0]);
+	//shaderCube.Set("spotLights[0].direction", -1.0f, 0.0f, -1.0f);
+	//shaderCube.Set("spotLights[0].cutOff", cos(radians(20.0f)));
+	//shaderCube.Set("spotLights[0].outerCutOff", cos(radians(25.0f)));
+	//shaderCube.Set("spotLights[0].linear", 0.09f);
+	//shaderCube.Set("spotLights[0].constant", 1.0f);
+	//shaderCube.Set("spotLights[0].cuadratic", 0.032f);
+	//shaderCube.Set("spotLights[0].direction", -1.0f, 0.0f, -1.0f);
+	//shaderCube.Set("spotLights[0].ambient", 0.2f, 1.0f, 0.1f);
+	//shaderCube.Set("spotLights[0].diffuse", 0.5f, 0.5f, 0.5f);
+	//shaderCube.Set("spotLights[0].specular", 1.0f, 1.0f, 1.0f);
+
+	////SpotLight 1
+	//shaderCube.Set("spotLights[1].position", spotLightPositions[1]);
+	//shaderCube.Set("spotLights[1].direction", -1.0f, 0.0f, -1.0f);
+	//shaderCube.Set("spotLights[1].cutOff", cos(radians(20.0f)));
+	//shaderCube.Set("spotLights[1].outerCutOff", cos(radians(25.0f)));
+	//shaderCube.Set("spotLights[1].direction", -1.0f, 0.0f, -1.0f);
+	//shaderCube.Set("spotLights[1].ambient", 1.0f, 0.15f, 0.1f);
+	//shaderCube.Set("spotLights[1].diffuse", 0.5f, 0.5f, 0.5f);
+	//shaderCube.Set("spotLights[1].constant", 1.0f);
+	//shaderCube.Set("spotLights[1].linear", 0.09f);
+	//shaderCube.Set("spotLights[1].cuadratic", 0.032f);
+
+	//glActiveTexture(GL_TEXTURE0);	//glBindTexture(GL_TEXTURE_2D, texture1);	//glActiveTexture(GL_TEXTURE1);	//glBindTexture(GL_TEXTURE_2D, texture2);
+	//shaderCube.Set("material.diffuse", 1);
+	//shaderCube.Set("material.specular", 2);
+	//shaderCube.Set("material.shininess", 25.6f);
+
+	//int numeroRepeticionesElemento = 10;
+
+	//for (uint32_t i = 0; i < numeroRepeticionesElemento; i++) {
+	//	glm::mat4 model = glm::mat4(1.0f);
+	//	model = glm::translate(model, cubePositions[i]);
+	//	float angle = 10.0f + (cos(glfwGetTime()) + (sin(glfwGetTime())));
+	//	model = glm::rotate(model, (float)glfwGetTime() * glm::radians(angle), glm::vec3(0.5f, 1.0f, 0.0f));
+	//	glm::mat3 normalMat = glm::inverse(glm::transpose(glm::mat3(model)));
+	//	shaderCube.Set("normalMat", normalMat);
+	//	RenderFigure(shaderCube, projection, view, model, CubeVAO, 36);
+	//}
 	glBindVertexArray(0);
 
 }
@@ -623,14 +650,20 @@ int main(int argc, char* argv[]) {
 	}
 
 
-	Shader shaderlight = Utils::GetFullShader("Shaders/vertexLight.vs", "Shaders/fragmentLight.fs");
+	Shader shaderlight = Utils::GetFullShader("Shaders/LightVS.vs", "Shaders/LightFS.fs");
 	Shader shader = Utils::GetFullShader("Shaders/vertex.vs", "Shaders/fragment.fs");
 	Shader shaderQuad = Utils::GetFullShader("Shaders/QuadVS.vs", "Shaders/QuadFS.fs");
+	Shader shaderNavePlayer = Utils::GetFullShader("Shaders/NavePlayerVS.vs", "Shaders/NavePlayerFS.fs");
 
 	uint32_t texture1 = Model::GetTexture("Textures/albedo.png", true);
 	uint32_t texture2 = Model::GetTexture("Textures/specular.png", true);
-	uint32_t texture3 = Model::GetTexture("Textures/texture3.png", true);
+	uint32_t textureSuelo = Model::GetTexture("Textures/texture3.png", true);
 
+	Model object("../assets/obj/Freighter/Freigther_BI_Export.obj");
+
+	//ObjectsModels objs[10] = { {0} };
+	//objs[0].model = object;
+	//objs[0].shader = &shaderNavePlayer;
 
 
 	uint32_t CubeVAO = createVertexData(verticesCubo, numeroElementosVerticesCubo, indicesCubo, numeroIndicesCubo);
@@ -640,7 +673,7 @@ int main(int argc, char* argv[]) {
 	Quad quad = Quad();
 	quad.shader = &shaderQuad;
 	quad.VAO = &QuadVAO;
-	quad.textures[0] = texture3;
+	quad.textures[0] = textureSuelo;
 	quad.numeroElementosParaDibujar = 6;
 
 	//Bucle inicial donde se realiza toda la accion del motor
@@ -652,8 +685,9 @@ int main(int argc, char* argv[]) {
 		HandlerInput(deltaTime);
 		//Window::HandlerInput(deltaTime);
 		//window.HandlerInput(window.GetWindow(), deltaTime);
-		cout << Window::_camera.GetPosition().x << " " << Window::_camera.GetPosition().y << endl;
-		Render(CubeVAO, SphereVAO, shader, shaderlight, 36, texture1, texture2, camera, quad);
+		//cout << Window::_camera.GetPosition().x << " " << Window::_camera.GetPosition().y << endl;
+		Render(CubeVAO, SphereVAO, shader, shaderlight, shaderNavePlayer, 36, texture1, texture2, quad, object);
+		//Render(CubeVAO, SphereVAO, shader, shaderlight, shaderNavePlayer, 36, texture1, texture2, quad, objs, object);
 
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();

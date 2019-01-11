@@ -25,6 +25,7 @@ public:
 	bool gammaCorrection_;
 
 	/* Functions*/
+	Model();
 	//Constructor
 	Model(std::string const &path, bool gamma = false);
 	//Draws the model and thus all the meshes
