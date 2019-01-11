@@ -18,19 +18,19 @@ public:
 	static Window* Instance();
 	static Window* GetInstance(const int widht, const int height);
 	//void HandlerInput();
-	void HandlerInput(const double deltaTime);
+	void HandlerInput(GLFWwindow* window,const double deltaTime);
 	GLFWwindow* GetWindow();
-private:
-	Window();
-	Window(const int widht, const int height);
-	static void OnScroll(GLFWwindow* window, double xoffset, double yoffset);
+	static Camera _camera;
 	static void OnMouse(GLFWwindow* window, double xpos, double ypos);
+	Window(const int widht, const int height);
+	Window();
+private:
+	static void OnScroll(GLFWwindow* window, double xoffset, double yoffset);
 	static void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int32_t height);
 
 	GLFWwindow* _glfwWindow = nullptr;
 	static Window* _window;
 	static bool _firstMouse;
 	static double _lastX, _lastY, _xoffset, _yoffset;
-	static Camera _camera;
 };
 #endif
