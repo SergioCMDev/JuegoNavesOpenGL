@@ -6,11 +6,13 @@
 #include<stdio.h>
 
 #include "Shader.h"
-#include "Utils.h"
+#include "Constants.h"
+#include "Model.h"
+
 #include "Window.h"
 #include "Camera.h"
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include "Utils.h"
+
 
 const uint32_t screen_width = 800, screen_height = 600;
 float lastX = (float)screen_width / 2.0f;
@@ -18,7 +20,6 @@ float lastY = (float)screen_height / 2.0f;
 #pragma region Variables Globales
 const float M_PI = 3.14f;
 
-Utils utils;
 
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
@@ -108,7 +109,6 @@ struct Sphere {
 
 using namespace std;
 
-const char* pathProyecto = "../tests/PracticaFinal/";
 #pragma endregion
 
 #pragma region Eventos
@@ -312,7 +312,6 @@ uint32_t createSphere(const float radius) {
 }
 
 
-
 int Inicializacion() {
 	if (!glfwInit()) {
 		cout << "Error initializing GLFW" << endl;
@@ -481,26 +480,7 @@ void Render(uint32_t VAO, uint32_t SphereVAO,
 
 }
 
-uint32_t createTexture(const char* path, bool flip) {
-	uint32_t texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	stbi_set_flip_vertically_on_load(flip);	int width, height, nChannels;
-	unsigned char* data = stbi_load(path, &width, &height, &nChannels, 0);
-	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	stbi_image_free(data);
-	return texture;
-}
 
 uint32_t createVertexData(const float* vertices, const uint32_t n_verts, const uint32_t* indices, const uint32_t n_indices) {
 	unsigned int VAO, VBO, EBO;
@@ -551,42 +531,22 @@ uint32_t createVertexData(const float* vertices, const uint32_t n_verts, const u
 	return VAO;
 }
 
-
-Shader getFullShader(const string pathVertex, const string pathFragment) {
-	string vertexpathStr = utils.GetFinalPath(pathProyecto, pathVertex);
-	const char* vertexpath = vertexpathStr.c_str();
-
-	string fragmentPathString = utils.GetFinalPath(pathProyecto, pathFragment);
-	const char* fragmentPath1 = fragmentPathString.c_str();
-
-	return Shader(vertexpath, fragmentPath1);
-}
-
-uint32_t GetTexture(const string pathtexture) {
-
-	string pathFinalImagen1String = utils.GetFinalPath(pathProyecto, pathtexture);
-	const char* pathFinalImagen1 = pathFinalImagen1String.c_str();
-	return createTexture(pathFinalImagen1, true);
-}
-
-
 int main(int argc, char* argv[]) {
 	if (!Inicializacion()) {
 		return -1;
 	}
 
 
-	Shader shaderlight = getFullShader("Shaders/vertexLight.vs", "Shaders/fragmentLight.fs");
-	Shader shader = getFullShader("Shaders/vertex.vs", "Shaders/fragment.fs");
+	Shader shaderlight = Utils::GetFullShader("Shaders/vertexLight.vs", "Shaders/fragmentLight.fs");
+	Shader shader = Utils::GetFullShader("Shaders/vertex.vs", "Shaders/fragment.fs");
 
-	uint32_t texture1 = GetTexture("Textures/albedo.png");
-	uint32_t texture2 = GetTexture("Textures/specular.png");
+	uint32_t texture1 = Model::GetTexture("Textures/albedo.png", true);
+	uint32_t texture2 = Model::GetTexture("Textures/specular.png", true);
 
 
 
 	uint32_t CubeVAO = createVertexData(verticesCubo, numeroElementosVerticesCubo, indicesCubo, numeroIndicesCubo);
 	uint32_t SphereVAO = createSphere(1);
-	//Window window1 = Window(screen_width, screen_height);
 
 	//Bucle inicial donde se realiza toda la accion del motor
 	while (!glfwWindowShouldClose(window.GetWindow())) {
