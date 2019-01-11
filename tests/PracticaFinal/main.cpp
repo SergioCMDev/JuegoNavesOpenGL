@@ -552,35 +552,36 @@ uint32_t createVertexData(const float* vertices, const uint32_t n_verts, const u
 }
 
 
+Shader getFullShader(const string pathVertex, const string pathFragment) {
+	string vertexpathStr = utils.GetFinalPath(pathProyecto, pathVertex);
+	const char* vertexpath = vertexpathStr.c_str();
+
+	string fragmentPathString = utils.GetFinalPath(pathProyecto, pathFragment);
+	const char* fragmentPath1 = fragmentPathString.c_str();
+
+	return Shader(vertexpath, fragmentPath1);
+}
+
+uint32_t GetTexture(const string pathtexture) {
+
+	string pathFinalImagen1String = utils.GetFinalPath(pathProyecto, pathtexture);
+	const char* pathFinalImagen1 = pathFinalImagen1String.c_str();
+	return createTexture(pathFinalImagen1, true);
+}
+
+
 int main(int argc, char* argv[]) {
 	if (!Inicializacion()) {
 		return -1;
 	}
 
 
-	string vertexpathStr = utils.GetFinalPath(pathProyecto, "Shaders/vertex.vs");
-	const char* vertexpath = vertexpathStr.c_str();
+	Shader shaderlight = getFullShader("Shaders/vertexLight.vs", "Shaders/fragmentLight.fs");
+	Shader shader = getFullShader("Shaders/vertex.vs", "Shaders/fragment.fs");
 
-	string fragmentPathString = utils.GetFinalPath(pathProyecto, "Shaders/fragment.fs");
-	const char* fragmentPath1 = fragmentPathString.c_str();
+	uint32_t texture1 = GetTexture("Textures/albedo.png");
+	uint32_t texture2 = GetTexture("Textures/specular.png");
 
-	string vertexpathLightString = utils.GetFinalPath(pathProyecto, "Shaders/vertexLight.vs");
-	const char* vertexpathLight = vertexpathLightString.c_str();
-
-	string fragmentPathLightString = utils.GetFinalPath(pathProyecto, "Shaders/fragmentLight.fs");
-	const char* fragmentPathLight = fragmentPathLightString.c_str();
-
-	string pathFinalImagen1String = utils.GetFinalPath(pathProyecto, "Textures/albedo.png");
-	const char* pathFinalImagen1 = pathFinalImagen1String.c_str();
-
-	string pathFinalImagen2String = utils.GetFinalPath(pathProyecto, "Textures/specular.png");
-	const char* pathFinalImagen2 = pathFinalImagen2String.c_str();
-
-	Shader shader = Shader(vertexpath, fragmentPath1);
-	Shader shaderlight = Shader(vertexpathLight, fragmentPathLight);
-
-	uint32_t texture1 = createTexture(pathFinalImagen1, true);
-	uint32_t texture2 = createTexture(pathFinalImagen2, true);
 
 
 	uint32_t CubeVAO = createVertexData(verticesCubo, numeroElementosVerticesCubo, indicesCubo, numeroIndicesCubo);
@@ -593,8 +594,8 @@ int main(int argc, char* argv[]) {
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		//HandlerInput(deltaTime);
-		Window::HandlerInput(deltaTime);
+		HandlerInput(deltaTime);
+		//Window::HandlerInput(deltaTime);
 		//window.HandlerInput(window.GetWindow(), deltaTime);
 		cout << Window::_camera.GetPosition().x << " " << Window::_camera.GetPosition().y << endl;
 		Render(CubeVAO, SphereVAO, shader, shaderlight, 36, texture1, texture2, camera);

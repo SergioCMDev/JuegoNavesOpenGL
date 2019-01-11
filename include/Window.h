@@ -17,8 +17,7 @@ public:
 	~Window();
 	static Window* Instance();
 	static Window* GetInstance(const int widht, const int height);
-	//void HandlerInput();
-	static void HandlerInput(GLFWwindow* window, const double deltaTime);
+	//static void HandlerInput(GLFWwindow* window, const double deltaTime);
 	static void HandlerInput(const double deltaTime);
 	GLFWwindow* GetWindow();
 	static Camera _camera;

@@ -37,9 +37,7 @@ void Window::OnMouse(GLFWwindow* window, double xpos, double ypos) {
 	double _yoffset = ypos - _lastY;
 	_lastX = xpos;
 	_lastY = ypos;
-	//while (true) {
-	//	cout << "dfff" << endl;
-	//}
+
 	cout << "X POS " << _lastX << " Y POS " << _lastY << endl;
 	_camera.handleMouseMovement(_xoffset, _yoffset);
 }
