@@ -5,15 +5,14 @@ Window* Window::_window;
 //const glm::vec3 posCamara = glm::vec3(0.0f, 0.0f, 3.0f);
 const glm::vec3 posCamara = glm::vec3(-6.0f, 2.0f, 3.0f);
 GLFWwindow* Window::_glfwWindow = 0;
-Camera Window::_camera(glm::vec3(-1.0f, 2.0f, 3.0f));
+Camera Window::_camera(glm::vec3(0.0f, 0.0f, 0.0f));
 
 //Camera camera(glm::vec3(-1.0f, 2.0f, 3.0f));
 
-bool Window::_firstMouse = false;
-double Window::_lastX = 0.0f,
-Window::_lastY = 0.0f,
-Window::_xoffset = 0.0f,
-Window::_yoffset = 0.0f;
+bool Window::_firstMouse = true;
+double Window::_lastX = 0.0f;
+double Window::_lastY = 0.0f;
+
 
 Window::~Window() {
 	_window = nullptr;
@@ -31,8 +30,8 @@ void Window::OnMouse(GLFWwindow* window, double xpos, double ypos) {
 		_lastY = ypos;
 	}
 
-	_xoffset = xpos - _lastX;
-	_yoffset = ypos - _lastY;
+	double _xoffset = xpos - _lastX;
+	double _yoffset = ypos - _lastY;
 	_lastX = xpos;
 	_lastY = ypos;
 	cout << "X POS " << _lastX << " Y POS " << _lastY << endl;
@@ -45,10 +44,7 @@ Window* Window::GetInstance(const int widht, const int height)
 	if (_window == 0) {
 		cout << "Creamos instancia de Window" << endl;
 		_window = new Window(widht, height);
-		glfwSetCursorPosCallback(_glfwWindow, OnMouse);
-		glfwSetFramebufferSizeCallback(_glfwWindow, OnChangeFrameBufferSize);
-		glfwSetScrollCallback(_glfwWindow, OnScroll);
-		glfwSetInputMode(_glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 	}
 	return _window;
 }

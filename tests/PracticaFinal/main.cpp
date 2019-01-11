@@ -12,6 +12,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+const uint32_t screen_width = 800, screen_height = 600;
+float lastX = (float)screen_width / 2.0f;
+float lastY = (float)screen_height / 2.0f;
 #pragma region Variables Globales
 const float M_PI = 3.14f;
 
@@ -33,9 +36,6 @@ glm::vec3 spotLightPositions[] = {
 float lastFrame = 0.0f;
 bool firstMouse = true;
 
-const uint32_t screen_width = 800, screen_height = 600;
-float lastX = (float)screen_width / 2.0f;
-float lastY = (float)screen_height / 2.0f;
 Window window;
 
 uint32_t numeroElementosVerticesCubo = 192;
@@ -112,6 +112,7 @@ const char* pathProyecto = "../tests/PracticaFinal/";
 #pragma endregion
 
 #pragma region Eventos
+Camera camera(glm::vec3(-1.0f, 2.0f, 3.0f));
 
 //void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int32_t height) {
 //	//redimension de pantalla 
@@ -119,19 +120,19 @@ const char* pathProyecto = "../tests/PracticaFinal/";
 //	glViewport(0, 0, width, height);
 //}
 //
-//void OnMouse(GLFWwindow* window, double xpos, double ypos) {
-//	if (firstMouse) {
-//		firstMouse = false;
-//		lastX = xpos;
-//		lastY = ypos;
-//	}
-//
-//	double xoffset = xpos - lastX;
-//	double yoffset = ypos - lastY;
-//	lastX = xpos;
-//	lastY = ypos;
-//	camera.handleMouseMovement(xoffset, yoffset);
-//}
+void OnMouse(GLFWwindow* window, double xpos, double ypos) {
+	if (firstMouse) {
+		firstMouse = false;
+		lastX = xpos;
+		lastY = ypos;
+	}
+
+	double xoffset = xpos - lastX;
+	double yoffset = ypos - lastY;
+	lastX = xpos;
+	lastY = ypos;
+	camera.handleMouseMovement(xoffset, yoffset);
+}
 //
 //
 //void OnScroll(GLFWwindow* window, double xoffset, double yoffset) {
@@ -331,10 +332,10 @@ int Inicializacion() {
 	glDepthFunc(GL_LESS);
 
 	//cuando la ventana cambie de tamaño
-	//glfwSetCursorPosCallback(window.GetWindow(), Window::OnMouse);
-	//glfwSetFramebufferSizeCallback(window.GetWindow(), OnChangeFrameBufferSize);
-	//glfwSetScrollCallback(window.GetWindow(), OnScroll);
-	//glfwSetInputMode(window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetCursorPosCallback(window.GetWindow(), Window::OnMouse);
+	glfwSetFramebufferSizeCallback(window.GetWindow(), Window::OnChangeFrameBufferSize);
+	glfwSetScrollCallback(window.GetWindow(), Window::OnScroll);
+	glfwSetInputMode(window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	return 1;
 };
 
@@ -582,7 +583,6 @@ int main(int argc, char* argv[]) {
 
 	uint32_t CubeVAO = createVertexData(verticesCubo, numeroElementosVerticesCubo, indicesCubo, numeroIndicesCubo);
 	uint32_t SphereVAO = createSphere(1);
-	Camera camera(glm::vec3(-1.0f, 2.0f, 3.0f));
 	//Window window1 = Window(screen_width, screen_height);
 
 	//Bucle inicial donde se realiza toda la accion del motor
@@ -592,7 +592,7 @@ int main(int argc, char* argv[]) {
 		lastFrame = currentFrame;
 
 		window.HandlerInput(window.GetWindow(), deltaTime);
-		cout << Window::_camera.GetPosition().x << Window::_camera.GetPosition().y <<endl;
+		cout << Window::_camera.GetPosition().x << " " << Window::_camera.GetPosition().y << endl;
 		Render(CubeVAO, SphereVAO, shader, shaderlight, 36, texture1, texture2, camera);
 
 		glfwSwapBuffers(window.GetWindow());
