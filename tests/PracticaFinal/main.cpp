@@ -114,11 +114,11 @@ const char* pathProyecto = "../tests/PracticaFinal/";
 #pragma region Eventos
 Camera camera(glm::vec3(-1.0f, 2.0f, 3.0f));
 
-//void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int32_t height) {
-//	//redimension de pantalla 
-//	//Cambio de clip scene a view scene
-//	glViewport(0, 0, width, height);
-//}
+void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int32_t height) {
+	//redimension de pantalla 
+	//Cambio de clip scene a view scene
+	glViewport(0, 0, width, height);
+}
 //
 void OnMouse(GLFWwindow* window, double xpos, double ypos) {
 	if (firstMouse) {
@@ -134,27 +134,29 @@ void OnMouse(GLFWwindow* window, double xpos, double ypos) {
 	camera.handleMouseMovement(xoffset, yoffset);
 }
 //
-//
-//void OnScroll(GLFWwindow* window, double xoffset, double yoffset) {
-//	camera.handleMouseScroll(yoffset);
-//}
-//
-//void HandlerInput(GLFWwindow* window, const double deltaTime) {
-//	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-//		camera.HandleKeyboard(Camera::Movement::Forward, deltaTime);
-//	}
-//	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-//		camera.HandleKeyboard(Camera::Movement::Backward, deltaTime);
-//	}
-//	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-//		camera.HandleKeyboard(Camera::Movement::Left, deltaTime);
-//	}
-//	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-//		camera.HandleKeyboard(Camera::Movement::Right, deltaTime);
-//	}
-//	//Window::HandlerInput();
-//}
-//#pragma endregion
+
+void OnScroll(GLFWwindow* window, double xoffset, double yoffset) {
+	camera.handleMouseScroll(yoffset);
+}
+
+void HandlerInput(const double deltaTime) {
+	if (glfwGetKey(window.GetWindow(), GLFW_KEY_W) == GLFW_PRESS) {
+		camera.HandleKeyboard(Camera::Movement::Forward, deltaTime);
+	}
+	if (glfwGetKey(window.GetWindow(), GLFW_KEY_S) == GLFW_PRESS) {
+		camera.HandleKeyboard(Camera::Movement::Backward, deltaTime);
+	}
+	if (glfwGetKey(window.GetWindow(), GLFW_KEY_A) == GLFW_PRESS) {
+		camera.HandleKeyboard(Camera::Movement::Left, deltaTime);
+	}
+	if (glfwGetKey(window.GetWindow(), GLFW_KEY_D) == GLFW_PRESS) {
+		camera.HandleKeyboard(Camera::Movement::Right, deltaTime);
+	}
+	if (glfwGetKey(window.GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		glfwSetWindowShouldClose(window.GetWindow(), true);
+	}
+}
+#pragma endregion
 
 #pragma region Metodos
 
@@ -319,6 +321,7 @@ int Inicializacion() {
 	}
 	//Window window1 = Window(screen_width, screen_height);
 	window = *Window::GetInstance(screen_width, screen_height);
+	window.AddCamera(camera);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		cout << "Error initializing GLAD" << endl;
@@ -332,9 +335,10 @@ int Inicializacion() {
 	glDepthFunc(GL_LESS);
 
 	//cuando la ventana cambie de tamaño
-	glfwSetCursorPosCallback(window.GetWindow(), Window::OnMouse);
-	glfwSetFramebufferSizeCallback(window.GetWindow(), Window::OnChangeFrameBufferSize);
-	glfwSetScrollCallback(window.GetWindow(), Window::OnScroll);
+	//glfwSetCursorPosCallback(window.GetWindow(), &Window::OnMouse);
+	glfwSetCursorPosCallback(window.GetWindow(), OnMouse);
+	glfwSetFramebufferSizeCallback(window.GetWindow(), OnChangeFrameBufferSize);
+	glfwSetScrollCallback(window.GetWindow(), OnScroll);
 	glfwSetInputMode(window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	return 1;
 };
@@ -574,8 +578,6 @@ int main(int argc, char* argv[]) {
 
 	Shader shader = Shader(vertexpath, fragmentPath1);
 	Shader shaderlight = Shader(vertexpathLight, fragmentPathLight);
-	int program = shader.GetIdProgram();
-	uint32_t VBOFigura, EBO;
 
 	uint32_t texture1 = createTexture(pathFinalImagen1, true);
 	uint32_t texture2 = createTexture(pathFinalImagen2, true);
@@ -591,7 +593,9 @@ int main(int argc, char* argv[]) {
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		window.HandlerInput(window.GetWindow(), deltaTime);
+		//HandlerInput(deltaTime);
+		Window::HandlerInput(deltaTime);
+		//window.HandlerInput(window.GetWindow(), deltaTime);
 		cout << Window::_camera.GetPosition().x << " " << Window::_camera.GetPosition().y << endl;
 		Render(CubeVAO, SphereVAO, shader, shaderlight, 36, texture1, texture2, camera);
 
@@ -601,8 +605,7 @@ int main(int argc, char* argv[]) {
 
 	//Si se han linkado bien los shaders, los borramos ya que estan linkados
 	glDeleteVertexArrays(1, &CubeVAO);
-	glDeleteBuffers(1, &VBOFigura);
-	glDeleteBuffers(1, &EBO);
+
 
 	glfwTerminate();
 	return 0;

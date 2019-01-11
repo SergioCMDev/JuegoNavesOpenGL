@@ -18,7 +18,8 @@ public:
 	static Window* Instance();
 	static Window* GetInstance(const int widht, const int height);
 	//void HandlerInput();
-	void HandlerInput(GLFWwindow* window,const double deltaTime);
+	static void HandlerInput(GLFWwindow* window, const double deltaTime);
+	static void HandlerInput(const double deltaTime);
 	GLFWwindow* GetWindow();
 	static Camera _camera;
 	static void OnMouse(GLFWwindow* window, double xpos, double ypos);
@@ -26,6 +27,7 @@ public:
 	Window();
 	static void OnScroll(GLFWwindow* window, double xoffset, double yoffset);
 	static void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int32_t height);
+	void Window::AddCamera(Camera camera);
 private:
 
 	static GLFWwindow* _glfwWindow;

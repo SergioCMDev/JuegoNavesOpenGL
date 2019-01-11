@@ -13,6 +13,9 @@ bool Window::_firstMouse = true;
 double Window::_lastX = 0.0f;
 double Window::_lastY = 0.0f;
 
+void Window::AddCamera(Camera camera) {
+	_camera = camera;
+}
 
 Window::~Window() {
 	_window = nullptr;
@@ -34,8 +37,11 @@ void Window::OnMouse(GLFWwindow* window, double xpos, double ypos) {
 	double _yoffset = ypos - _lastY;
 	_lastX = xpos;
 	_lastY = ypos;
+	//while (true) {
+	//	cout << "dfff" << endl;
+	//}
 	cout << "X POS " << _lastX << " Y POS " << _lastY << endl;
-	Window::_camera.handleMouseMovement(_xoffset, _yoffset);
+	_camera.handleMouseMovement(_xoffset, _yoffset);
 }
 
 
@@ -53,7 +59,7 @@ GLFWwindow* Window::GetWindow() {
 	return _glfwWindow;
 }
 
-void Window::HandlerInput(GLFWwindow* window, const double deltaTime) {
+void Window::HandlerInput(const double deltaTime) {
 
 	if (glfwGetKey(_glfwWindow, GLFW_KEY_W) == GLFW_PRESS) {
 		_camera.HandleKeyboard(Camera::Movement::Forward, deltaTime);
@@ -72,7 +78,6 @@ void Window::HandlerInput(GLFWwindow* window, const double deltaTime) {
 		glfwSetWindowShouldClose(_glfwWindow, true);
 	}
 }
-
 
 void Window::OnScroll(GLFWwindow* window, double xoffset, double yoffset) {
 	//Window* windowW = Window::Instance();
