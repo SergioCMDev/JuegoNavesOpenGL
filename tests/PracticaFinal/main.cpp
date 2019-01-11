@@ -17,6 +17,8 @@
 const uint32_t screen_width = 800, screen_height = 600;
 float lastX = (float)screen_width / 2.0f;
 float lastY = (float)screen_height / 2.0f;
+const vec3 posCamera = glm::vec3(-1.0f, 2.0f, 3.0f);
+Camera camera(posCamera);
 #pragma region Variables Globales
 const float M_PI = 3.14f;
 
@@ -72,7 +74,20 @@ float verticesCubo[] = {  //vertices      //uvs     //normals
 	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      0.0f, 1.0f, 0.0f,
 	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     0.0f, 1.0f, 0.0f };
 
+uint32_t numeroElementosVerticesQuad = 20;
+
+float verticesQuad[] = {
+	-0.5f,  0.5f,  0.5f,       0.0f, 0.0f,    //top
+	  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,
+	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,
+	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f };
+
 uint32_t numeroIndicesCubo = 36;
+uint32_t numeroIndicesQuad = 6;
+uint32_t indicesQuad[]{
+	0, 1, 2, 0, 2, 3 //Front
+};
+
 
 uint32_t indicesCubo[]{
 	0, 1, 2, 0, 2, 3 //Front
@@ -107,12 +122,24 @@ struct Sphere {
 	uint32_t numeroTexturas;
 };
 
+struct Quad {
+	float* vertices;
+	float* normals;
+	float* textCoords;
+	uint32_t* elementos;
+	uint32_t numeroVertices;
+	uint32_t numeroElementos;
+	uint32_t numeroNormales;
+	uint32_t numeroTexturas;
+	uint32_t textures[3];
+	Shader shader;
+};
+
 using namespace std;
 
 #pragma endregion
 
 #pragma region Eventos
-Camera camera(glm::vec3(-1.0f, 2.0f, 3.0f));
 
 void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int32_t height) {
 	//redimension de pantalla 
@@ -311,7 +338,6 @@ uint32_t createSphere(const float radius) {
 
 }
 
-
 int Inicializacion() {
 	if (!glfwInit()) {
 		cout << "Error initializing GLFW" << endl;
@@ -342,23 +368,25 @@ int Inicializacion() {
 	return 1;
 };
 
-void RenderSphere(const Shader & shaderlight, glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model, const uint32_t &SphereVAO)
-{
-	shaderlight.Set("projection", projection);
-	shaderlight.Set("view", view);
 
-	shaderlight.Set("model", model);
-	glBindVertexArray(SphereVAO);
-	glDrawElements(GL_TRIANGLES, 121 * 8, GL_UNSIGNED_INT, 0);
+void RenderFigure(const Shader & shader, glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model, const uint32_t &VAO, const uint32_t &numeroElementos)
+{
+	shader.Set("projection", projection);
+	shader.Set("view", view);
+	shader.Set("model", model);
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, numeroElementos, GL_UNSIGNED_INT, 0);
 }
 
-void Render(uint32_t VAO, uint32_t SphereVAO,
-	const Shader& shaderCube, const Shader& shaderlight,
-	const uint32_t numberOfElements, uint32_t texture1, uint32_t texture2, Camera camera) {
+
+
+void Render(uint32_t CubeVAO, uint32_t SphereVAO, uint32_t quadVAO,
+	const Shader& shaderCube, const Shader& shaderlight, const Shader& shaderQuad,
+	const uint32_t numberOfElements, uint32_t texture1, uint32_t texture2, uint32_t texture3, Camera camera) {
 	//Renderizamos la pantalla con un color basandonos en el esquema RGBA(transparencia)
 	//Si lo quitamos, no borra nunca la pantalla
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	uint32_t elementosParaDibujarEsfera = 121 * 8;
 
 	//Dibujamos esferas de luz
 	glm::mat4 view = camera.GetViewMatrix();
@@ -370,14 +398,14 @@ void Render(uint32_t VAO, uint32_t SphereVAO,
 	model = translate(model, pointLightPositions[0]);
 	model = scale(model, vec3(0.2f));
 
-	RenderSphere(shaderlight, projection, view, model, SphereVAO);
+	RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
 
 	model = mat4(1.0f);
 	shaderlight.Set("color", vec3(0.1f, 0.1f, 1.1f));
 	model = translate(model, pointLightPositions[1]);
 	model = scale(model, vec3(0.2f));
 
-	RenderSphere(shaderlight, projection, view, model, SphereVAO);
+	RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
 
 
 	model = mat4(1.0f);
@@ -385,7 +413,7 @@ void Render(uint32_t VAO, uint32_t SphereVAO,
 	model = translate(model, spotLightPositions[0]);
 	model = scale(model, vec3(0.4f));
 
-	RenderSphere(shaderlight, projection, view, model, SphereVAO);
+	RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
 
 
 	model = mat4(1.0f);
@@ -393,9 +421,19 @@ void Render(uint32_t VAO, uint32_t SphereVAO,
 	model = translate(model, spotLightPositions[1]);
 	model = scale(model, vec3(0.4f));
 
-	RenderSphere(shaderlight, projection, view, model, SphereVAO);
+	RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
 
+	//////////////////////////////////////////////////////////////////////////////////////
+	//Dibujamos Suelo
+	glActiveTexture(GL_TEXTURE4);	glBindTexture(GL_TEXTURE_2D, texture3);
 
+	shaderQuad.Use();
+	shaderQuad.Set("quadTexture", 4);
+	model = mat4(1.0f);
+	model = glm::translate(model, vec3(0.0f, -4.0f, 0.0f));
+	model = glm::scale(model, vec3(10.0f));
+	RenderFigure(shaderQuad, projection, view, model, quadVAO, 6);
+	///////////////////////////////////////////////////////////////////////
 
 	//Dibujamos los cubos 
 	shaderCube.Use();
@@ -455,14 +493,11 @@ void Render(uint32_t VAO, uint32_t SphereVAO,
 	shaderCube.Set("spotLights[1].linear", 0.09f);
 	shaderCube.Set("spotLights[1].cuadratic", 0.032f);
 
-
-	shaderCube.Set("material.diffuse", 0);
-	shaderCube.Set("material.specular", 1);
+	glActiveTexture(GL_TEXTURE0);	glBindTexture(GL_TEXTURE_2D, texture1);	glActiveTexture(GL_TEXTURE1);	glBindTexture(GL_TEXTURE_2D, texture2);
+	shaderCube.Set("material.diffuse", 1);
+	shaderCube.Set("material.specular", 2);
 	shaderCube.Set("material.shininess", 25.6f);
 
-	glActiveTexture(GL_TEXTURE0);	glBindTexture(GL_TEXTURE_2D, texture1);	glActiveTexture(GL_TEXTURE1);	glBindTexture(GL_TEXTURE_2D, texture2);
-
-	glBindVertexArray(VAO);
 	int numeroRepeticionesElemento = 10;
 
 	for (uint32_t i = 0; i < numeroRepeticionesElemento; i++) {
@@ -470,16 +505,15 @@ void Render(uint32_t VAO, uint32_t SphereVAO,
 		model = glm::translate(model, cubePositions[i]);
 		float angle = 10.0f + (cos(glfwGetTime()) + (sin(glfwGetTime())));
 		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(angle), glm::vec3(0.5f, 1.0f, 0.0f));
-		shaderCube.Set("model", model);
 		glm::mat3 normalMat = glm::inverse(glm::transpose(glm::mat3(model)));
 		shaderCube.Set("normalMat", normalMat);
+		RenderFigure(shaderCube, projection, view, model, CubeVAO, 36);
 
-		glDrawElements(GL_TRIANGLES, numberOfElements, GL_UNSIGNED_INT, 0);
+		//glDrawElements(GL_TRIANGLES, numberOfElements, GL_UNSIGNED_INT, 0);
 	}
 	glBindVertexArray(0);
 
 }
-
 
 
 uint32_t createVertexData(const float* vertices, const uint32_t n_verts, const uint32_t* indices, const uint32_t n_indices) {
@@ -531,6 +565,55 @@ uint32_t createVertexData(const float* vertices, const uint32_t n_verts, const u
 	return VAO;
 }
 
+uint32_t createVertexDataQuad(const float* vertices, const uint32_t n_verts, const uint32_t* indices, const uint32_t n_indices, const uint32_t numberOfElementsPerLine) {
+	unsigned int VAO, VBO, EBO;
+
+	glGenVertexArrays(1, &VAO);
+	//Generamos 2 buffer, elementos y objetos
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+
+	//Bindeamos el VAO
+	glBindVertexArray(VAO);
+
+	uint32_t _numberOfElementsPerLine = numberOfElementsPerLine;
+	uint32_t stride = 3;
+
+	//Bindeamos buffer vertices
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	//Subida de vertices al buffer
+	glBufferData(GL_ARRAY_BUFFER, n_verts * sizeof(float) * _numberOfElementsPerLine, vertices, GL_STATIC_DRAW);
+
+	//Bindeo buffer indices
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, n_indices * sizeof(float), indices, GL_STATIC_DRAW);
+
+	//vertices del triangulo 6 por que hay 6 elementos hasta el proximo inicio de linea
+	uint32_t atributteNumber = 0;
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, _numberOfElementsPerLine * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	//Vertices de textura
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, _numberOfElementsPerLine * sizeof(float), (void*)(stride * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	stride += 2;
+	////Vertices normal
+	//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, _numberOfElementsPerLine * sizeof(float), (void*)(stride * sizeof(float)));
+	//glEnableVertexAttribArray(2);
+
+	//desbindeamos buffer objetos
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	//Desbindeo
+	glBindVertexArray(0);
+
+	//desbindeamos buffer elements
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	return VAO;
+}
+
 int main(int argc, char* argv[]) {
 	if (!Inicializacion()) {
 		return -1;
@@ -539,13 +622,16 @@ int main(int argc, char* argv[]) {
 
 	Shader shaderlight = Utils::GetFullShader("Shaders/vertexLight.vs", "Shaders/fragmentLight.fs");
 	Shader shader = Utils::GetFullShader("Shaders/vertex.vs", "Shaders/fragment.fs");
+	Shader shaderQuad = Utils::GetFullShader("Shaders/QuadVS.vs", "Shaders/QuadFS.fs");
 
 	uint32_t texture1 = Model::GetTexture("Textures/albedo.png", true);
 	uint32_t texture2 = Model::GetTexture("Textures/specular.png", true);
+	uint32_t texture3 = Model::GetTexture("Textures/texture3.png", true);
 
 
 
 	uint32_t CubeVAO = createVertexData(verticesCubo, numeroElementosVerticesCubo, indicesCubo, numeroIndicesCubo);
+	uint32_t QuadVAO = createVertexDataQuad(verticesQuad, numeroElementosVerticesQuad, indicesQuad, numeroIndicesQuad, 5);
 	uint32_t SphereVAO = createSphere(1);
 
 	//Bucle inicial donde se realiza toda la accion del motor
@@ -558,7 +644,7 @@ int main(int argc, char* argv[]) {
 		//Window::HandlerInput(deltaTime);
 		//window.HandlerInput(window.GetWindow(), deltaTime);
 		cout << Window::_camera.GetPosition().x << " " << Window::_camera.GetPosition().y << endl;
-		Render(CubeVAO, SphereVAO, shader, shaderlight, 36, texture1, texture2, camera);
+		Render(CubeVAO, SphereVAO, QuadVAO, shader, shaderlight, shaderQuad, 36, texture1, texture2, texture3, camera);
 
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
