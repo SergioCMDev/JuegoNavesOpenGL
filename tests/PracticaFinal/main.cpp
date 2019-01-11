@@ -129,10 +129,12 @@ struct Quad {
 	uint32_t* elementos;
 	uint32_t numeroVertices;
 	uint32_t numeroElementos;
+	uint32_t numeroElementosParaDibujar;
 	uint32_t numeroNormales;
 	uint32_t numeroTexturas;
 	uint32_t textures[3];
-	Shader shader;
+	Shader *shader;
+	uint32_t* VAO;
 };
 
 using namespace std;
@@ -380,9 +382,9 @@ void RenderFigure(const Shader & shader, glm::mat4 &projection, glm::mat4 &view,
 
 
 
-void Render(uint32_t CubeVAO, uint32_t SphereVAO, uint32_t quadVAO,
-	const Shader& shaderCube, const Shader& shaderlight, const Shader& shaderQuad,
-	const uint32_t numberOfElements, uint32_t texture1, uint32_t texture2, uint32_t texture3, Camera camera) {
+void Render(uint32_t CubeVAO, uint32_t SphereVAO,
+	const Shader& shaderCube, const Shader& shaderlight,
+	const uint32_t numberOfElements, uint32_t texture1, uint32_t texture2, Camera camera, Quad quad) {
 	//Renderizamos la pantalla con un color basandonos en el esquema RGBA(transparencia)
 	//Si lo quitamos, no borra nunca la pantalla
 
@@ -425,14 +427,15 @@ void Render(uint32_t CubeVAO, uint32_t SphereVAO, uint32_t quadVAO,
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	//Dibujamos Suelo
-	glActiveTexture(GL_TEXTURE4);	glBindTexture(GL_TEXTURE_2D, texture3);
+	glActiveTexture(GL_TEXTURE4);	glBindTexture(GL_TEXTURE_2D, quad.textures[0]);
 
-	shaderQuad.Use();
-	shaderQuad.Set("quadTexture", 4);
+	quad.shader->Use();
+	quad.shader->Set("quadTexture", 4);
 	model = mat4(1.0f);
 	model = glm::translate(model, vec3(0.0f, -4.0f, 0.0f));
 	model = glm::scale(model, vec3(10.0f));
-	RenderFigure(shaderQuad, projection, view, model, quadVAO, 6);
+	//RenderFigure(quad.shader, projection, view, model, *quad.VAO, 6);
+	RenderFigure(*quad.shader, projection, view, model, *quad.VAO, quad.numeroElementosParaDibujar);
 	///////////////////////////////////////////////////////////////////////
 
 	//Dibujamos los cubos 
@@ -634,6 +637,12 @@ int main(int argc, char* argv[]) {
 	uint32_t QuadVAO = createVertexDataQuad(verticesQuad, numeroElementosVerticesQuad, indicesQuad, numeroIndicesQuad, 5);
 	uint32_t SphereVAO = createSphere(1);
 
+	Quad quad = Quad();
+	quad.shader = &shaderQuad;
+	quad.VAO = &QuadVAO;
+	quad.textures[0] = texture3;
+	quad.numeroElementosParaDibujar = 6;
+
 	//Bucle inicial donde se realiza toda la accion del motor
 	while (!glfwWindowShouldClose(window.GetWindow())) {
 		float currentFrame = glfwGetTime();
@@ -644,7 +653,7 @@ int main(int argc, char* argv[]) {
 		//Window::HandlerInput(deltaTime);
 		//window.HandlerInput(window.GetWindow(), deltaTime);
 		cout << Window::_camera.GetPosition().x << " " << Window::_camera.GetPosition().y << endl;
-		Render(CubeVAO, SphereVAO, QuadVAO, shader, shaderlight, shaderQuad, 36, texture1, texture2, texture3, camera);
+		Render(CubeVAO, SphereVAO, shader, shaderlight, 36, texture1, texture2, camera, quad);
 
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
