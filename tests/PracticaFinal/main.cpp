@@ -16,7 +16,6 @@
 const float M_PI = 3.14f;
 
 Utils utils;
-Camera camera(glm::vec3(-1.0f, 2.0f, 3.0f));
 
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
@@ -114,47 +113,47 @@ const char* pathProyecto = "../tests/PracticaFinal/";
 
 #pragma region Eventos
 
-void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int32_t height) {
-	//redimension de pantalla 
-	//Cambio de clip scene a view scene
-	glViewport(0, 0, width, height);
-}
-
-void OnMouse(GLFWwindow* window, double xpos, double ypos) {
-	if (firstMouse) {
-		firstMouse = false;
-		lastX = xpos;
-		lastY = ypos;
-	}
-
-	double xoffset = xpos - lastX;
-	double yoffset = ypos - lastY;
-	lastX = xpos;
-	lastY = ypos;
-	camera.handleMouseMovement(xoffset, yoffset);
-}
-
-
-void OnScroll(GLFWwindow* window, double xoffset, double yoffset) {
-	camera.handleMouseScroll(yoffset);
-}
-
-void HandlerInput(GLFWwindow* window, const double deltaTime) {
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		camera.HandleKeyboard(Camera::Movement::Forward, deltaTime);
-	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-		camera.HandleKeyboard(Camera::Movement::Backward, deltaTime);
-	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		camera.HandleKeyboard(Camera::Movement::Left, deltaTime);
-	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		camera.HandleKeyboard(Camera::Movement::Right, deltaTime);
-	}
-	//Window::HandlerInput();
-}
-#pragma endregion
+//void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int32_t height) {
+//	//redimension de pantalla 
+//	//Cambio de clip scene a view scene
+//	glViewport(0, 0, width, height);
+//}
+//
+//void OnMouse(GLFWwindow* window, double xpos, double ypos) {
+//	if (firstMouse) {
+//		firstMouse = false;
+//		lastX = xpos;
+//		lastY = ypos;
+//	}
+//
+//	double xoffset = xpos - lastX;
+//	double yoffset = ypos - lastY;
+//	lastX = xpos;
+//	lastY = ypos;
+//	camera.handleMouseMovement(xoffset, yoffset);
+//}
+//
+//
+//void OnScroll(GLFWwindow* window, double xoffset, double yoffset) {
+//	camera.handleMouseScroll(yoffset);
+//}
+//
+//void HandlerInput(GLFWwindow* window, const double deltaTime) {
+//	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+//		camera.HandleKeyboard(Camera::Movement::Forward, deltaTime);
+//	}
+//	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+//		camera.HandleKeyboard(Camera::Movement::Backward, deltaTime);
+//	}
+//	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+//		camera.HandleKeyboard(Camera::Movement::Left, deltaTime);
+//	}
+//	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+//		camera.HandleKeyboard(Camera::Movement::Right, deltaTime);
+//	}
+//	//Window::HandlerInput();
+//}
+//#pragma endregion
 
 #pragma region Metodos
 
@@ -317,7 +316,8 @@ int Inicializacion() {
 		glfwTerminate();
 		return -1;
 	}
-	window = Window(screen_width, screen_height);
+	//Window window1 = Window(screen_width, screen_height);
+	window = *Window::GetInstance(screen_width, screen_height);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		cout << "Error initializing GLAD" << endl;
@@ -331,10 +331,10 @@ int Inicializacion() {
 	glDepthFunc(GL_LESS);
 
 	//cuando la ventana cambie de tamaño
-	glfwSetCursorPosCallback(window.GetWindow(), OnMouse);
-	glfwSetFramebufferSizeCallback(window.GetWindow(), OnChangeFrameBufferSize);
-	glfwSetScrollCallback(window.GetWindow(), OnScroll);
-	glfwSetInputMode(window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetCursorPosCallback(window.GetWindow(), Window::OnMouse);
+	//glfwSetFramebufferSizeCallback(window.GetWindow(), OnChangeFrameBufferSize);
+	//glfwSetScrollCallback(window.GetWindow(), OnScroll);
+	//glfwSetInputMode(window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	return 1;
 };
 
@@ -350,7 +350,7 @@ void RenderSphere(const Shader & shaderlight, glm::mat4 &projection, glm::mat4 &
 
 void Render(uint32_t VAO, uint32_t SphereVAO,
 	const Shader& shaderCube, const Shader& shaderlight,
-	const uint32_t numberOfElements, Camera camera, uint32_t texture1, uint32_t texture2) {
+	const uint32_t numberOfElements, uint32_t texture1, uint32_t texture2, Camera camera) {
 	//Renderizamos la pantalla con un color basandonos en el esquema RGBA(transparencia)
 	//Si lo quitamos, no borra nunca la pantalla
 
@@ -475,6 +475,7 @@ void Render(uint32_t VAO, uint32_t SphereVAO,
 	glBindVertexArray(0);
 
 }
+
 uint32_t createTexture(const char* path, bool flip) {
 	uint32_t texture;
 	glGenTextures(1, &texture);
@@ -578,25 +579,21 @@ int main(int argc, char* argv[]) {
 	uint32_t texture1 = createTexture(pathFinalImagen1, true);
 	uint32_t texture2 = createTexture(pathFinalImagen2, true);
 
-	long sizeOfIndices, sizeOfVertices;
-
-	sizeOfIndices = numeroIndicesCubo * sizeof(float);
-	sizeOfVertices = numeroElementosVerticesCubo * sizeof(float);
-
-
-
 
 	uint32_t CubeVAO = createVertexData(verticesCubo, numeroElementosVerticesCubo, indicesCubo, numeroIndicesCubo);
 	uint32_t SphereVAO = createSphere(1);
+	Camera camera(glm::vec3(-1.0f, 2.0f, 3.0f));
+	//Window window1 = Window(screen_width, screen_height);
 
 	//Bucle inicial donde se realiza toda la accion del motor
 	while (!glfwWindowShouldClose(window.GetWindow())) {
 		float currentFrame = glfwGetTime();
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-		HandlerInput(window.GetWindow(), deltaTime);
 
-		Render(CubeVAO, SphereVAO, shader, shaderlight, 36, camera, texture1, texture2);
+		window.HandlerInput(window.GetWindow(), deltaTime);
+		cout << Window::_camera.GetPosition().x << Window::_camera.GetPosition().y <<endl;
+		Render(CubeVAO, SphereVAO, shader, shaderlight, 36, texture1, texture2, camera);
 
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();

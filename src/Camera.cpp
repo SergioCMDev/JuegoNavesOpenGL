@@ -71,6 +71,8 @@ void Camera::HandleKeyboard(const Movement direction, const float deltaTime) {
 	}
 
 	if (!_flying) _position.y = prev_y;
+	updateCameraVectors();
+
 }
 
 void Camera::SetFlying(bool fly) {

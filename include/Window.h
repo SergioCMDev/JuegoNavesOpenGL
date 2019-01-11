@@ -28,7 +28,7 @@ private:
 	static void OnScroll(GLFWwindow* window, double xoffset, double yoffset);
 	static void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int32_t height);
 
-	GLFWwindow* _glfwWindow = nullptr;
+	static GLFWwindow* _glfwWindow;
 	static Window* _window;
 	static bool _firstMouse;
 	static double _lastX, _lastY, _xoffset, _yoffset;
