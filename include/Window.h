@@ -15,22 +15,22 @@ using namespace std;
 class Window {
 public:
 	~Window();
-	//static Window* Instance(const int widht, const int height);
+	static Window* Instance();
 	static Window* GetInstance(const int widht, const int height);
-	GLFWwindow* GetWindow();
-	void HandlerInput();
+	//void HandlerInput();
 	void HandlerInput(const double deltaTime);
-	void OnScroll(double xoffset, double yoffset);
-	void OnMouse(GLFWwindow* window, double xpos, double ypos);
+	GLFWwindow* GetWindow();
 private:
 	Window();
 	Window(const int widht, const int height);
-	void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int32_t height);
+	static void OnScroll(GLFWwindow* window, double xoffset, double yoffset);
+	static void OnMouse(GLFWwindow* window, double xpos, double ypos);
+	static void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int32_t height);
+
 	GLFWwindow* _glfwWindow = nullptr;
 	static Window* _window;
-
-	bool _firstMouse = false;
-	double _lastX, _lastY, _xoffset, _yoffset;
-	Camera* _camera = nullptr;
+	static bool _firstMouse;
+	static double _lastX, _lastY, _xoffset, _yoffset;
+	static Camera _camera;
 };
 #endif

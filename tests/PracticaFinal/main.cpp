@@ -154,7 +154,7 @@ int main(int argc, char* argv[]) {
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		window->HandlerInput(deltaTime);
-		window->HandlerInput();
+		//window->HandlerInput();
 
 		Render(shader, object);
 
