@@ -1,6 +1,6 @@
 #include "Model.h"
 #include "Utils.h"
-
+#include "Constants.h"
 
 #include<glad/glad.h>
 
@@ -8,7 +8,6 @@
 #include <stb_image.h>
 
 using namespace std;
-const char* pathProyecto = "../tests/PracticaFinal/";
 
 
 void Model::loadModel(string const path) {
@@ -25,6 +24,10 @@ void Model::loadModel(string const path) {
 
 	//process ASSIMP's root node recursevily
 	processNode(scene->mRootNode, scene);
+}
+
+Model::Model()
+{
 }
 
 Model::Model(string const &path, bool gamma) : gammaCorrection_(gamma) {
@@ -201,30 +204,7 @@ void Model::Draw(const Shader& shader) const {
 	}
 }
 
-uint32_t Model::CreateTexture(const char* path, bool flip) {
-	uint32_t texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+uint32_t Model::GetTexture(const char* pathtexture, bool flip) {
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	stbi_set_flip_vertically_on_load(flip);	int width, height, nChannels;
-	unsigned char* data = stbi_load(path, &width, &height, &nChannels, 0);
-	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	stbi_image_free(data);
-	return texture;
-};
-
-uint32_t Model::GetTexture(const std::string pathtexture, bool flip) {
-
-	string pathFinalImagen1String = Utils::GetFinalPath(pathProyecto, pathtexture);
-	const char* pathFinalImagen1 = pathFinalImagen1String.c_str();
-	return CreateTexture(pathFinalImagen1, flip);
-};
+	return TextureFromFile(pathtexture, Constants::pathProyecto, false);
+}
