@@ -12,6 +12,7 @@
 #include "Window.h"
 #include "Camera.h"
 #include "Utils.h"
+#include "main.h"
 
 
 const float screen_width = 800.0f, screen_height = 600.0f;
@@ -136,14 +137,13 @@ struct Quad {
 	Shader *shader;
 	uint32_t* VAO;
 };
-const uint32_t maximoNumeroModelos = 10;
 
 struct ObjectsModels {
 	Model *model;
 	Shader &shader;
 };
 struct TransferObjects {
-	const uint32_t maximoModelos = maximoNumeroModelos;
+	const uint32_t maximoModelos = Constants::MaximoObjectosTransferencia;
 	uint32_t numeroModelos;
 	ObjectsModels *modelos[10];
 };
@@ -175,12 +175,12 @@ void OnMouse(GLFWwindow* window, double xpos, double ypos) {
 	camera.handleMouseMovement(xoffset, yoffset);
 }
 
-
 void OnScroll(GLFWwindow* window, double xoffset, double yoffset) {
 	camera.handleMouseScroll(yoffset);
 }
 
-void HandlerInput(const double deltaTime) {
+void MovimientoCamara(const double &deltaTime)
+{
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_W) == GLFW_PRESS) {
 		camera.HandleKeyboard(Camera::Movement::Forward, deltaTime);
 	}
@@ -193,9 +193,31 @@ void HandlerInput(const double deltaTime) {
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_D) == GLFW_PRESS) {
 		camera.HandleKeyboard(Camera::Movement::Right, deltaTime);
 	}
+}
+
+void MovimientoJugador(const double &deltaTime)
+{
+	if (glfwGetKey(window.GetWindow(), GLFW_KEY_LEFT) == GLFW_PRESS) {
+		camera.HandleKeyboard(Camera::Movement::Forward, deltaTime);
+	}
+	if (glfwGetKey(window.GetWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS) {
+		camera.HandleKeyboard(Camera::Movement::Backward, deltaTime);
+	}
+	if (glfwGetKey(window.GetWindow(), GLFW_KEY_UP) == GLFW_PRESS) {
+		camera.HandleKeyboard(Camera::Movement::Left, deltaTime);
+	}
+	if (glfwGetKey(window.GetWindow(), GLFW_KEY_DOWN) == GLFW_PRESS) {
+		camera.HandleKeyboard(Camera::Movement::Right, deltaTime);
+	}
+}
+
+void HandlerInput(const double deltaTime) {
+	MovimientoCamara(deltaTime);
+	MovimientoJugador(deltaTime);
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window.GetWindow(), true);
 	}
+
 }
 #pragma endregion
 
@@ -452,7 +474,6 @@ void Render(uint32_t CubeVAO, uint32_t SphereVAO,
 	for (size_t i = 0; i < transfer.numeroModelos; i++)
 	{
 
-		//OK
 		glm::mat4 model = mat4(1.0f);
 
 		model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f));
@@ -478,20 +499,7 @@ void Render(uint32_t CubeVAO, uint32_t SphereVAO,
 		//model = glm::scale(model, glm::vec3(0.1f));
 		//shader.Set("model", model);
 
-		//modelObjs.modelos[0].model->Draw(shader);
 
-		/////////////////////////////////////////////////////////////////////////
-		//for (size_t i = 0; i < modelObjs.numeroModelos; i++)
-		//{
-		//	
-		//	Shader shader = modelObjs.modelos[i].shader;
-		//	glm::mat4 model(1.0f);
-		//	shader.Use();
-		//	shader.Set("projection", projection);
-		//	shader.Set("view", view);
-		//	model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f));
-		//	model = glm::scale(model, glm::vec3(0.1f));
-		//	shader.Set("model", model);
 
 		//	modelObjs.modelos[i].model.Draw(shader);
 		//}
@@ -711,12 +719,6 @@ int main(int argc, char* argv[]) {
 		objectosssArray,
 
 	};
-
-
-
-
-
-
 
 
 	uint32_t CubeVAO = createVertexData(verticesCubo, numeroElementosVerticesCubo, indicesCubo, numeroIndicesCubo);
