@@ -18,26 +18,28 @@
 const float screen_width = 800.0f, screen_height = 600.0f;
 float lastX = (float)screen_width / 2.0f;
 float lastY = (float)screen_height / 2.0f;
-const vec3 posCamera = glm::vec3(-1.0f, 2.0f, 3.0f);
-const vec3 posPlayer = vec3(-1.0f, 2.0f, 3.0f);
+//const vec3 posCamera = glm::vec3(-1.0f, 6.0f, 3.0f);
+const vec3 posCamera = glm::vec3(0.0f, 16.0f, 0.0f);
+const vec3 posPlayer = vec3(0.0f, 0.0f, 0.0f);
+const vec3 posSuelo = vec3(0.0f, -16.0f, 0.0f);
 
 Camera camera(posCamera);
 #pragma region Variables Globales
 const float M_PI = 3.14f;
 
 
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-
-glm::vec3 pointLightPositions[] = {
-	glm::vec3(0.7f, 0.2f, 2.0f),
-	glm::vec3(2.3f, -3.3f, -4.0f)
-};
-
-glm::vec3 spotLightPositions[] = {
-	glm::vec3(2.7f, 3.2f, 2.0f),
-	glm::vec3(-2.7f, 3.2f, -5.0f),
-
-};
+//glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+//
+//glm::vec3 pointLightPositions[] = {
+//	glm::vec3(0.7f, 0.2f, 2.0f),
+//	glm::vec3(2.3f, -3.3f, -4.0f)
+//};
+//
+//glm::vec3 spotLightPositions[] = {
+//	glm::vec3(2.7f, 3.2f, 2.0f),
+//	glm::vec3(-2.7f, 3.2f, -5.0f),
+//
+//};
 
 float lastFrame = 0.0f;
 bool firstMouse = true;
@@ -203,16 +205,16 @@ void MovimientoJugador(const float &deltaTime, TransferObjects objects)
 	//vec3 right = ;
 	//Camera::Movement::Forward //Hacer para player igual
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_LEFT) == GLFW_PRESS) {
-		objects.modelos[0]->position -= vec3(1.0f, 0.0f, 0.0f) * deltaTime;
+		objects.modelos[0]->position += vec3(1.0f, 0.0f, 0.0f) * deltaTime;
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS) {
-		objects.modelos[0]->position  += vec3(1.0f, 0.0f, 0.0f) * deltaTime;
+		objects.modelos[0]->position  -= vec3(1.0f, 0.0f, 0.0f) * deltaTime;
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_UP) == GLFW_PRESS) {
-		objects.modelos[0]->position += vec3(0.0f, 1.0f, 0.0f) * deltaTime;
+		objects.modelos[0]->position += vec3(0.0f, 0.0f, 1.0f) * deltaTime;
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_DOWN) == GLFW_PRESS) {
-		objects.modelos[0]->position -= vec3(0.0f, 1.0f, 0.0f) * deltaTime;
+		objects.modelos[0]->position -= vec3(0.0f, 0.0f, 1.0f) * deltaTime;
 	}
 }
 
@@ -418,6 +420,8 @@ void RenderFigure(const Shader & shader, glm::mat4 &projection, glm::mat4 &view,
 	glDrawElements(GL_TRIANGLES, numeroElementos, GL_UNSIGNED_INT, 0);
 }
 
+void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view);
+
 void Render(uint32_t CubeVAO, uint32_t SphereVAO,
 	const Shader& shaderCube, const Shader& shaderlight, const Shader& shaderNave,
 	uint32_t texture1, uint32_t texture2,
@@ -426,7 +430,6 @@ void Render(uint32_t CubeVAO, uint32_t SphereVAO,
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	//uint32_t elementosParaDibujarEsfera = 121 * 8;
 
-	////Dibujamos esferas de luz
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
 
@@ -463,16 +466,8 @@ void Render(uint32_t CubeVAO, uint32_t SphereVAO,
 		//RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
 	}
 
-	//////////////////////////////////////////////////////////////////////////////////////
 	//Dibujamos Suelo
-	glActiveTexture(GL_TEXTURE4);	glBindTexture(GL_TEXTURE_2D, quad.textures[0]);
-
-	quad.shader->Use();
-	quad.shader->Set("quadTexture", 4);
-	glm::mat4 model = mat4(1.0f);
-	model = glm::translate(model, vec3(0.0f, -7.0f, 0.0f));
-	model = glm::scale(model, vec3(10.0f));
-	RenderFigure(*quad.shader, projection, view, model, *quad.VAO, quad.numeroElementosParaDibujar);
+	RenderQuadSuelo(quad, projection, view);
 
 
 
@@ -573,6 +568,18 @@ void Render(uint32_t CubeVAO, uint32_t SphereVAO,
 	}
 
 	glBindVertexArray(0);
+}
+
+void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view)
+{
+	glActiveTexture(GL_TEXTURE4);	glBindTexture(GL_TEXTURE_2D, quad.textures[0]);
+
+	quad.shader->Use();
+	quad.shader->Set("quadTexture", 4);
+	glm::mat4 model = mat4(1.0f);
+	model = glm::translate(model, posSuelo);
+	model = glm::scale(model, vec3(20.0f));
+	RenderFigure(*quad.shader, projection, view, model, *quad.VAO, quad.numeroElementosParaDibujar);
 }
 
 

@@ -11,8 +11,8 @@
 #include<glm/gtc/type_precision.hpp>
 
 //Default Camera Values
-const float k_Yaw = -90.0f;
-const float k_Pitch = 0.0f;
+const float k_Yaw = 90.0f; //Grados eje X
+const float k_Pitch = 270.0f; //Camra mirando hacia abajo Grados Eje Y
 const float k_Speed = 2.5f;
 const float k_Sensitivity = 0.1f;
 const float k_FOV = 45.0f;
