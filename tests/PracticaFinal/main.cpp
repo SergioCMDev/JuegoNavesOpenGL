@@ -145,7 +145,7 @@ struct ObjectsModels {
 struct TransferObjects {
 	const uint32_t maximoModelos = maximoNumeroModelos;
 	uint32_t numeroModelos;
-	ObjectsModels modelos[10];
+	ObjectsModels *modelos[10];
 };
 
 
@@ -394,8 +394,7 @@ void RenderFigure(const Shader & shader, glm::mat4 &projection, glm::mat4 &view,
 void Render(uint32_t CubeVAO, uint32_t SphereVAO,
 	const Shader& shaderCube, const Shader& shaderlight, const Shader& shaderNave,
 	const uint32_t numberOfElements, uint32_t texture1, uint32_t texture2,
-	Quad quad, ObjectsModels object) {
-	//Quad quad, ObjectsModels modelObjs[]) {
+	Quad quad, TransferObjects transfer) {
 
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	//uint32_t elementosParaDibujarEsfera = 121 * 8;
@@ -450,21 +449,18 @@ void Render(uint32_t CubeVAO, uint32_t SphereVAO,
 
 
 
+	//OK
 	model = mat4(1.0f);
-	object.shader.Use();
-	object.shader.Set("projection", projection);
-	object.shader.Set("view", view);
+
 	model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f));
 	model = glm::scale(model, glm::vec3(0.1f));
-	object.shader.Set("model", model);
 
-	object.model->Draw(object.shader);
+	transfer.modelos[0]->shader.Use();
+	transfer.modelos[0]->shader.Set("projection", projection);
+	transfer.modelos[0]->shader.Set("view", view);
+	transfer.modelos[0]->shader.Set("model", model);
 
-
-
-
-
-
+	transfer.modelos[0]->model->Draw(transfer.modelos[0]->shader);
 
 
 
@@ -474,33 +470,36 @@ void Render(uint32_t CubeVAO, uint32_t SphereVAO,
 
 
 
-//FIX
-	//Shader shader = modelObjs.modelos[0].shader;
-	//model = mat4(1.0f);
-	//shader.Use();
-	//shader.Set("projection", projection);
-	//shader.Set("view", view);
-	//model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f));
-	//model = glm::scale(model, glm::vec3(0.1f));
-	//shader.Set("model", model);
 
-	//modelObjs.modelos[0].model->Draw(shader);
 
-	/////////////////////////////////////////////////////////////////////////
-	//for (size_t i = 0; i < modelObjs.numeroModelos; i++)
-	//{
-	//	
-	//	Shader shader = modelObjs.modelos[i].shader;
-	//	glm::mat4 model(1.0f);
-	//	shader.Use();
-	//	shader.Set("projection", projection);
-	//	shader.Set("view", view);
-	//	model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f));
-	//	model = glm::scale(model, glm::vec3(0.1f));
-	//	shader.Set("model", model);
 
-	//	modelObjs.modelos[i].model.Draw(shader);
-	//}
+	//FIX
+		//Shader shader = modelObjs.modelos[0].shader;
+		//model = mat4(1.0f);
+		//shader.Use();
+		//shader.Set("projection", projection);
+		//shader.Set("view", view);
+		//model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f));
+		//model = glm::scale(model, glm::vec3(0.1f));
+		//shader.Set("model", model);
+
+		//modelObjs.modelos[0].model->Draw(shader);
+
+		/////////////////////////////////////////////////////////////////////////
+		//for (size_t i = 0; i < modelObjs.numeroModelos; i++)
+		//{
+		//	
+		//	Shader shader = modelObjs.modelos[i].shader;
+		//	glm::mat4 model(1.0f);
+		//	shader.Use();
+		//	shader.Set("projection", projection);
+		//	shader.Set("view", view);
+		//	model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f));
+		//	model = glm::scale(model, glm::vec3(0.1f));
+		//	shader.Set("model", model);
+
+		//	modelObjs.modelos[i].model.Draw(shader);
+		//}
 
 	{
 
@@ -701,34 +700,25 @@ int main(int argc, char* argv[]) {
 	Model object("../assets/obj/Freighter/Freigther_BI_Export.obj");
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	//struct ObjectsModels2 {
-	//	Model model;
-	//	Shader shader;
-	//};
-	//
-	//objsArray[0] = { object, shaderNavePlayer };
-	//objsArray[1] = { object, shaderNavePlayer };
-	ObjectsModels objectosss = {
-		&object, shaderNavePlayer
+	ObjectsModels objectosssArray[1] = {
+		{&object, shaderNavePlayer}
 	};
+
+	/*ObjectsModels objectosss = {
+	&object, shaderNavePlayer
+	};*/
 
 	uint32_t numeroObjetos = 1;
 	uint32_t maximoObjetos = 10;
 
-	//struct TransferObjects2 {
-	//	const uint32_t maximoModelos = maximoNumeroModelos;
-	//	uint32_t numeroModelos;
-	//	ObjectsModels2 objectosss[1];
-	//};
 
-	//TransferObjects transfer = {
-	//	1,
-	//	1,
-	//	//objectosss->model,
-	//	//objectosss->shader,
-	//	*objectosss,
-	//	//objectosss->shader,
-	//};
+
+	TransferObjects transfer = {
+		maximoObjetos,
+		numeroObjetos,
+		objectosssArray,
+
+	};
 
 
 
@@ -757,7 +747,7 @@ int main(int argc, char* argv[]) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//Render(CubeVAO, SphereVAO, shader, shaderlight, shaderNavePlayer, 36, texture1, texture2, quad, transfer);
-		Render(CubeVAO, SphereVAO, shader, shaderlight, shaderNavePlayer, 36, texture1, texture2, quad, objectosss);
+		Render(CubeVAO, SphereVAO, shader, shaderlight, shaderNavePlayer, 36, texture1, texture2, quad, transfer);
 
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
