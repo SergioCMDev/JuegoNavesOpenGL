@@ -449,27 +449,22 @@ void Render(uint32_t CubeVAO, uint32_t SphereVAO,
 
 
 
-	//OK
-	model = mat4(1.0f);
+	for (size_t i = 0; i < transfer.numeroModelos; i++)
+	{
 
-	model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f));
-	model = glm::scale(model, glm::vec3(0.1f));
+		//OK
+		glm::mat4 model = mat4(1.0f);
 
-	transfer.modelos[0]->shader.Use();
-	transfer.modelos[0]->shader.Set("projection", projection);
-	transfer.modelos[0]->shader.Set("view", view);
-	transfer.modelos[0]->shader.Set("model", model);
+		model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.1f));
 
-	transfer.modelos[0]->model->Draw(transfer.modelos[0]->shader);
+		transfer.modelos[i]->shader.Use();
+		transfer.modelos[i]->shader.Set("projection", projection);
+		transfer.modelos[i]->shader.Set("view", view);
+		transfer.modelos[i]->shader.Set("model", model);
 
-
-
-
-
-
-
-
-
+		transfer.modelos[i]->model->Draw(transfer.modelos[0]->shader);
+	}
 
 
 
@@ -709,12 +704,9 @@ int main(int argc, char* argv[]) {
 	};*/
 
 	uint32_t numeroObjetos = 1;
-	uint32_t maximoObjetos = 10;
-
-
 
 	TransferObjects transfer = {
-		maximoObjetos,
+		Constants::MaximoObjectosTransferencia,
 		numeroObjetos,
 		objectosssArray,
 
