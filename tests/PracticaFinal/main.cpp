@@ -196,10 +196,8 @@ void MovimientoCamara(const double &deltaTime)
 	}
 }
 
-void MovimientoJugador(const float &deltaTime, TransferObjects objects, Player* player)
+void MovimientoJugador(const float &deltaTime, Player* player)
 {
-	//vec3 right = ;
-	//Camera::Movement::Forward //Hacer para player igual
 	//Player player = ((Player)*objects.modelos[0]);
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_LEFT) == GLFW_PRESS) {
 		//player->_position += vec3(1.0f, 0.0f, 0.0f) * deltaTime;
@@ -222,8 +220,10 @@ void MovimientoJugador(const float &deltaTime, TransferObjects objects, Player* 
 
 void HandlerInput(const double deltaTime, TransferObjects objects, Player* player) {
 	MovimientoCamara(deltaTime);
+	if (objects.modelos[0]->_type == 1) {
 
-	MovimientoJugador(deltaTime, objects, player);
+	}
+	MovimientoJugador(deltaTime, player);
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window.GetWindow(), true);
 	}
@@ -425,10 +425,12 @@ void RenderFigure(const Shader & shader, glm::mat4 &projection, glm::mat4 &view,
 
 void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view);
 
+void RenderPlayer(Player * player, glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view);
+
 void Render(uint32_t CubeVAO, uint32_t SphereVAO,
 	const Shader& shaderCube, const Shader& shaderlight, const Shader& shaderNave,
 	uint32_t texture1, uint32_t texture2,
-	Quad quad, TransferObjects transfer, Player player) {
+	Quad quad, TransferObjects transfer, Player *player) {
 
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	//uint32_t elementosParaDibujarEsfera = 121 * 8;
@@ -473,31 +475,24 @@ void Render(uint32_t CubeVAO, uint32_t SphereVAO,
 	RenderQuadSuelo(quad, projection, view);
 	glm::mat4 model = mat4(1.0f);
 
-	player._shader.Use();
-	model = glm::translate(model, player._position);
-	model = glm::scale(model, glm::vec3(0.1f));
-
-	player._shader.Set("projection", projection);
-	player._shader.Set("view", view);
-	player._shader.Set("model", model);
-	player._model.Draw(player._shader);
+	RenderPlayer(player, model, projection, view);
 
 
-	for (size_t i = 0; i < transfer.numeroModelos; i++)
-	{
+	//for (size_t i = 0; i < transfer.numeroModelos; i++)
+	//{
 
-		glm::mat4 model = mat4(1.0f);
+	//	glm::mat4 model = mat4(1.0f);
 
-		model = glm::translate(model, transfer.modelos[i]->_position);
-		model = glm::scale(model, glm::vec3(0.1f));
+	//	model = glm::translate(model, transfer.modelos[i]->_position);
+	//	model = glm::scale(model, glm::vec3(0.1f));
 
-		transfer.modelos[i]->_shader.Use();
-		transfer.modelos[i]->_shader.Set("projection", projection);
-		transfer.modelos[i]->_shader.Set("view", view);
-		transfer.modelos[i]->_shader.Set("model", model);
+	//	transfer.modelos[i]->_shader.Use();
+	//	transfer.modelos[i]->_shader.Set("projection", projection);
+	//	transfer.modelos[i]->_shader.Set("view", view);
+	//	transfer.modelos[i]->_shader.Set("model", model);
 
-		transfer.modelos[i]->_model.Draw(transfer.modelos[0]->_shader);
-	}
+	//	transfer.modelos[i]->_model.Draw(transfer.modelos[0]->_shader);
+	//}
 
 
 	{
@@ -580,6 +575,18 @@ void Render(uint32_t CubeVAO, uint32_t SphereVAO,
 	}
 
 	glBindVertexArray(0);
+}
+
+void RenderPlayer(Player * player, glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view)
+{
+	player->_shader.Use();
+	model = glm::translate(model, player->_position);
+	model = glm::scale(model, glm::vec3(0.1f));
+
+	player->_shader.Set("projection", projection);
+	player->_shader.Set("view", view);
+	player->_shader.Set("model", model);
+	player->_model.Draw(player->_shader);
 }
 
 void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view)
@@ -743,8 +750,9 @@ int main(int argc, char* argv[]) {
 		lastFrame = currentFrame;
 
 		HandlerInput(deltaTime, transfer, &player);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		Render(CubeVAO, SphereVAO, shader, shaderlight, shaderNavePlayer, texture1, texture2, quad, transfer, player);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		GameObject g = *transfer.modelos[0];
+		Player* player2 = static_cast<Player*>(&g);
+		Render(CubeVAO, SphereVAO, shader, shaderlight, shaderNavePlayer, texture1, texture2, quad, transfer, &player);
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
 	}

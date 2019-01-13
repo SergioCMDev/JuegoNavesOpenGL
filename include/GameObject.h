@@ -16,8 +16,9 @@ public:
 		Right = 3,
 	};
 	Model _model;
+	uint32_t _type;
 	Shader &_shader = Shader();
-
+	virtual ~GameObject() {};
 	GameObject();
 	float GetVelocity();
 	glm::vec3 GetRightVector();

@@ -7,6 +7,7 @@ Player::Player(Shader & shader, glm::vec3 position)
 	//_position = position;
 	SetPosition( position);
 	_velocity = 2.5f;
+	_type = 1;
 }
 
 //float Player::GetVelocity()
