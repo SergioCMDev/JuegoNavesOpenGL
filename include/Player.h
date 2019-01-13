@@ -9,10 +9,14 @@
 class Player : public GameObject{
 
 public:
+	Player();
 	//float GetVelocity();
-	void Player::MoverJugador(const Movement movement, const float deltaTime);
+	void MoverJugador(const Movement movement, const float deltaTime);
+	static Player* Instance(Shader & shader, glm::vec3 position);
+	static Player* GetInstance();
 	Player(Shader & shader, glm::vec3 position);
 private:
+	static Player* _instance;
 	//float _velocity = 0.5f;
 	const char* pathToModel = "../assets/obj/Freighter/Freigther_BI_Export.obj";
 

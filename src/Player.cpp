@@ -1,5 +1,10 @@
 #include "Player.h"
 
+Player* Player::_instance;
+
+Player::Player() {
+
+}
 Player::Player(Shader & shader, glm::vec3 position)
 {
 	_model = Model(pathToModel);
@@ -9,6 +14,8 @@ Player::Player(Shader & shader, glm::vec3 position)
 	_velocity = 2.5f;
 	_type = 1;
 }
+
+//Player::
 
 //float Player::GetVelocity()
 //{
@@ -29,4 +36,17 @@ void Player::MoverJugador(const Movement movement, const float deltaTime)
 		case Movement::Right:
 			_position -= GetRightVector() * actualVelocity; break;
 		}
+}
+
+Player * Player::Instance(Shader & shader, glm::vec3 position)
+{
+	if (_instance == 0) {
+		_instance = &Player(shader, position);
+	}
+	return _instance;
+}
+
+Player * Player::GetInstance() {
+	return _instance;
+
 }

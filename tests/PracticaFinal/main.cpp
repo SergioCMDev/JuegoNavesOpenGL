@@ -213,16 +213,13 @@ void MovimientoJugador(const float &deltaTime, Player* player)
 		player->MoverJugador(Player::Movement::Forward, deltaTime);
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_DOWN) == GLFW_PRESS) {
-		player->MoverJugador(Player::Movement::Backward, deltaTime);
 		//player->_position -= vec3(0.0f, 0.0f, 1.0f) * deltaTime;
+		player->MoverJugador(Player::Movement::Backward, deltaTime);
 	}
 }
 
 void HandlerInput(const double deltaTime, TransferObjects objects, Player* player) {
 	MovimientoCamara(deltaTime);
-	if (objects.modelos[0]->_type == 1) {
-
-	}
 	MovimientoJugador(deltaTime, player);
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window.GetWindow(), true);
@@ -427,8 +424,7 @@ void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view);
 
 void RenderPlayer(Player * player, glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view);
 
-void Render(uint32_t CubeVAO, uint32_t SphereVAO,
-	const Shader& shaderCube, const Shader& shaderlight, const Shader& shaderNave,
+void Render(const Shader& shaderCube, const Shader& shaderlight, const Shader& shaderNave,
 	uint32_t texture1, uint32_t texture2,
 	Quad quad, TransferObjects transfer, Player *player) {
 
@@ -716,7 +712,8 @@ int main(int argc, char* argv[]) {
 	uint32_t textureSuelo = Model::GetTexture("Textures/texture3.png", true);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	Player  player(shaderNavePlayer, posPlayer);
+	//Player* player = Player::Instance(shaderNavePlayer, posPlayer);
+	Player player(shaderNavePlayer, posPlayer);
 
 	GameObject objectosssArray[1] = {
 	{player}
@@ -729,19 +726,21 @@ int main(int argc, char* argv[]) {
 		Constants::MaximoObjectosTransferencia,
 		numeroObjetos,
 		objectosssArray,
-
 	};
 
 
-	uint32_t CubeVAO = createVertexData(verticesCubo, numeroElementosVerticesCubo, indicesCubo, numeroIndicesCubo);
+	//uint32_t CubeVAO = createVertexData(verticesCubo, numeroElementosVerticesCubo, indicesCubo, numeroIndicesCubo);
+	//uint32_t SphereVAO = createSphere(1);
 	uint32_t QuadVAO = createVertexDataQuad(verticesQuad, numeroElementosVerticesQuad, indicesQuad, numeroIndicesQuad, 5);
-	uint32_t SphereVAO = createSphere(1);
 
 	Quad quad = Quad();
 	quad.shader = &shaderQuad;
 	quad.VAO = &QuadVAO;
 	quad.textures[0] = textureSuelo;
 	quad.numeroElementosParaDibujar = 6;
+
+	//GameObject *g = transfer.modelos[0];
+	//Player* player2 = static_cast<Player*>(g);
 
 	//Bucle inicial donde se realiza toda la accion del motor
 	while (!glfwWindowShouldClose(window.GetWindow())) {
@@ -750,15 +749,15 @@ int main(int argc, char* argv[]) {
 		lastFrame = currentFrame;
 
 		HandlerInput(deltaTime, transfer, &player);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		GameObject g = *transfer.modelos[0];
-		Player* player2 = static_cast<Player*>(&g);
-		Render(CubeVAO, SphereVAO, shader, shaderlight, shaderNavePlayer, texture1, texture2, quad, transfer, &player);
+
+		Render(shader, shaderlight, shaderNavePlayer, texture1, texture2, quad, transfer,& player);
+		
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
 	}
 
 	//Si se han linkado bien los shaders, los borramos ya que estan linkados
-	glDeleteVertexArrays(1, &CubeVAO);
+	//glDeleteVertexArrays(1, &CubeVAO);
 
 
 	glfwTerminate();
