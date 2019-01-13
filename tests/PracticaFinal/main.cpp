@@ -13,8 +13,10 @@
 #include "Camera.h"
 #include "GameObject.h"
 
-#include "Model.h"
+//#include "Model.h"
 #include "Player.h"
+#include "Meteor.h"
+#include "main.h"
 
 const float screen_width = 800.0f, screen_height = 600.0f;
 float lastX = (float)screen_width / 2.0f;
@@ -424,7 +426,17 @@ void RenderFigure(const Shader & shader, glm::mat4 &projection, glm::mat4 &view,
 	glDrawElements(GL_TRIANGLES, numeroElementos, GL_UNSIGNED_INT, 0);
 }
 
-void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view);
+void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view)
+{
+	glActiveTexture(GL_TEXTURE4);	glBindTexture(GL_TEXTURE_2D, quad.textures[0]);
+
+	quad.shader->Use();
+	quad.shader->Set("quadTexture", 4);
+	glm::mat4 model = mat4(1.0f);
+	model = glm::translate(model, posSuelo);
+	model = glm::scale(model, vec3(20.0f));
+	RenderFigure(*quad.shader, projection, view, model, *quad.VAO, quad.numeroElementosParaDibujar);
+}
 
 
 void Render(const Shader& shaderCube, const Shader& shaderlight,
@@ -480,23 +492,16 @@ void Render(const Shader& shaderCube, const Shader& shaderlight,
 	{
 		if (transfer.modelos[i]->_type == Constants::TIPO_PLAYER) {
 
-			GameObject *g = transfer.modelos[0];
+			GameObject *g = transfer.modelos[i];
 			Player* player = static_cast<Player*>(g)->GetInstance();
 			player->Render(model, projection, view);
 		}
-		else 
+		else if(transfer.modelos[i]->_type == Constants::TIPO_METEOR)
 		{
 			glm::mat4 model = mat4(1.0f);
-
-			model = glm::translate(model, transfer.modelos[i]->_position);
-			model = glm::scale(model, glm::vec3(0.1f));
-
-			transfer.modelos[i]->_shader.Use();
-			transfer.modelos[i]->_shader.Set("projection", projection);
-			transfer.modelos[i]->_shader.Set("view", view);
-			transfer.modelos[i]->_shader.Set("model", model);
-
-			transfer.modelos[i]->_model.Draw(transfer.modelos[0]->_shader);
+			GameObject *g = transfer.modelos[i];
+			Meteor* meteor = static_cast<Meteor*>(g);
+			meteor->RenderMeteor(model, projection, view);
 		}
 	}
 
@@ -581,20 +586,6 @@ void Render(const Shader& shaderCube, const Shader& shaderlight,
 	}
 
 	glBindVertexArray(0);
-}
-
-
-
-void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view)
-{
-	glActiveTexture(GL_TEXTURE4);	glBindTexture(GL_TEXTURE_2D, quad.textures[0]);
-
-	quad.shader->Use();
-	quad.shader->Set("quadTexture", 4);
-	glm::mat4 model = mat4(1.0f);
-	model = glm::translate(model, posSuelo);
-	model = glm::scale(model, vec3(20.0f));
-	RenderFigure(*quad.shader, projection, view, model, *quad.VAO, quad.numeroElementosParaDibujar);
 }
 
 
@@ -706,6 +697,7 @@ int main(int argc, char* argv[]) {
 	Shader shader = Utils::GetFullShader("Shaders/vertex.vs", "Shaders/fragment.fs");
 	Shader shaderQuad = Utils::GetFullShader("Shaders/QuadVS.vs", "Shaders/QuadFS.fs");
 	Shader shaderNavePlayer = Utils::GetFullShader("Shaders/NavePlayerVS.vs", "Shaders/NavePlayerFS.fs");
+	Shader shaderMeteorito = Utils::GetFullShader("Shaders/MetorVS.vs", "Shaders/MetorFS.fs");
 
 	uint32_t texture1 = Model::GetTexture("Textures/albedo.png", true);
 	uint32_t texture2 = Model::GetTexture("Textures/specular.png", true);
@@ -714,20 +706,23 @@ int main(int argc, char* argv[]) {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	Player* player = Player::Instance(shaderNavePlayer, posPlayer);
+	vec3 posMeteorito = vec3(3.0f, 0.0f, 0.0f);
+	Meteor meteor = Meteor(shaderMeteorito, posMeteorito);
 
-	GameObject objectosssArray[1] = {
-	{*player}
-	};
+	const uint32_t numeroObjetos = 2;
+	GameObject *objectosssArray[numeroObjetos];
+	objectosssArray[0] = player;
+	objectosssArray[1] = &meteor;
+	
 
 
-	uint32_t numeroObjetos = 1;
 
 	TransferObjects transfer = {
 		Constants::MaximoObjectosTransferencia,
 		numeroObjetos,
-		objectosssArray,
+		*objectosssArray,
 	};
-
+	transfer.modelos[1] = &meteor; //FIND HOW TO FIX
 
 	//uint32_t CubeVAO = createVertexData(verticesCubo, numeroElementosVerticesCubo, indicesCubo, numeroIndicesCubo);
 	//uint32_t SphereVAO = createSphere(1);
