@@ -14,6 +14,7 @@
 #include "GameObject.h"
 
 #include "Model.h"
+#include "Player.h"
 
 const float screen_width = 800.0f, screen_height = 600.0f;
 float lastX = (float)screen_width / 2.0f;
@@ -691,19 +692,13 @@ int main(int argc, char* argv[]) {
 	uint32_t texture2 = Model::GetTexture("Textures/specular.png", true);
 	uint32_t textureSuelo = Model::GetTexture("Textures/texture3.png", true);
 
-	//Model object("../assets/obj/Freighter/Freigther_BI_Export.obj");
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-	GameObject player (Constants::pathToPlayerModel, shaderNavePlayer, posPlayer);
-
+	Player player (shaderNavePlayer, posPlayer);
 
 	GameObject objectosssArray[1] = {
 	{player}
 	};
 
-	/*ObjectsModels objectosss = {
-	&object, shaderNavePlayer
-	};*/
 
 	uint32_t numeroObjetos = 1;
 

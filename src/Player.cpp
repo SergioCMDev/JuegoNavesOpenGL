@@ -1,6 +1,11 @@
 #include "Player.h"
 
-
+Player::Player(Shader & shader, glm::vec3 position)
+{
+	_model = Model(pathToModel);
+	_shader = shader;
+	_position = position;
+}
 
 void Player::MoverJugador(const Movement movement, const GameObject model, const float deltaTime)
 {
