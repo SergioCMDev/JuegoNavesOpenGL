@@ -226,6 +226,20 @@ void HandlerInput(const double deltaTime, TransferObjects objects, Player* playe
 	}
 
 }
+
+
+void HandlerInput(const double deltaTime, TransferObjects objects) {
+	MovimientoCamara(deltaTime);
+	if (objects.modelos[0]->_type == 1) {
+		GameObject *g = objects.modelos[0];
+		Player* player = static_cast<Player*>(g)->GetInstance();
+		MovimientoJugador(deltaTime, player);
+	}
+	if (glfwGetKey(window.GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		glfwSetWindowShouldClose(window.GetWindow(), true);
+	}
+
+}
 #pragma endregion
 
 #pragma region Metodos
@@ -422,11 +436,11 @@ void RenderFigure(const Shader & shader, glm::mat4 &projection, glm::mat4 &view,
 
 void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view);
 
-void RenderPlayer(Player * player, glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view);
 
-void Render(const Shader& shaderCube, const Shader& shaderlight, const Shader& shaderNave,
+void Render(const Shader& shaderCube, const Shader& shaderlight,
 	uint32_t texture1, uint32_t texture2,
-	Quad quad, TransferObjects transfer, Player *player) {
+	Quad quad, TransferObjects transfer) {
+	//Quad quad, TransferObjects transfer, Player *player) {
 
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	//uint32_t elementosParaDibujarEsfera = 121 * 8;
@@ -471,24 +485,30 @@ void Render(const Shader& shaderCube, const Shader& shaderlight, const Shader& s
 	RenderQuadSuelo(quad, projection, view);
 	glm::mat4 model = mat4(1.0f);
 
-	RenderPlayer(player, model, projection, view);
 
+	for (size_t i = 0; i < transfer.numeroModelos; i++)
+	{
+		if (transfer.modelos[i]->_type == Constants::TIPO_PLAYER) {
 
-	//for (size_t i = 0; i < transfer.numeroModelos; i++)
-	//{
+			GameObject *g = transfer.modelos[0];
+			Player* player = static_cast<Player*>(g)->GetInstance();
+			player->Render(model, projection, view);
+		}
+		else 
+		{
+			glm::mat4 model = mat4(1.0f);
 
-	//	glm::mat4 model = mat4(1.0f);
+			model = glm::translate(model, transfer.modelos[i]->_position);
+			model = glm::scale(model, glm::vec3(0.1f));
 
-	//	model = glm::translate(model, transfer.modelos[i]->_position);
-	//	model = glm::scale(model, glm::vec3(0.1f));
+			transfer.modelos[i]->_shader.Use();
+			transfer.modelos[i]->_shader.Set("projection", projection);
+			transfer.modelos[i]->_shader.Set("view", view);
+			transfer.modelos[i]->_shader.Set("model", model);
 
-	//	transfer.modelos[i]->_shader.Use();
-	//	transfer.modelos[i]->_shader.Set("projection", projection);
-	//	transfer.modelos[i]->_shader.Set("view", view);
-	//	transfer.modelos[i]->_shader.Set("model", model);
-
-	//	transfer.modelos[i]->_model.Draw(transfer.modelos[0]->_shader);
-	//}
+			transfer.modelos[i]->_model.Draw(transfer.modelos[0]->_shader);
+		}
+	}
 
 
 	{
@@ -740,8 +760,6 @@ int main(int argc, char* argv[]) {
 	quad.textures[0] = textureSuelo;
 	quad.numeroElementosParaDibujar = 6;
 
-	//GameObject *g = transfer.modelos[0];
-	//Player* player2 = static_cast<Player*>(g);
 
 	//Bucle inicial donde se realiza toda la accion del motor
 	while (!glfwWindowShouldClose(window.GetWindow())) {
@@ -749,10 +767,12 @@ int main(int argc, char* argv[]) {
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		HandlerInput(deltaTime, transfer, player);
+		HandlerInput(deltaTime, transfer);
+		//HandlerInput(deltaTime, transfer, player);
 
-		Render(shader, shaderlight, shaderNavePlayer, texture1, texture2, quad, transfer, player);
-		
+		//Render(shader, shaderlight, shaderNavePlayer, texture1, texture2, quad, transfer, player2);
+		Render(shader, shaderlight, texture1, texture2, quad, transfer);
+
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
 	}

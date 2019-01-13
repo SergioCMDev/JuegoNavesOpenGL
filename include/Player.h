@@ -16,6 +16,7 @@ public:
 	static Player* GetInstance();
 	Player(Shader & shader, glm::vec3 position);
 	~Player();
+	void Render(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view);
 private:
 	static Player* _instance;
 	//float _velocity = 0.5f;

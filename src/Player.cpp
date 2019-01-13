@@ -26,6 +26,21 @@ Player::~Player() {
 //	return _playerSpeed;
 //}
 
+
+
+void Player::Render(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view)
+{
+
+	Player::_shader.Use();
+	model = glm::translate(model, _position);
+	model = glm::scale(model, glm::vec3(0.1f));
+
+	_shader.Set("projection", projection);
+	_shader.Set("view", view);
+	_shader.Set("model", model);
+	_model.Draw(_shader);
+}
+
 void Player::MoverJugador(const Movement movement, const float deltaTime)
 {
 	float actualVelocity = GetVelocity() * deltaTime;
