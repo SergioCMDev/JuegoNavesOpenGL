@@ -201,26 +201,26 @@ void MovimientoJugador(const float &deltaTime, Player* player)
 	//Player player = ((Player)*objects.modelos[0]);
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_LEFT) == GLFW_PRESS) {
 		//player->_position += vec3(1.0f, 0.0f, 0.0f) * deltaTime;
-		player->MoverJugador(Player::Movement::Left, deltaTime);
+		player->Mover(Player::Movement::Left, deltaTime);
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS) {
 		//player->_position -= vec3(1.0f, 0.0f, 0.0f) * deltaTime;
-		player->MoverJugador(Player::Movement::Right, deltaTime);
+		player->Mover(Player::Movement::Right, deltaTime);
 
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_UP) == GLFW_PRESS) {
 		//player->_position += vec3(0.0f, 0.0f, 1.0f) * deltaTime;
-		player->MoverJugador(Player::Movement::Forward, deltaTime);
+		player->Mover(Player::Movement::Forward, deltaTime);
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_DOWN) == GLFW_PRESS) {
 		//player->_position -= vec3(0.0f, 0.0f, 1.0f) * deltaTime;
-		player->MoverJugador(Player::Movement::Backward, deltaTime);
+		player->Mover(Player::Movement::Backward, deltaTime);
 	}
 }
 
 void HandlerInput(const double deltaTime, TransferObjects objects) {
 	MovimientoCamara(deltaTime);
-	if (objects.modelos[0]->_type == 1) {
+	if (objects.modelos[0]->_type == Constants::TIPO_PLAYER) {
 		GameObject *g = objects.modelos[0];
 		Player* player = static_cast<Player*>(g)->GetInstance();
 		MovimientoJugador(deltaTime, player);

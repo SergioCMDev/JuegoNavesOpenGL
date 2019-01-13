@@ -1,11 +1,11 @@
-#include "Player.h"
+#include "Meteor.h"
 
-Player* Player::_instance;
 
-Player::Player() {
+
+Meteor::Meteor() {
 
 }
-Player::Player(Shader & shader, glm::vec3 position)
+Meteor::Meteor(Shader & shader, glm::vec3 position)
 {
 	_model = Model(pathToModel);
 	_shader = shader;
@@ -15,8 +15,8 @@ Player::Player(Shader & shader, glm::vec3 position)
 	_type = 1;
 }
 
-Player::~Player() {
-	_instance = nullptr;
+Meteor::~Meteor() {
+	/*_instance = nullptr;*/
 }
 
 //Player::
@@ -28,10 +28,10 @@ Player::~Player() {
 
 
 
-void Player::Render(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view)
+void Meteor::Render(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view)
 {
 
-	Player::_shader.Use();
+	_shader.Use();
 	model = glm::translate(model, _position);
 	model = glm::scale(model, glm::vec3(0.1f));
 
@@ -41,7 +41,7 @@ void Player::Render(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view)
 	_model.Draw(_shader);
 }
 
-void Player::Mover(const Movement movement, const float deltaTime)
+void Meteor::Mover(const Movement movement, const float deltaTime)
 {
 	float actualVelocity = GetVelocity() * deltaTime;
 	float prev_y = _position.y;
@@ -55,17 +55,4 @@ void Player::Mover(const Movement movement, const float deltaTime)
 	case Movement::Right:
 		_position -= GetRightVector() * actualVelocity; break;
 	}
-}
-
-Player * Player::Instance(Shader & shader, glm::vec3 position)
-{
-	if (_instance == 0) {
-		_instance = new Player(shader, position);
-	}
-	return _instance;
-}
-
-Player * Player::GetInstance() {
-	return _instance;
-
 }
