@@ -12,7 +12,7 @@
 #include "Window.h"
 #include "Camera.h"
 #include "Utils.h"
-#include "main.h"
+#include "ObjectModel.h"
 
 
 const float screen_width = 800.0f, screen_height = 600.0f;
@@ -141,16 +141,16 @@ struct Quad {
 	uint32_t* VAO;
 };
 
-struct ObjectsModels {
-	Model *model;
-	Shader &shader;
-	vec3 position;
-};
+//struct ObjectsModels {
+//	Model *model;
+//	Shader &shader;
+//	vec3 position;
+//};
 
 struct TransferObjects {
 	const uint32_t maximoModelos = Constants::MaximoObjectosTransferencia;
 	uint32_t numeroModelos;
-	ObjectsModels *modelos[10];
+	ObjectModel *modelos[10];
 };
 
 
@@ -699,7 +699,7 @@ int main(int argc, char* argv[]) {
 	Model object("../assets/obj/Freighter/Freigther_BI_Export.obj");
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	ObjectsModels objectosssArray[1] = {
+	ObjectModel objectosssArray[1] = {
 		{&object, shaderNavePlayer, posPlayer}
 	};
 
