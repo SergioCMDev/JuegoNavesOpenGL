@@ -25,13 +25,13 @@ public:
 	glm::vec3 GetPosition();
 	void SetPosition(glm::vec3 position);
 
-	//GameObject(Model * model, Shader& shader, glm::vec3 position);
-	//GameObject(const char* pathToModel, Shader& shader, glm::vec3 position);
+	GameObject(Model * model, Shader& shader, glm::vec3 position);
+	GameObject(const char* pathToModel, Shader& shader, glm::vec3 position);
 	vec3 _position;
 
-private:
-	const float _velocity = 0.0f;
 	const vec3 _right = vec3(1.0f, 0.0f, 0.0f);
 	const vec3 _up = vec3(0.0f, 0.0f, 1.0f);
+	float _velocity = 0.0f;
+private:
 };
 #endif

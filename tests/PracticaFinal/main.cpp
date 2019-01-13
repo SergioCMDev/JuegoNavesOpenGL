@@ -21,7 +21,7 @@ float lastX = (float)screen_width / 2.0f;
 float lastY = (float)screen_height / 2.0f;
 //const vec3 posCamera = glm::vec3(-1.0f, 6.0f, 3.0f);
 const vec3 posCamera = glm::vec3(0.0f, 16.0f, 0.0f);
-const vec3 posPlayer = vec3(0.0f, 0.0f, 0.0f);
+const vec3 posPlayer = vec3(5.0f, 0.0f, 0.0f);
 const vec3 posSuelo = vec3(0.0f, -16.0f, 0.0f);
 
 Camera camera(posCamera);
@@ -196,27 +196,34 @@ void MovimientoCamara(const double &deltaTime)
 	}
 }
 
-void MovimientoJugador(const float &deltaTime, TransferObjects objects)
+void MovimientoJugador(const float &deltaTime, TransferObjects objects, Player* player)
 {
 	//vec3 right = ;
 	//Camera::Movement::Forward //Hacer para player igual
+	//Player player = ((Player)*objects.modelos[0]);
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_LEFT) == GLFW_PRESS) {
-		objects.modelos[0]->_position += vec3(1.0f, 0.0f, 0.0f) * deltaTime;
+		//player->_position += vec3(1.0f, 0.0f, 0.0f) * deltaTime;
+		player->MoverJugador(Player::Movement::Left, deltaTime);
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS) {
-		objects.modelos[0]->_position  -= vec3(1.0f, 0.0f, 0.0f) * deltaTime;
+		//player->_position -= vec3(1.0f, 0.0f, 0.0f) * deltaTime;
+		player->MoverJugador(Player::Movement::Right, deltaTime);
+
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_UP) == GLFW_PRESS) {
-		objects.modelos[0]->_position += vec3(0.0f, 0.0f, 1.0f) * deltaTime;
+		//player->_position += vec3(0.0f, 0.0f, 1.0f) * deltaTime;
+		player->MoverJugador(Player::Movement::Forward, deltaTime);
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_DOWN) == GLFW_PRESS) {
-		objects.modelos[0]->_position -= vec3(0.0f, 0.0f, 1.0f) * deltaTime;
+		player->MoverJugador(Player::Movement::Backward, deltaTime);
+		//player->_position -= vec3(0.0f, 0.0f, 1.0f) * deltaTime;
 	}
 }
 
-void HandlerInput(const double deltaTime, TransferObjects objects) {
+void HandlerInput(const double deltaTime, TransferObjects objects, Player* player) {
 	MovimientoCamara(deltaTime);
-	MovimientoJugador(deltaTime, objects);
+
+	MovimientoJugador(deltaTime, objects, player);
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window.GetWindow(), true);
 	}
@@ -400,7 +407,7 @@ int Inicializacion() {
 
 	//cuando la ventana cambie de tamaño
 	//glfwSetCursorPosCallback(window.GetWindow(), &Window::OnMouse);
-	glfwSetCursorPosCallback(window.GetWindow(), OnMouse);
+	//glfwSetCursorPosCallback(window.GetWindow(), OnMouse);
 	glfwSetFramebufferSizeCallback(window.GetWindow(), OnChangeFrameBufferSize);
 	glfwSetScrollCallback(window.GetWindow(), OnScroll);
 	glfwSetInputMode(window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -421,7 +428,7 @@ void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view);
 void Render(uint32_t CubeVAO, uint32_t SphereVAO,
 	const Shader& shaderCube, const Shader& shaderlight, const Shader& shaderNave,
 	uint32_t texture1, uint32_t texture2,
-	Quad quad, TransferObjects transfer) {
+	Quad quad, TransferObjects transfer, Player player) {
 
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	//uint32_t elementosParaDibujarEsfera = 121 * 8;
@@ -464,7 +471,16 @@ void Render(uint32_t CubeVAO, uint32_t SphereVAO,
 
 	//Dibujamos Suelo
 	RenderQuadSuelo(quad, projection, view);
+	glm::mat4 model = mat4(1.0f);
 
+	player._shader.Use();
+	model = glm::translate(model, player._position);
+	model = glm::scale(model, glm::vec3(0.1f));
+
+	player._shader.Set("projection", projection);
+	player._shader.Set("view", view);
+	player._shader.Set("model", model);
+	player._model.Draw(player._shader);
 
 
 	for (size_t i = 0; i < transfer.numeroModelos; i++)
@@ -693,7 +709,7 @@ int main(int argc, char* argv[]) {
 	uint32_t textureSuelo = Model::GetTexture("Textures/texture3.png", true);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	Player player (shaderNavePlayer, posPlayer);
+	Player  player(shaderNavePlayer, posPlayer);
 
 	GameObject objectosssArray[1] = {
 	{player}
@@ -726,10 +742,9 @@ int main(int argc, char* argv[]) {
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		HandlerInput(deltaTime, transfer);
+		HandlerInput(deltaTime, transfer, &player);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		Render(CubeVAO, SphereVAO, shader, shaderlight, shaderNavePlayer, texture1, texture2, quad, transfer);
+		Render(CubeVAO, SphereVAO, shader, shaderlight, shaderNavePlayer, texture1, texture2, quad, transfer, player);
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
 	}

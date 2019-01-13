@@ -6,6 +6,7 @@ Player::Player(Shader & shader, glm::vec3 position)
 	_shader = shader;
 	//_position = position;
 	SetPosition( position);
+	_velocity = 2.5f;
 }
 
 //float Player::GetVelocity()
@@ -23,24 +24,8 @@ void Player::MoverJugador(const Movement movement, const float deltaTime)
 		case Movement::Backward:
 			_position -= GetUpVector() * actualVelocity; break;
 		case Movement::Left:
-			_position -= GetRightVector() * actualVelocity; break;
-		case Movement::Right:
 			_position += GetRightVector() * actualVelocity; break;
+		case Movement::Right:
+			_position -= GetRightVector() * actualVelocity; break;
 		}
-
-
-		//updateCameraVectors();
-
 }
-//if (glfwGetKey(window.GetWindow(), GLFW_KEY_LEFT) == GLFW_PRESS) {
-//	objects.modelos[0]->position += _right * deltaTime;
-//}
-//if (glfwGetKey(window.GetWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS) {
-//	objects.modelos[0]->position -= _right * deltaTime;
-//}
-//if (glfwGetKey(window.GetWindow(), GLFW_KEY_UP) == GLFW_PRESS) {
-//	objects.modelos[0]->position += _up * deltaTime;
-//}
-//if (glfwGetKey(window.GetWindow(), GLFW_KEY_DOWN) == GLFW_PRESS) {
-//	objects.modelos[0]->position -= _up * deltaTime;
-//}
