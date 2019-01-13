@@ -12,7 +12,7 @@
 #include "Window.h"
 #include "Camera.h"
 #include "Utils.h"
-#include "ObjectModel.h"
+#include "GameObject.h"
 
 
 const float screen_width = 800.0f, screen_height = 600.0f;
@@ -150,7 +150,7 @@ struct Quad {
 struct TransferObjects {
 	const uint32_t maximoModelos = Constants::MaximoObjectosTransferencia;
 	uint32_t numeroModelos;
-	ObjectModel *modelos[10];
+	GameObject *modelos[10];
 };
 
 
@@ -699,7 +699,7 @@ int main(int argc, char* argv[]) {
 	Model object("../assets/obj/Freighter/Freigther_BI_Export.obj");
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	ObjectModel objectosssArray[1] = {
+	GameObject objectosssArray[1] = {
 		{&object, shaderNavePlayer, posPlayer}
 	};
 

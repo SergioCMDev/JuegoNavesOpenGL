@@ -1,11 +1,12 @@
-#ifndef OBJECTMODEL_H
-#define OBJECTMODEL_H
+#ifndef GAMEOBJECT_H
+#define GAMEOBJECT_H
 #include<iostream>
 #include "string.h"
 #include "Shader.h"
+#include "Model.h"
 
 
-class ObjectModel {
+class GameObject {
 
 public:
 	Model *model;

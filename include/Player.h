@@ -4,8 +4,8 @@
 #include "string.h"
 #include "Shader.h"
 #include "Model.h"
-#include "ObjectModel.h"
-
+#include "GameObject.h"
+#include "Constants.h"
 
 class Player {
 
@@ -16,7 +16,7 @@ public:
 		Left = 2,
 		Right = 3,
 	};
-	void MoverJugador(const Movement movement, const ObjectModel model, const float deltaTime);
+	void MoverJugador(const Movement movement, const GameObject model, const float deltaTime);
 
 private:
 	vec3 _right = vec3(1.0f, 0.0f, 0.0f);

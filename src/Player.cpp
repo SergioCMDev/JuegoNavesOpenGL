@@ -1,9 +1,8 @@
 #include "Player.h"
-#include "Shader.h"
-#include "Constants.h"
-#include "ObjectModel.h"
 
-void Player::MoverJugador(const Movement movement, const ObjectModel model, const float deltaTime)
+
+
+void Player::MoverJugador(const Movement movement, const GameObject model, const float deltaTime)
 {
 		//float velocity = k_Speed * deltaTime;
 		//float prev_y = _position.y;
