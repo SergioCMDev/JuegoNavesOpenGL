@@ -1,10 +1,8 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 #include<iostream>
-#include "string.h"
 #include "Shader.h"
 #include "Model.h"
-#include "Utils.h"
 #include "Shader.h"
 #include "Constants.h"
 
@@ -19,14 +17,21 @@ public:
 	};
 	Model _model;
 	Shader &_shader = Shader();
-	vec3 _position;
 
-	//GameObject();
+	GameObject();
+	float GetVelocity();
+	glm::vec3 GetRightVector();
+	glm::vec3 GetUpVector();
+	glm::vec3 GetPosition();
+	void SetPosition(glm::vec3 position);
+
 	//GameObject(Model * model, Shader& shader, glm::vec3 position);
 	//GameObject(const char* pathToModel, Shader& shader, glm::vec3 position);
+	vec3 _position;
 
 private:
-	vec3 _right = vec3(1.0f, 0.0f, 0.0f);
-	vec3 _up = vec3(0.0f, 0.0f, 1.0f);
+	const float _velocity = 0.0f;
+	const vec3 _right = vec3(1.0f, 0.0f, 0.0f);
+	const vec3 _up = vec3(0.0f, 0.0f, 1.0f);
 };
 #endif

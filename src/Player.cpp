@@ -4,23 +4,29 @@ Player::Player(Shader & shader, glm::vec3 position)
 {
 	_model = Model(pathToModel);
 	_shader = shader;
-	_position = position;
+	//_position = position;
+	SetPosition( position);
 }
 
-void Player::MoverJugador(const Movement movement, const GameObject model, const float deltaTime)
+//float Player::GetVelocity()
+//{
+//	return _playerSpeed;
+//}
+
+void Player::MoverJugador(const Movement movement, const float deltaTime)
 {
-		//float velocity = k_Speed * deltaTime;
-		//float prev_y = _position.y;
-		//switch (movement) {
-		/*case Movement::Forward:
-			_gameObject.position += _front * velocity; break;
+		float actualVelocity = GetVelocity() * deltaTime;
+		float prev_y = _position.y;
+		switch (movement) {
+		case Movement::Forward:
+			_position += GetUpVector() * actualVelocity; break;
 		case Movement::Backward:
-			_gameObject.position -= _front * velocity; break;
+			_position -= GetUpVector() * actualVelocity; break;
 		case Movement::Left:
-			_gameObject.position -= _right * velocity; break;
+			_position -= GetRightVector() * actualVelocity; break;
 		case Movement::Right:
-			_gameObject.position += _right * velocity; break;
-		}*/
+			_position += GetRightVector() * actualVelocity; break;
+		}
 
 
 		//updateCameraVectors();
