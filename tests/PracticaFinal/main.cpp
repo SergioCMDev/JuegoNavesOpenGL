@@ -713,10 +713,11 @@ int main(int argc, char* argv[]) {
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	//Player* player = Player::Instance(shaderNavePlayer, posPlayer);
-	Player player(shaderNavePlayer, posPlayer);
+	//Player player(shaderNavePlayer, posPlayer);
+	Player* player = Player::Instance(shaderNavePlayer, posPlayer);
 
 	GameObject objectosssArray[1] = {
-	{player}
+	{*player}
 	};
 
 
@@ -748,9 +749,9 @@ int main(int argc, char* argv[]) {
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		HandlerInput(deltaTime, transfer, &player);
+		HandlerInput(deltaTime, transfer, player);
 
-		Render(shader, shaderlight, shaderNavePlayer, texture1, texture2, quad, transfer,& player);
+		Render(shader, shaderlight, shaderNavePlayer, texture1, texture2, quad, transfer, player);
 		
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();

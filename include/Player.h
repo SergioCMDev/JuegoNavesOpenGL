@@ -15,6 +15,7 @@ public:
 	static Player* Instance(Shader & shader, glm::vec3 position);
 	static Player* GetInstance();
 	Player(Shader & shader, glm::vec3 position);
+	~Player();
 private:
 	static Player* _instance;
 	//float _velocity = 0.5f;
