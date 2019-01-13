@@ -218,16 +218,6 @@ void MovimientoJugador(const float &deltaTime, Player* player)
 	}
 }
 
-void HandlerInput(const double deltaTime, TransferObjects objects, Player* player) {
-	MovimientoCamara(deltaTime);
-	MovimientoJugador(deltaTime, player);
-	if (glfwGetKey(window.GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-		glfwSetWindowShouldClose(window.GetWindow(), true);
-	}
-
-}
-
-
 void HandlerInput(const double deltaTime, TransferObjects objects) {
 	MovimientoCamara(deltaTime);
 	if (objects.modelos[0]->_type == 1) {
@@ -593,17 +583,7 @@ void Render(const Shader& shaderCube, const Shader& shaderlight,
 	glBindVertexArray(0);
 }
 
-void RenderPlayer(Player * player, glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view)
-{
-	player->_shader.Use();
-	model = glm::translate(model, player->_position);
-	model = glm::scale(model, glm::vec3(0.1f));
 
-	player->_shader.Set("projection", projection);
-	player->_shader.Set("view", view);
-	player->_shader.Set("model", model);
-	player->_model.Draw(player->_shader);
-}
 
 void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view)
 {
@@ -732,8 +712,7 @@ int main(int argc, char* argv[]) {
 	uint32_t textureSuelo = Model::GetTexture("Textures/texture3.png", true);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	//Player* player = Player::Instance(shaderNavePlayer, posPlayer);
-	//Player player(shaderNavePlayer, posPlayer);
+
 	Player* player = Player::Instance(shaderNavePlayer, posPlayer);
 
 	GameObject objectosssArray[1] = {
@@ -768,9 +747,7 @@ int main(int argc, char* argv[]) {
 		lastFrame = currentFrame;
 
 		HandlerInput(deltaTime, transfer);
-		//HandlerInput(deltaTime, transfer, player);
 
-		//Render(shader, shaderlight, shaderNavePlayer, texture1, texture2, quad, transfer, player2);
 		Render(shader, shaderlight, texture1, texture2, quad, transfer);
 
 		glfwSwapBuffers(window.GetWindow());
