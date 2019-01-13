@@ -5,15 +5,15 @@
 #include<cstdint>
 #include<stdio.h>
 
-#include "Shader.h"
 #include "Constants.h"
-#include "Model.h"
+#include "Shader.h"
+#include "Utils.h"
 
 #include "Window.h"
 #include "Camera.h"
-#include "Utils.h"
 #include "GameObject.h"
 
+#include "Model.h"
 
 const float screen_width = 800.0f, screen_height = 600.0f;
 float lastX = (float)screen_width / 2.0f;
@@ -141,11 +141,6 @@ struct Quad {
 	uint32_t* VAO;
 };
 
-//struct ObjectsModels {
-//	Model *model;
-//	Shader &shader;
-//	vec3 position;
-//};
 
 struct TransferObjects {
 	const uint32_t maximoModelos = Constants::MaximoObjectosTransferencia;
@@ -205,16 +200,16 @@ void MovimientoJugador(const float &deltaTime, TransferObjects objects)
 	//vec3 right = ;
 	//Camera::Movement::Forward //Hacer para player igual
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_LEFT) == GLFW_PRESS) {
-		objects.modelos[0]->position += vec3(1.0f, 0.0f, 0.0f) * deltaTime;
+		objects.modelos[0]->_position += vec3(1.0f, 0.0f, 0.0f) * deltaTime;
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS) {
-		objects.modelos[0]->position  -= vec3(1.0f, 0.0f, 0.0f) * deltaTime;
+		objects.modelos[0]->_position  -= vec3(1.0f, 0.0f, 0.0f) * deltaTime;
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_UP) == GLFW_PRESS) {
-		objects.modelos[0]->position += vec3(0.0f, 0.0f, 1.0f) * deltaTime;
+		objects.modelos[0]->_position += vec3(0.0f, 0.0f, 1.0f) * deltaTime;
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_DOWN) == GLFW_PRESS) {
-		objects.modelos[0]->position -= vec3(0.0f, 0.0f, 1.0f) * deltaTime;
+		objects.modelos[0]->_position -= vec3(0.0f, 0.0f, 1.0f) * deltaTime;
 	}
 }
 
@@ -476,15 +471,15 @@ void Render(uint32_t CubeVAO, uint32_t SphereVAO,
 
 		glm::mat4 model = mat4(1.0f);
 
-		model = glm::translate(model, transfer.modelos[i]->position);
+		model = glm::translate(model, transfer.modelos[i]->_position);
 		model = glm::scale(model, glm::vec3(0.1f));
 
-		transfer.modelos[i]->shader.Use();
-		transfer.modelos[i]->shader.Set("projection", projection);
-		transfer.modelos[i]->shader.Set("view", view);
-		transfer.modelos[i]->shader.Set("model", model);
+		transfer.modelos[i]->_shader.Use();
+		transfer.modelos[i]->_shader.Set("projection", projection);
+		transfer.modelos[i]->_shader.Set("view", view);
+		transfer.modelos[i]->_shader.Set("model", model);
 
-		transfer.modelos[i]->model->Draw(transfer.modelos[0]->shader);
+		transfer.modelos[i]->_model.Draw(transfer.modelos[0]->_shader);
 	}
 
 
@@ -696,11 +691,14 @@ int main(int argc, char* argv[]) {
 	uint32_t texture2 = Model::GetTexture("Textures/specular.png", true);
 	uint32_t textureSuelo = Model::GetTexture("Textures/texture3.png", true);
 
-	Model object("../assets/obj/Freighter/Freigther_BI_Export.obj");
+	//Model object("../assets/obj/Freighter/Freigther_BI_Export.obj");
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
+	GameObject player (Constants::pathToPlayerModel, shaderNavePlayer, posPlayer);
+
+
 	GameObject objectosssArray[1] = {
-		{&object, shaderNavePlayer, posPlayer}
+	{player}
 	};
 
 	/*ObjectsModels objectosss = {
@@ -737,7 +735,6 @@ int main(int argc, char* argv[]) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		Render(CubeVAO, SphereVAO, shader, shaderlight, shaderNavePlayer, texture1, texture2, quad, transfer);
-		//transfer.modelos[0]->position += vec3(0.0f, 0.1f, 0.0f);
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
 	}

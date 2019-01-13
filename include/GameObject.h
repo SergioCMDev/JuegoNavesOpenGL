@@ -4,13 +4,19 @@
 #include "string.h"
 #include "Shader.h"
 #include "Model.h"
-
+#include "Utils.h"
+#include "Shader.h"
+#include "Constants.h"
 
 class GameObject {
 
 public:
-	Model *model;
-	Shader &shader;
-	vec3 position;
+	Model _model;
+	Shader &_shader = Shader();
+	vec3 _position;
+
+	GameObject();
+	GameObject(Model * model, Shader& shader, glm::vec3 position);
+	GameObject(const char* pathToModel, Shader& shader, glm::vec3 position);
 };
 #endif

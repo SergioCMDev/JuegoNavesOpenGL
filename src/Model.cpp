@@ -9,6 +9,13 @@
 
 using namespace std;
 
+Model::Model()
+{
+}
+
+Model::~Model()
+{
+}
 
 void Model::loadModel(string const path) {
 	//read file via ASSIMP
@@ -26,9 +33,6 @@ void Model::loadModel(string const path) {
 	processNode(scene->mRootNode, scene);
 }
 
-Model::Model()
-{
-}
 
 Model::Model(string const &path, bool gamma) : gammaCorrection_(gamma) {
 	loadModel(path);

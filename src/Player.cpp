@@ -8,13 +8,13 @@ void Player::MoverJugador(const Movement movement, const GameObject model, const
 		//float prev_y = _position.y;
 		//switch (movement) {
 		/*case Movement::Forward:
-			model_position += _front * velocity; break;
+			_gameObject.position += _front * velocity; break;
 		case Movement::Backward:
-			_position -= _front * velocity; break;
+			_gameObject.position -= _front * velocity; break;
 		case Movement::Left:
-			_position -= _right * velocity; break;
+			_gameObject.position -= _right * velocity; break;
 		case Movement::Right:
-			_position += _right * velocity; break;
+			_gameObject.position += _right * velocity; break;
 		}*/
 
 
