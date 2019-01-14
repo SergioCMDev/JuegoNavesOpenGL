@@ -155,7 +155,11 @@ struct TransferObjects {
 using namespace std;
 
 #pragma endregion
-
+Player* GetPlayerReference(GameObject* objectPlayer) {
+	GameObject *g = objectPlayer;
+	Player* player = static_cast<Player*>(objectPlayer);
+	return player;
+}
 #pragma region Eventos
 
 void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int32_t height) {
@@ -223,8 +227,7 @@ void MovimientoJugador(const float &deltaTime, Player* player)
 void HandlerInput(const double deltaTime, TransferObjects objects) {
 	MovimientoCamara(deltaTime);
 	if (objects.modelos[0]->_type == Constants::TIPO_PLAYER) {
-		GameObject *g = objects.modelos[0];
-		Player* player = static_cast<Player*>(g);
+		Player* player = GetPlayerReference(objects.modelos[0]);
 		MovimientoJugador(deltaTime, player);
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -234,7 +237,11 @@ void HandlerInput(const double deltaTime, TransferObjects objects) {
 }
 #pragma endregion
 
+
+
 #pragma region Metodos
+
+
 
 void generateVerts(float * verts, float * norms, float * tex, unsigned int * el, const uint32_t slices, const uint32_t stacks, const uint32_t radius) {
 	float theta, phi;       // Generate positions and normals
@@ -442,7 +449,6 @@ void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view)
 void Render(const Shader& shaderCube, const Shader& shaderlight,
 	uint32_t texture1, uint32_t texture2,
 	Quad quad, TransferObjects transfer) {
-	//Quad quad, TransferObjects transfer, Player *player) {
 
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	//uint32_t elementosParaDibujarEsfera = 121 * 8;
@@ -492,8 +498,8 @@ void Render(const Shader& shaderCube, const Shader& shaderlight,
 	{
 		if (transfer.modelos[i]->_type == Constants::TIPO_PLAYER) {
 
-			GameObject *g = transfer.modelos[i];
-			Player* player = static_cast<Player*>(g);
+			Player* player = GetPlayerReference(transfer.modelos[0]);
+
 			player->Render(model, projection, view);
 		}
 		else if(transfer.modelos[i]->_type == Constants::TIPO_METEOR)
@@ -705,7 +711,6 @@ int main(int argc, char* argv[]) {
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	//Player* player = Player::Instance(shaderNavePlayer, posPlayer);
 	Player player (shaderNavePlayer, posPlayer);
 	vec3 posMeteorito = vec3(3.0f, 0.0f, 0.0f);
 	Meteor meteor = Meteor(shaderMeteorito, posMeteorito);
@@ -715,8 +720,6 @@ int main(int argc, char* argv[]) {
 	objectosssArray[0] = &player;
 	objectosssArray[1] = &meteor;
 	
-
-
 
 	TransferObjects transfer = {
 		Constants::MaximoObjectosTransferencia,
