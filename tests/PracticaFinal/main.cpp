@@ -50,61 +50,47 @@ bool firstMouse = true;
 Window window;
 
 
-	uint32_t numeroElementosVerticesCubo = 192;
+	//uint32_t numeroElementosVerticesCubo = 192;
 
-	float verticesCubo[] = {  //vertices      //uvs     //normals
-		  -0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,     0.0f, 0.0f, 1.0f,//front
-		  0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,      0.0f, 0.0f, 1.0f,
-		  0.5f,  0.5f,  0.5f,       1.0f, 1.0f,       0.0f, 0.0f, 1.0f,
-		  -0.5f, 0.5f,  0.5f,       0.0f, 1.0f,       0.0f, 0.0f, 1.0f,
+	//float verticesCubo[] = {  //vertices      //uvs     //normals
+	//	  -0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,     0.0f, 0.0f, 1.0f,//front
+	//	  0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,      0.0f, 0.0f, 1.0f,
+	//	  0.5f,  0.5f,  0.5f,       1.0f, 1.0f,       0.0f, 0.0f, 1.0f,
+	//	  -0.5f, 0.5f,  0.5f,       0.0f, 1.0f,       0.0f, 0.0f, 1.0f,
 
-		  0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,      1.0f, 0.0f, 0.0f,//right
-		  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     1.0f, 0.0f, 0.0f,
-		  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      1.0f, 0.0f, 0.0f,
-		  0.5f,  0.5f,  0.5f,       0.0f, 1.0f,       1.0f, 0.0f, 0.0f,
+	//	  0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,      1.0f, 0.0f, 0.0f,//right
+	//	  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     1.0f, 0.0f, 0.0f,
+	//	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      1.0f, 0.0f, 0.0f,
+	//	  0.5f,  0.5f,  0.5f,       0.0f, 1.0f,       1.0f, 0.0f, 0.0f,
 
-		  -0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,    0.0f, 0.0f, -1.0f,//back
-		  -0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,     0.0f, 0.0f, -1.0f,
-		  0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,      0.0f, 0.0f, -1.0f,
-		  0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,     0.0f, 0.0f, -1.0f,
+	//	  -0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,    0.0f, 0.0f, -1.0f,//back
+	//	  -0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,     0.0f, 0.0f, -1.0f,
+	//	  0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,      0.0f, 0.0f, -1.0f,
+	//	  0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,     0.0f, 0.0f, -1.0f,
 
-		  -0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,     -1.0f, 0.0f, 0.0f,//left
-		  -0.5f,  0.5f,  0.5f,       1.0f, 1.0f,      -1.0f, 0.0f, 0.0f,
-		  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     -1.0f, 0.0f, 0.0f,
-		  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    -1.0f, 0.0f, 0.0f,
+	//	  -0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,     -1.0f, 0.0f, 0.0f,//left
+	//	  -0.5f,  0.5f,  0.5f,       1.0f, 1.0f,      -1.0f, 0.0f, 0.0f,
+	//	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     -1.0f, 0.0f, 0.0f,
+	//	  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    -1.0f, 0.0f, 0.0f,
 
-		  -0.5f,  -0.5f,  0.5f,       0.0f, 1.0f,     0.0f, -1.0f, 0.0f,//bottom
-		  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    0.0f, -1.0f, 0.0f,
-		  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     0.0f, -1.0f, 0.0f,
-		  0.5f,  -0.5f,  0.5f,       1.0f, 1.0f,      0.0f, -1.0f, 0.0f,
+	//	  -0.5f,  -0.5f,  0.5f,       0.0f, 1.0f,     0.0f, -1.0f, 0.0f,//bottom
+	//	  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    0.0f, -1.0f, 0.0f,
+	//	  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     0.0f, -1.0f, 0.0f,
+	//	  0.5f,  -0.5f,  0.5f,       1.0f, 1.0f,      0.0f, -1.0f, 0.0f,
 
-		  -0.5f,  0.5f,  0.5f,       0.0f, 0.0f,      0.0f, 1.0f, 0.0f,//top
-		  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,       0.0f, 1.0f, 0.0f,
-		  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      0.0f, 1.0f, 0.0f,
-		  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     0.0f, 1.0f, 0.0f };
+	//	  -0.5f,  0.5f,  0.5f,       0.0f, 0.0f,      0.0f, 1.0f, 0.0f,//top
+	//	  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,       0.0f, 1.0f, 0.0f,
+	//	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      0.0f, 1.0f, 0.0f,
+	//	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     0.0f, 1.0f, 0.0f };
 
-	uint32_t numeroElementosVerticesQuad = 20;
-
-	float verticesQuad[] = {
-		-0.5f,  0.5f,  0.5f,       0.0f, 0.0f,    //top
-		  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,
-		  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,
-		  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f };
-
-	uint32_t numeroIndicesCubo = 36;
-	uint32_t numeroIndicesQuad = 6;
-	uint32_t indicesQuad[]{
-		0, 1, 2, 0, 2, 3 //Front
-	};
-
-	uint32_t indicesCubo[]{
-		0, 1, 2, 0, 2, 3 //Front
-		,4, 5, 6, 4, 6, 7 //Right
-		,8, 9, 10, 8, 10, 11 //Back
-		,12, 13, 14, 12, 14, 15 //Left
-		,16, 17, 18, 16, 18, 19 //Bottom
-		,20, 21, 22, 20, 22, 23 //Top
-	};
+	//uint32_t indicesCubo[]{
+	//	0, 1, 2, 0, 2, 3 //Front
+	//	,4, 5, 6, 4, 6, 7 //Right
+	//	,8, 9, 10, 8, 10, 11 //Back
+	//	,12, 13, 14, 12, 14, 15 //Left
+	//	,16, 17, 18, 16, 18, 19 //Bottom
+	//	,20, 21, 22, 20, 22, 23 //Top
+	//};
 
 	//glm::vec3 cubePositions[] = {
 	// glm::vec3(0.0f, 0.0f, 0.0f),
@@ -129,6 +115,20 @@ Window window;
 	//	uint32_t numeroNormales;
 	//	uint32_t numeroTexturas;
 	//};
+
+	uint32_t numeroElementosVerticesQuad = 20;
+
+	float verticesQuad[] = {
+		-0.5f,  0.5f,  0.5f,       0.0f, 0.0f,    //top
+		  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,
+		  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,
+		  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f };
+
+	//uint32_t numeroIndicesCubo = 36;
+	uint32_t numeroIndicesQuad = 6;
+	uint32_t indicesQuad[]{
+		0, 1, 2, 0, 2, 3 //Front
+	};
 
 	struct Quad {
 		float* vertices;
@@ -509,7 +509,7 @@ void Render(const Shader& shaderCube, const Shader& shaderlight,
 			glm::mat4 model = mat4(1.0f);
 			GameObject *g = transfer.modelos[i];
 			Meteor* meteor = static_cast<Meteor*>(g);
-			meteor->RenderMeteor(model, projection, view);
+			meteor->Render(model, projection, view);
 		}
 	}
 
@@ -719,8 +719,6 @@ int main(int argc, char* argv[]) {
 
 	const uint32_t numeroObjetos = 2;
 	GameObject *objectosssArray[numeroObjetos];
-	objectosssArray[0] = &player;
-	objectosssArray[1] = &meteor;
 
 
 	TransferObjects transfer = {
@@ -728,7 +726,8 @@ int main(int argc, char* argv[]) {
 		numeroObjetos,
 		*objectosssArray,
 	};
-	transfer.modelos[1] = &meteor; //FIND HOW TO FIX
+	transfer.modelos[0] = &player; 
+	transfer.modelos[1] = &meteor; 
 
 	//uint32_t CubeVAO = createVertexData(verticesCubo, numeroElementosVerticesCubo, indicesCubo, numeroIndicesCubo);
 	//uint32_t SphereVAO = createSphere(1);

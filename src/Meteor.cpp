@@ -1,5 +1,5 @@
 #include "Meteor.h"
-
+#include<GLFW/glfw3.h>
 
 
 Meteor::Meteor() {
@@ -33,8 +33,9 @@ void Meteor::Render(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view)
 
 	_shader.Use();
 	model = glm::translate(model, _position);
-	model = glm::scale(model, glm::vec3(0.1f));
-
+	model = glm::scale(model, _scale);
+	float angle = glm::radians((40 + glm::cos(45.0f) + glm::sin(90.0f)));
+	model = glm::rotate(model, (float)glfwGetTime() *  angle, vec3(1.0f, 1.0f, 0.0f));
 	_shader.Set("projection", projection);
 	_shader.Set("view", view);
 	_shader.Set("model", model);
@@ -57,16 +58,17 @@ void Meteor::Mover(const Movement movement, const float deltaTime)
 	}
 }
 
-void Meteor::RenderMeteor(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view)
-{
-	model = glm::translate(model, _position);
-	model = glm::scale(model, _scale);
 
-	_shader.Use();
-	_shader.Set("projection", projection);
-	_shader.Set("view", view);
-	_shader.Set("model", model);
-	_model.Draw(_shader);
-}
-
+//void Meteor::RenderMeteor(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view)
+//{
+//	model = glm::translate(model, _position);
+//	model = glm::scale(model, _scale);
+//
+//	_shader.Use();
+//	_shader.Set("projection", projection);
+//	_shader.Set("view", view);
+//	_shader.Set("model", model);
+//	_model.Draw(_shader);
+//}
+//
 
