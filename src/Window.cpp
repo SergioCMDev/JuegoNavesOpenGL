@@ -47,7 +47,7 @@ Window* Window::GetInstance(const int widht, const int height)
 {
 	if (_window == 0) {
 		cout << "Creamos instancia de Window" << endl;
-		_window = new Window(widht, height);
+		_window = &Window(widht, height);
 
 	}
 	return _window;
