@@ -49,100 +49,102 @@ bool firstMouse = true;
 
 Window window;
 
-uint32_t numeroElementosVerticesCubo = 192;
 
-float verticesCubo[] = {  //vertices      //uvs     //normals
-	  -0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,     0.0f, 0.0f, 1.0f,//front
-	  0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,      0.0f, 0.0f, 1.0f,
-	  0.5f,  0.5f,  0.5f,       1.0f, 1.0f,       0.0f, 0.0f, 1.0f,
-	  -0.5f, 0.5f,  0.5f,       0.0f, 1.0f,       0.0f, 0.0f, 1.0f,
+	uint32_t numeroElementosVerticesCubo = 192;
 
-	  0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,      1.0f, 0.0f, 0.0f,//right
-	  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     1.0f, 0.0f, 0.0f,
-	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      1.0f, 0.0f, 0.0f,
-	  0.5f,  0.5f,  0.5f,       0.0f, 1.0f,       1.0f, 0.0f, 0.0f,
+	float verticesCubo[] = {  //vertices      //uvs     //normals
+		  -0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,     0.0f, 0.0f, 1.0f,//front
+		  0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,      0.0f, 0.0f, 1.0f,
+		  0.5f,  0.5f,  0.5f,       1.0f, 1.0f,       0.0f, 0.0f, 1.0f,
+		  -0.5f, 0.5f,  0.5f,       0.0f, 1.0f,       0.0f, 0.0f, 1.0f,
 
-	  -0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,    0.0f, 0.0f, -1.0f,//back
-	  -0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,     0.0f, 0.0f, -1.0f,
-	  0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,      0.0f, 0.0f, -1.0f,
-	  0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,     0.0f, 0.0f, -1.0f,
+		  0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,      1.0f, 0.0f, 0.0f,//right
+		  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     1.0f, 0.0f, 0.0f,
+		  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      1.0f, 0.0f, 0.0f,
+		  0.5f,  0.5f,  0.5f,       0.0f, 1.0f,       1.0f, 0.0f, 0.0f,
 
-	  -0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,     -1.0f, 0.0f, 0.0f,//left
-	  -0.5f,  0.5f,  0.5f,       1.0f, 1.0f,      -1.0f, 0.0f, 0.0f,
-	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     -1.0f, 0.0f, 0.0f,
-	  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    -1.0f, 0.0f, 0.0f,
+		  -0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,    0.0f, 0.0f, -1.0f,//back
+		  -0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,     0.0f, 0.0f, -1.0f,
+		  0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,      0.0f, 0.0f, -1.0f,
+		  0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,     0.0f, 0.0f, -1.0f,
 
-	  -0.5f,  -0.5f,  0.5f,       0.0f, 1.0f,     0.0f, -1.0f, 0.0f,//bottom
-	  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    0.0f, -1.0f, 0.0f,
-	  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     0.0f, -1.0f, 0.0f,
-	  0.5f,  -0.5f,  0.5f,       1.0f, 1.0f,      0.0f, -1.0f, 0.0f,
+		  -0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,     -1.0f, 0.0f, 0.0f,//left
+		  -0.5f,  0.5f,  0.5f,       1.0f, 1.0f,      -1.0f, 0.0f, 0.0f,
+		  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     -1.0f, 0.0f, 0.0f,
+		  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    -1.0f, 0.0f, 0.0f,
 
-	  -0.5f,  0.5f,  0.5f,       0.0f, 0.0f,      0.0f, 1.0f, 0.0f,//top
-	  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,       0.0f, 1.0f, 0.0f,
-	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      0.0f, 1.0f, 0.0f,
-	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     0.0f, 1.0f, 0.0f };
+		  -0.5f,  -0.5f,  0.5f,       0.0f, 1.0f,     0.0f, -1.0f, 0.0f,//bottom
+		  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    0.0f, -1.0f, 0.0f,
+		  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     0.0f, -1.0f, 0.0f,
+		  0.5f,  -0.5f,  0.5f,       1.0f, 1.0f,      0.0f, -1.0f, 0.0f,
 
-uint32_t numeroElementosVerticesQuad = 20;
+		  -0.5f,  0.5f,  0.5f,       0.0f, 0.0f,      0.0f, 1.0f, 0.0f,//top
+		  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,       0.0f, 1.0f, 0.0f,
+		  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      0.0f, 1.0f, 0.0f,
+		  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     0.0f, 1.0f, 0.0f };
 
-float verticesQuad[] = {
-	-0.5f,  0.5f,  0.5f,       0.0f, 0.0f,    //top
-	  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,
-	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,
-	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f };
+	uint32_t numeroElementosVerticesQuad = 20;
 
-uint32_t numeroIndicesCubo = 36;
-uint32_t numeroIndicesQuad = 6;
-uint32_t indicesQuad[]{
-	0, 1, 2, 0, 2, 3 //Front
-};
+	float verticesQuad[] = {
+		-0.5f,  0.5f,  0.5f,       0.0f, 0.0f,    //top
+		  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,
+		  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,
+		  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f };
 
-uint32_t indicesCubo[]{
-	0, 1, 2, 0, 2, 3 //Front
-	,4, 5, 6, 4, 6, 7 //Right
-	,8, 9, 10, 8, 10, 11 //Back
-	,12, 13, 14, 12, 14, 15 //Left
-	,16, 17, 18, 16, 18, 19 //Bottom
-	,20, 21, 22, 20, 22, 23 //Top
-};
+	uint32_t numeroIndicesCubo = 36;
+	uint32_t numeroIndicesQuad = 6;
+	uint32_t indicesQuad[]{
+		0, 1, 2, 0, 2, 3 //Front
+	};
 
-glm::vec3 cubePositions[] = {
- glm::vec3(0.0f, 0.0f, 0.0f),
- glm::vec3(2.0f, 5.0f, -15.0f),
- glm::vec3(-1.5f, -2.2f, -2.5f),
- glm::vec3(-3.8f, -2.0f, -12.3f),
- glm::vec3(2.4f, -0.4f, -3.5f),
- glm::vec3(-1.7f, 3.0f, -7.5f),
- glm::vec3(1.3f, -2.0f, -2.5f),
- glm::vec3(1.5f, 2.0f, -2.5f),
- glm::vec3(1.5f, 0.2f, -1.5f),
- glm::vec3(-1.3f, 1.0f, -1.5f)
-};
+	uint32_t indicesCubo[]{
+		0, 1, 2, 0, 2, 3 //Front
+		,4, 5, 6, 4, 6, 7 //Right
+		,8, 9, 10, 8, 10, 11 //Back
+		,12, 13, 14, 12, 14, 15 //Left
+		,16, 17, 18, 16, 18, 19 //Bottom
+		,20, 21, 22, 20, 22, 23 //Top
+	};
 
-struct Sphere {
-	float* vertices;
-	float* normals;
-	float* textCoords;
-	uint32_t* elementos;
-	uint32_t numeroVertices;
-	uint32_t numeroElementos;
-	uint32_t numeroNormales;
-	uint32_t numeroTexturas;
-};
+	//glm::vec3 cubePositions[] = {
+	// glm::vec3(0.0f, 0.0f, 0.0f),
+	// glm::vec3(2.0f, 5.0f, -15.0f),
+	// glm::vec3(-1.5f, -2.2f, -2.5f),
+	// glm::vec3(-3.8f, -2.0f, -12.3f),
+	// glm::vec3(2.4f, -0.4f, -3.5f),
+	// glm::vec3(-1.7f, 3.0f, -7.5f),
+	// glm::vec3(1.3f, -2.0f, -2.5f),
+	// glm::vec3(1.5f, 2.0f, -2.5f),
+	// glm::vec3(1.5f, 0.2f, -1.5f),
+	// glm::vec3(-1.3f, 1.0f, -1.5f)
+	//};
 
-struct Quad {
-	float* vertices;
-	float* normals;
-	float* textCoords;
-	uint32_t* elementos;
-	uint32_t numeroVertices;
-	uint32_t numeroElementos;
-	uint32_t numeroElementosParaDibujar;
-	uint32_t numeroNormales;
-	uint32_t numeroTexturas;
-	uint32_t textures[3];
-	Shader *shader;
-	uint32_t* VAO;
-};
+	//struct Sphere {
+	//	float* vertices;
+	//	float* normals;
+	//	float* textCoords;
+	//	uint32_t* elementos;
+	//	uint32_t numeroVertices;
+	//	uint32_t numeroElementos;
+	//	uint32_t numeroNormales;
+	//	uint32_t numeroTexturas;
+	//};
+
+	struct Quad {
+		float* vertices;
+		float* normals;
+		float* textCoords;
+		uint32_t* elementos;
+		uint32_t numeroVertices;
+		uint32_t numeroElementos;
+		uint32_t numeroElementosParaDibujar;
+		uint32_t numeroNormales;
+		uint32_t numeroTexturas;
+		uint32_t textures[3];
+		Shader *shader;
+		uint32_t* VAO;
+	};
+
 
 
 struct TransferObjects {
@@ -241,158 +243,159 @@ void HandlerInput(const double deltaTime, TransferObjects objects) {
 
 #pragma region Metodos
 
+#pragma region Generacion esfera
+//void generateVerts(float * verts, float * norms, float * tex, unsigned int * el, const uint32_t slices, const uint32_t stacks, const uint32_t radius) {
+//	float theta, phi;       // Generate positions and normals
+//	float thetaFac = (float)((2.0 * M_PI) / slices);
+//	float phiFac = (float)(M_PI / stacks);
+//	float nx, ny, nz, s, t;
+//	uint32_t idx = 0, tIdx = 0;
+//	for (uint8_t i = 0; i <= slices; i++) {
+//		theta = i * thetaFac;
+//		s = (float)i / slices;
+//		for (uint8_t j = 0; j <= stacks; j++) {
+//			phi = j * phiFac;
+//			t = (float)j / stacks;
+//			nx = sinf(phi) * cosf(theta);
+//			ny = sinf(phi) * sinf(theta);
+//			nz = cosf(phi);
+//			verts[idx] = radius * nx;
+//			verts[idx + 1] = radius * ny;
+//			verts[idx + 2] = radius * nz;
+//			norms[idx] = nx;
+//			norms[idx + 1] = ny;
+//			norms[idx + 2] = nz;
+//			idx += 3;
+//
+//			tex[tIdx] = s;
+//			tex[tIdx + 1] = t;
+//			tIdx += 2;
+//		}
+//	}
+//
+//	idx = 0;                      // Generate the element list
+//	for (uint8_t i = 0; i < slices; i++) {
+//		uint32_t stackStart = i * (stacks + 1);
+//		uint32_t nextStackStart = (i + 1) * (stacks + 1);
+//		for (uint8_t j = 0; j < stacks; j++) {
+//			if (j == 0) {
+//				el[idx] = stackStart;
+//				el[idx + 1] = stackStart + 1;
+//				el[idx + 2] = nextStackStart + 1;
+//				idx += 3;
+//			}
+//			else if (j == stacks - 1) {
+//				el[idx] = stackStart + j;
+//				el[idx + 1] = stackStart + j + 1;
+//				el[idx + 2] = nextStackStart + j;
+//				idx += 3;
+//			}
+//			else {
+//				el[idx] = stackStart + j;
+//				el[idx + 1] = stackStart + j + 1;
+//				el[idx + 2] = nextStackStart + j + 1;
+//				el[idx + 3] = nextStackStart + j;
+//				el[idx + 4] = stackStart + j;
+//				el[idx + 5] = nextStackStart + j + 1;
+//				idx += 6;
+//			}
+//		}
+//	}
+//}
 
+//uint32_t createSphere(const float radius) {
+//	constexpr int slices = 10;
+//	constexpr int stacks = 10;
+//
+//	Sphere sphere;
+//
+//	constexpr uint32_t nVerts = (slices + 1) * (stacks + 1); //121
+//	constexpr uint32_t elements = (slices * 2 * (stacks - 1)) * 3; //540
+//
+//	float v[3 * nVerts];        // Verts      363 elementos
+//	float n[3 * nVerts];        // Normals    363 elementos
+//	float tex[2 * nVerts];      // Tex coords    242 elementos
+//	uint32_t el[elements];      // Elements
+//
+//	generateVerts(v, n, tex, el, slices, stacks, radius);
+//	sphere.vertices = v;
+//	sphere.textCoords = tex;
+//	sphere.elementos = el;
+//	sphere.normals = n;
+//	sphere.numeroVertices = nVerts * 3;
+//	sphere.numeroNormales = nVerts * 3;
+//	sphere.numeroTexturas = 2 * nVerts;
+//	sphere.numeroElementos = elements;
+//
+//	const int sizeTotal = (sphere.numeroVertices + sphere.numeroNormales + sphere.numeroTexturas);
+//
+//	//vector<float> newVertice2(sizeTotal);
+//	float newVertice2[3 * nVerts + 3 * nVerts + 2 * nVerts];
+//
+//	for (size_t i = 0; i < sphere.numeroVertices / 3; i++)
+//	{
+//		newVertice2[0 + 8 * i] = sphere.vertices[3 * i];
+//		newVertice2[1 + 8 * i] = sphere.vertices[3 * i + 1];
+//		newVertice2[2 + 8 * i] = sphere.vertices[3 * i + 2];
+//
+//		newVertice2[3 + 8 * i] = sphere.normals[3 * i];
+//		newVertice2[4 + 8 * i] = sphere.normals[3 * i + 1];
+//		newVertice2[5 + 8 * i] = sphere.normals[3 * i + 2];
+//
+//		newVertice2[6 + 8 * i] = sphere.textCoords[2 * i];
+//		newVertice2[7 + 8 * i] = sphere.textCoords[2 * i + 1];
+//	}
+//
+//	uint32_t VAO, VBO, EBO;
+//
+//	glGenVertexArrays(1, &VAO);
+//	//Generamos 2 buffer, elementos y objetos
+//	glGenBuffers(1, &VBO);
+//	glGenBuffers(1, &EBO);
+//
+//	//Bindeamos el VAO
+//	glBindVertexArray(VAO);
+//
+//	//Bindeamos buffer vertices
+//	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+//	//Subida de vertices al buffer
+//
+//	glBufferData(GL_ARRAY_BUFFER, sizeof(newVertice2), &newVertice2, GL_STATIC_DRAW);
+//
+//
+//	//Bindeo buffer indices
+//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(el), el, GL_STATIC_DRAW);
+//
+//	//Vertices de posicion
+//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * (sizeof(float)), (void*)0);
+//	glEnableVertexAttribArray(0);
+//
+//	////Vertices de normales
+//	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * (sizeof(float)), (void*)(3 * (sizeof(float))));
+//	glEnableVertexAttribArray(1);
+//
+//	//Vertices de textura
+//	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * (sizeof(float)), (void*)(6 * (sizeof(float))));
+//	glEnableVertexAttribArray(2);
+//
+//
+//	//desbindeamos buffer objetos
+//	glBindBuffer(GL_ARRAY_BUFFER, 0);
+//
+//	//Desbindeo
+//	glBindVertexArray(0);
+//
+//	//desbindeamos buffer elements
+//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+//
+//	return VAO;
+//
+//	//return sphere;
+//
+//}
+#pragma endregion
 
-void generateVerts(float * verts, float * norms, float * tex, unsigned int * el, const uint32_t slices, const uint32_t stacks, const uint32_t radius) {
-	float theta, phi;       // Generate positions and normals
-	float thetaFac = (float)((2.0 * M_PI) / slices);
-	float phiFac = (float)(M_PI / stacks);
-	float nx, ny, nz, s, t;
-	uint32_t idx = 0, tIdx = 0;
-	for (uint8_t i = 0; i <= slices; i++) {
-		theta = i * thetaFac;
-		s = (float)i / slices;
-		for (uint8_t j = 0; j <= stacks; j++) {
-			phi = j * phiFac;
-			t = (float)j / stacks;
-			nx = sinf(phi) * cosf(theta);
-			ny = sinf(phi) * sinf(theta);
-			nz = cosf(phi);
-			verts[idx] = radius * nx;
-			verts[idx + 1] = radius * ny;
-			verts[idx + 2] = radius * nz;
-			norms[idx] = nx;
-			norms[idx + 1] = ny;
-			norms[idx + 2] = nz;
-			idx += 3;
-
-			tex[tIdx] = s;
-			tex[tIdx + 1] = t;
-			tIdx += 2;
-		}
-	}
-
-	idx = 0;                      // Generate the element list
-	for (uint8_t i = 0; i < slices; i++) {
-		uint32_t stackStart = i * (stacks + 1);
-		uint32_t nextStackStart = (i + 1) * (stacks + 1);
-		for (uint8_t j = 0; j < stacks; j++) {
-			if (j == 0) {
-				el[idx] = stackStart;
-				el[idx + 1] = stackStart + 1;
-				el[idx + 2] = nextStackStart + 1;
-				idx += 3;
-			}
-			else if (j == stacks - 1) {
-				el[idx] = stackStart + j;
-				el[idx + 1] = stackStart + j + 1;
-				el[idx + 2] = nextStackStart + j;
-				idx += 3;
-			}
-			else {
-				el[idx] = stackStart + j;
-				el[idx + 1] = stackStart + j + 1;
-				el[idx + 2] = nextStackStart + j + 1;
-				el[idx + 3] = nextStackStart + j;
-				el[idx + 4] = stackStart + j;
-				el[idx + 5] = nextStackStart + j + 1;
-				idx += 6;
-			}
-		}
-	}
-}
-
-uint32_t createSphere(const float radius) {
-	constexpr int slices = 10;
-	constexpr int stacks = 10;
-
-	Sphere sphere;
-
-	constexpr uint32_t nVerts = (slices + 1) * (stacks + 1); //121
-	constexpr uint32_t elements = (slices * 2 * (stacks - 1)) * 3; //540
-
-	float v[3 * nVerts];        // Verts      363 elementos
-	float n[3 * nVerts];        // Normals    363 elementos
-	float tex[2 * nVerts];      // Tex coords    242 elementos
-	uint32_t el[elements];      // Elements
-
-	generateVerts(v, n, tex, el, slices, stacks, radius);
-	sphere.vertices = v;
-	sphere.textCoords = tex;
-	sphere.elementos = el;
-	sphere.normals = n;
-	sphere.numeroVertices = nVerts * 3;
-	sphere.numeroNormales = nVerts * 3;
-	sphere.numeroTexturas = 2 * nVerts;
-	sphere.numeroElementos = elements;
-
-	const int sizeTotal = (sphere.numeroVertices + sphere.numeroNormales + sphere.numeroTexturas);
-
-	//vector<float> newVertice2(sizeTotal);
-	float newVertice2[3 * nVerts + 3 * nVerts + 2 * nVerts];
-
-	for (size_t i = 0; i < sphere.numeroVertices / 3; i++)
-	{
-		newVertice2[0 + 8 * i] = sphere.vertices[3 * i];
-		newVertice2[1 + 8 * i] = sphere.vertices[3 * i + 1];
-		newVertice2[2 + 8 * i] = sphere.vertices[3 * i + 2];
-
-		newVertice2[3 + 8 * i] = sphere.normals[3 * i];
-		newVertice2[4 + 8 * i] = sphere.normals[3 * i + 1];
-		newVertice2[5 + 8 * i] = sphere.normals[3 * i + 2];
-
-		newVertice2[6 + 8 * i] = sphere.textCoords[2 * i];
-		newVertice2[7 + 8 * i] = sphere.textCoords[2 * i + 1];
-	}
-
-	uint32_t VAO, VBO, EBO;
-
-	glGenVertexArrays(1, &VAO);
-	//Generamos 2 buffer, elementos y objetos
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-
-	//Bindeamos el VAO
-	glBindVertexArray(VAO);
-
-	//Bindeamos buffer vertices
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//Subida de vertices al buffer
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(newVertice2), &newVertice2, GL_STATIC_DRAW);
-
-
-	//Bindeo buffer indices
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(el), el, GL_STATIC_DRAW);
-
-	//Vertices de posicion
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * (sizeof(float)), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	////Vertices de normales
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * (sizeof(float)), (void*)(3 * (sizeof(float))));
-	glEnableVertexAttribArray(1);
-
-	//Vertices de textura
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * (sizeof(float)), (void*)(6 * (sizeof(float))));
-	glEnableVertexAttribArray(2);
-
-
-	//desbindeamos buffer objetos
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	//Desbindeo
-	glBindVertexArray(0);
-
-	//desbindeamos buffer elements
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	return VAO;
-
-	//return sphere;
-
-}
 
 int Inicializacion() {
 	if (!glfwInit()) {
@@ -444,7 +447,6 @@ void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view)
 	model = glm::scale(model, vec3(20.0f));
 	RenderFigure(*quad.shader, projection, view, model, *quad.VAO, quad.numeroElementosParaDibujar);
 }
-
 
 void Render(const Shader& shaderCube, const Shader& shaderlight,
 	uint32_t texture1, uint32_t texture2,
@@ -502,7 +504,7 @@ void Render(const Shader& shaderCube, const Shader& shaderlight,
 
 			player->Render(model, projection, view);
 		}
-		else if(transfer.modelos[i]->_type == Constants::TIPO_METEOR)
+		else if (transfer.modelos[i]->_type == Constants::TIPO_METEOR)
 		{
 			glm::mat4 model = mat4(1.0f);
 			GameObject *g = transfer.modelos[i];
@@ -711,7 +713,7 @@ int main(int argc, char* argv[]) {
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	Player player (shaderNavePlayer, posPlayer);
+	Player player(shaderNavePlayer, posPlayer);
 	vec3 posMeteorito = vec3(3.0f, 0.0f, 0.0f);
 	Meteor meteor = Meteor(shaderMeteorito, posMeteorito);
 
@@ -719,7 +721,7 @@ int main(int argc, char* argv[]) {
 	GameObject *objectosssArray[numeroObjetos];
 	objectosssArray[0] = &player;
 	objectosssArray[1] = &meteor;
-	
+
 
 	TransferObjects transfer = {
 		Constants::MaximoObjectosTransferencia,
