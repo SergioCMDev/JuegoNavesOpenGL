@@ -25,7 +25,8 @@ public:
 	glm::vec3 GetUpVector();
 	glm::vec3 GetPosition();
 	void SetPosition(glm::vec3 position);
-
+	//GameObject *_parent;
+	//std::array<GameObject> *_children;
 	GameObject(Model * model, Shader& shader, glm::vec3 position);
 	GameObject(const char* pathToModel, Shader& shader, glm::vec3 position);
 	vec3 _position;

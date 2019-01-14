@@ -224,7 +224,7 @@ void HandlerInput(const double deltaTime, TransferObjects objects) {
 	MovimientoCamara(deltaTime);
 	if (objects.modelos[0]->_type == Constants::TIPO_PLAYER) {
 		GameObject *g = objects.modelos[0];
-		Player* player = static_cast<Player*>(g)->GetInstance();
+		Player* player = static_cast<Player*>(g);
 		MovimientoJugador(deltaTime, player);
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -493,7 +493,7 @@ void Render(const Shader& shaderCube, const Shader& shaderlight,
 		if (transfer.modelos[i]->_type == Constants::TIPO_PLAYER) {
 
 			GameObject *g = transfer.modelos[i];
-			Player* player = static_cast<Player*>(g)->GetInstance();
+			Player* player = static_cast<Player*>(g);
 			player->Render(model, projection, view);
 		}
 		else if(transfer.modelos[i]->_type == Constants::TIPO_METEOR)
@@ -705,13 +705,14 @@ int main(int argc, char* argv[]) {
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	Player* player = Player::Instance(shaderNavePlayer, posPlayer);
+	//Player* player = Player::Instance(shaderNavePlayer, posPlayer);
+	Player player (shaderNavePlayer, posPlayer);
 	vec3 posMeteorito = vec3(3.0f, 0.0f, 0.0f);
 	Meteor meteor = Meteor(shaderMeteorito, posMeteorito);
 
 	const uint32_t numeroObjetos = 2;
 	GameObject *objectosssArray[numeroObjetos];
-	objectosssArray[0] = player;
+	objectosssArray[0] = &player;
 	objectosssArray[1] = &meteor;
 	
 
