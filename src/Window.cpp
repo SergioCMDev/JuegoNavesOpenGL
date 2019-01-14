@@ -2,12 +2,10 @@
 
 
 Window* Window::_window;
-//const glm::vec3 posCamara = glm::vec3(0.0f, 0.0f, 3.0f);
 const glm::vec3 posCamara = glm::vec3(-6.0f, 2.0f, 3.0f);
 GLFWwindow* Window::_glfwWindow = 0;
 Camera Window::_camera(glm::vec3(0.0f, 0.0f, 0.0f));
 
-//Camera camera(glm::vec3(-1.0f, 2.0f, 3.0f));
 
 bool Window::_firstMouse = true;
 double Window::_lastX = 0.0f;
@@ -38,7 +36,7 @@ void Window::OnMouse(GLFWwindow* window, double xpos, double ypos) {
 	_lastX = xpos;
 	_lastY = ypos;
 
-	cout << "X POS " << _lastX << " Y POS " << _lastY << endl;
+	//cout << "X POS " << _lastX << " Y POS " << _lastY << endl;
 	_camera.handleMouseMovement(_xoffset, _yoffset);
 }
 

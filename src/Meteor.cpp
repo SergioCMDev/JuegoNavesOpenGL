@@ -9,7 +9,6 @@ Meteor::Meteor(Shader & shader, glm::vec3 position)
 {
 	_model = Model(pathToModel);
 	_shader = shader;
-	//_position = position;
 	SetPosition(position);
 	_velocity = 2.5f;
 	_type = 2;
@@ -19,12 +18,6 @@ Meteor::~Meteor() {
 	/*_instance = nullptr;*/
 }
 
-//Player::
-
-//float Player::GetVelocity()
-//{
-//	return _playerSpeed;
-//}
 
 
 
@@ -57,18 +50,3 @@ void Meteor::Mover(const Movement movement, const float deltaTime)
 		_position -= GetRightVector() * actualVelocity; break;
 	}
 }
-
-
-//void Meteor::RenderMeteor(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view)
-//{
-//	model = glm::translate(model, _position);
-//	model = glm::scale(model, _scale);
-//
-//	_shader.Use();
-//	_shader.Set("projection", projection);
-//	_shader.Set("view", view);
-//	_shader.Set("model", model);
-//	_model.Draw(_shader);
-//}
-//
-
