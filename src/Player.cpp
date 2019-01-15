@@ -5,6 +5,7 @@ Player::Player() {
 }
 Player::Player(Shader & shader, glm::vec3 position)
 {
+	position = vec3(0.0f, 0.0f, 5.0f);
 	_model = Model(pathToModel);
 	_shader = shader;
 	SetPosition(position);
@@ -23,6 +24,8 @@ void Player::Render(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view)
 
 	Player::_shader.Use();
 	model = glm::translate(model, _position);
+	//model = glm::rotate(model, (float)glm::radians(0.0f), vec3(0.0f, 1.0f, 0.0f));
+
 	model = glm::scale(model, glm::vec3(0.1f));
 
 	_shader.Set("projection", projection);

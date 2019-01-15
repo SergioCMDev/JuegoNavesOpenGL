@@ -22,7 +22,7 @@ const float screen_width = 800.0f, screen_height = 600.0f;
 float lastX = (float)screen_width / 2.0f;
 float lastY = (float)screen_height / 2.0f;
 //const vec3 posCamera = glm::vec3(-1.0f, 6.0f, 3.0f);
-const vec3 posCamera = glm::vec3(0.0f, 16.0f, 0.0f);
+const vec3 posCamera = glm::vec3(0.0f, 20.0f, 0.0f);
 const vec3 posPlayer = vec3(5.0f, 0.0f, 0.0f);
 const vec3 posSuelo = vec3(0.0f, -16.0f, 0.0f);
 
@@ -50,100 +50,100 @@ bool firstMouse = true;
 Window window;
 
 
-	//uint32_t numeroElementosVerticesCubo = 192;
+//uint32_t numeroElementosVerticesCubo = 192;
 
-	//float verticesCubo[] = {  //vertices      //uvs     //normals
-	//	  -0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,     0.0f, 0.0f, 1.0f,//front
-	//	  0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,      0.0f, 0.0f, 1.0f,
-	//	  0.5f,  0.5f,  0.5f,       1.0f, 1.0f,       0.0f, 0.0f, 1.0f,
-	//	  -0.5f, 0.5f,  0.5f,       0.0f, 1.0f,       0.0f, 0.0f, 1.0f,
+//float verticesCubo[] = {  //vertices      //uvs     //normals
+//	  -0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,     0.0f, 0.0f, 1.0f,//front
+//	  0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,      0.0f, 0.0f, 1.0f,
+//	  0.5f,  0.5f,  0.5f,       1.0f, 1.0f,       0.0f, 0.0f, 1.0f,
+//	  -0.5f, 0.5f,  0.5f,       0.0f, 1.0f,       0.0f, 0.0f, 1.0f,
 
-	//	  0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,      1.0f, 0.0f, 0.0f,//right
-	//	  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     1.0f, 0.0f, 0.0f,
-	//	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      1.0f, 0.0f, 0.0f,
-	//	  0.5f,  0.5f,  0.5f,       0.0f, 1.0f,       1.0f, 0.0f, 0.0f,
+//	  0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,      1.0f, 0.0f, 0.0f,//right
+//	  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     1.0f, 0.0f, 0.0f,
+//	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      1.0f, 0.0f, 0.0f,
+//	  0.5f,  0.5f,  0.5f,       0.0f, 1.0f,       1.0f, 0.0f, 0.0f,
 
-	//	  -0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,    0.0f, 0.0f, -1.0f,//back
-	//	  -0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,     0.0f, 0.0f, -1.0f,
-	//	  0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,      0.0f, 0.0f, -1.0f,
-	//	  0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,     0.0f, 0.0f, -1.0f,
+//	  -0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,    0.0f, 0.0f, -1.0f,//back
+//	  -0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,     0.0f, 0.0f, -1.0f,
+//	  0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,      0.0f, 0.0f, -1.0f,
+//	  0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,     0.0f, 0.0f, -1.0f,
 
-	//	  -0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,     -1.0f, 0.0f, 0.0f,//left
-	//	  -0.5f,  0.5f,  0.5f,       1.0f, 1.0f,      -1.0f, 0.0f, 0.0f,
-	//	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     -1.0f, 0.0f, 0.0f,
-	//	  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    -1.0f, 0.0f, 0.0f,
+//	  -0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,     -1.0f, 0.0f, 0.0f,//left
+//	  -0.5f,  0.5f,  0.5f,       1.0f, 1.0f,      -1.0f, 0.0f, 0.0f,
+//	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     -1.0f, 0.0f, 0.0f,
+//	  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    -1.0f, 0.0f, 0.0f,
 
-	//	  -0.5f,  -0.5f,  0.5f,       0.0f, 1.0f,     0.0f, -1.0f, 0.0f,//bottom
-	//	  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    0.0f, -1.0f, 0.0f,
-	//	  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     0.0f, -1.0f, 0.0f,
-	//	  0.5f,  -0.5f,  0.5f,       1.0f, 1.0f,      0.0f, -1.0f, 0.0f,
+//	  -0.5f,  -0.5f,  0.5f,       0.0f, 1.0f,     0.0f, -1.0f, 0.0f,//bottom
+//	  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    0.0f, -1.0f, 0.0f,
+//	  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     0.0f, -1.0f, 0.0f,
+//	  0.5f,  -0.5f,  0.5f,       1.0f, 1.0f,      0.0f, -1.0f, 0.0f,
 
-	//	  -0.5f,  0.5f,  0.5f,       0.0f, 0.0f,      0.0f, 1.0f, 0.0f,//top
-	//	  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,       0.0f, 1.0f, 0.0f,
-	//	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      0.0f, 1.0f, 0.0f,
-	//	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     0.0f, 1.0f, 0.0f };
+//	  -0.5f,  0.5f,  0.5f,       0.0f, 0.0f,      0.0f, 1.0f, 0.0f,//top
+//	  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,       0.0f, 1.0f, 0.0f,
+//	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      0.0f, 1.0f, 0.0f,
+//	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     0.0f, 1.0f, 0.0f };
 
-	//uint32_t indicesCubo[]{
-	//	0, 1, 2, 0, 2, 3 //Front
-	//	,4, 5, 6, 4, 6, 7 //Right
-	//	,8, 9, 10, 8, 10, 11 //Back
-	//	,12, 13, 14, 12, 14, 15 //Left
-	//	,16, 17, 18, 16, 18, 19 //Bottom
-	//	,20, 21, 22, 20, 22, 23 //Top
-	//};
+//uint32_t indicesCubo[]{
+//	0, 1, 2, 0, 2, 3 //Front
+//	,4, 5, 6, 4, 6, 7 //Right
+//	,8, 9, 10, 8, 10, 11 //Back
+//	,12, 13, 14, 12, 14, 15 //Left
+//	,16, 17, 18, 16, 18, 19 //Bottom
+//	,20, 21, 22, 20, 22, 23 //Top
+//};
 
-	//glm::vec3 cubePositions[] = {
-	// glm::vec3(0.0f, 0.0f, 0.0f),
-	// glm::vec3(2.0f, 5.0f, -15.0f),
-	// glm::vec3(-1.5f, -2.2f, -2.5f),
-	// glm::vec3(-3.8f, -2.0f, -12.3f),
-	// glm::vec3(2.4f, -0.4f, -3.5f),
-	// glm::vec3(-1.7f, 3.0f, -7.5f),
-	// glm::vec3(1.3f, -2.0f, -2.5f),
-	// glm::vec3(1.5f, 2.0f, -2.5f),
-	// glm::vec3(1.5f, 0.2f, -1.5f),
-	// glm::vec3(-1.3f, 1.0f, -1.5f)
-	//};
+//glm::vec3 cubePositions[] = {
+// glm::vec3(0.0f, 0.0f, 0.0f),
+// glm::vec3(2.0f, 5.0f, -15.0f),
+// glm::vec3(-1.5f, -2.2f, -2.5f),
+// glm::vec3(-3.8f, -2.0f, -12.3f),
+// glm::vec3(2.4f, -0.4f, -3.5f),
+// glm::vec3(-1.7f, 3.0f, -7.5f),
+// glm::vec3(1.3f, -2.0f, -2.5f),
+// glm::vec3(1.5f, 2.0f, -2.5f),
+// glm::vec3(1.5f, 0.2f, -1.5f),
+// glm::vec3(-1.3f, 1.0f, -1.5f)
+//};
 
-	//struct Sphere {
-	//	float* vertices;
-	//	float* normals;
-	//	float* textCoords;
-	//	uint32_t* elementos;
-	//	uint32_t numeroVertices;
-	//	uint32_t numeroElementos;
-	//	uint32_t numeroNormales;
-	//	uint32_t numeroTexturas;
-	//};
+//struct Sphere {
+//	float* vertices;
+//	float* normals;
+//	float* textCoords;
+//	uint32_t* elementos;
+//	uint32_t numeroVertices;
+//	uint32_t numeroElementos;
+//	uint32_t numeroNormales;
+//	uint32_t numeroTexturas;
+//};
 
-	uint32_t numeroElementosVerticesQuad = 20;
+uint32_t numeroElementosVerticesQuad = 20;
 
-	float verticesQuad[] = {
-		-0.5f,  0.5f,  0.5f,       0.0f, 0.0f,    //top
-		  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,
-		  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,
-		  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f };
+float verticesQuad[] = {
+	-0.5f,  0.5f,  0.5f,       0.0f, 0.0f,    //top
+	  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,
+	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,
+	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f };
 
-	//uint32_t numeroIndicesCubo = 36;
-	uint32_t numeroIndicesQuad = 6;
-	uint32_t indicesQuad[]{
-		0, 1, 2, 0, 2, 3 //Front
-	};
+//uint32_t numeroIndicesCubo = 36;
+uint32_t numeroIndicesQuad = 6;
+uint32_t indicesQuad[]{
+	0, 1, 2, 0, 2, 3 //Front
+};
 
-	struct Quad {
-		float* vertices;
-		float* normals;
-		float* textCoords;
-		uint32_t* elementos;
-		uint32_t numeroVertices;
-		uint32_t numeroElementos;
-		uint32_t numeroElementosParaDibujar;
-		uint32_t numeroNormales;
-		uint32_t numeroTexturas;
-		uint32_t textures[3];
-		Shader *shader;
-		uint32_t* VAO;
-	};
+struct Quad {
+	float* vertices;
+	float* normals;
+	float* textCoords;
+	uint32_t* elementos;
+	uint32_t numeroVertices;
+	uint32_t numeroElementos;
+	uint32_t numeroElementosParaDibujar;
+	uint32_t numeroNormales;
+	uint32_t numeroTexturas;
+	uint32_t textures[3];
+	Shader *shader;
+	uint32_t* VAO;
+};
 
 
 
@@ -448,6 +448,20 @@ void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view)
 	RenderFigure(*quad.shader, projection, view, model, *quad.VAO, quad.numeroElementosParaDibujar);
 }
 
+
+
+void MoveObjects(const double deltaTim, TransferObjects transfer) {
+	for (size_t i = 0; i < transfer.numeroModelos; i++)
+	{
+		if (transfer.modelos[i]->_type == Constants::TIPO_METEOR)
+		{
+			GameObject *g = transfer.modelos[i];
+			Meteor* meteor = static_cast<Meteor*>(g);
+
+			meteor->Mover(deltaTim);
+		}
+	}
+}
 void Render(const Shader& shaderCube, const Shader& shaderlight,
 	uint32_t texture1, uint32_t texture2,
 	Quad quad, TransferObjects transfer) {
@@ -509,6 +523,7 @@ void Render(const Shader& shaderCube, const Shader& shaderlight,
 			glm::mat4 model = mat4(1.0f);
 			GameObject *g = transfer.modelos[i];
 			Meteor* meteor = static_cast<Meteor*>(g);
+
 			meteor->Render(model, projection, view);
 		}
 	}
@@ -715,9 +730,12 @@ int main(int argc, char* argv[]) {
 
 	Player player(shaderNavePlayer, posPlayer);
 	vec3 posMeteorito = vec3(3.0f, 0.0f, 0.0f);
-	Meteor meteor = Meteor(shaderMeteorito, posMeteorito);
+	Meteor meteor  = Meteor(shaderMeteorito);
+	Meteor meteor2 = Meteor(shaderMeteorito);
+	Meteor meteor3 = Meteor(shaderMeteorito);
+	Meteor meteor4 = Meteor(shaderMeteorito);
 
-	const uint32_t numeroObjetos = 2;
+	const uint32_t numeroObjetos = 5;
 	GameObject *objectosssArray[numeroObjetos];
 
 
@@ -726,8 +744,13 @@ int main(int argc, char* argv[]) {
 		numeroObjetos,
 		*objectosssArray,
 	};
-	transfer.modelos[0] = &player; 
-	transfer.modelos[1] = &meteor; 
+	transfer.modelos[0] = &player;
+	transfer.modelos[1] = &meteor;
+	transfer.modelos[2] = &meteor2;
+	transfer.modelos[3] = &meteor3;
+	transfer.modelos[4] = &meteor4;
+
+
 
 	//uint32_t CubeVAO = createVertexData(verticesCubo, numeroElementosVerticesCubo, indicesCubo, numeroIndicesCubo);
 	//uint32_t SphereVAO = createSphere(1);
@@ -748,8 +771,8 @@ int main(int argc, char* argv[]) {
 
 		HandlerInput(deltaTime, transfer);
 
+		MoveObjects(deltaTime, transfer);
 		Render(shader, shaderlight, texture1, texture2, quad, transfer);
-
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
 	}

@@ -11,13 +11,12 @@ class Meteor : public GameObject{
 public:
 	Meteor();
 
-	void Mover(const Movement movement, const float deltaTime);
-
+	void Mover(const float& deltaTime);
+	Meteor(Shader & shader);
 	Meteor(Shader & shader, glm::vec3 position);
 	~Meteor();
-	void Render(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view);
 	vec3 _scale = vec3(1.0f);
-	void RenderMeteor(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view);
+	void Render(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view);
 
 private:
 

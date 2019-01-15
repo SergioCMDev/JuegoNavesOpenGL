@@ -5,7 +5,7 @@
 #include "Shader.h"
 #include "GameObject.h"
 #include "Constants.h"
-
+#include<GLFW/glfw3.h>
 class Player : public GameObject{
 
 public:
