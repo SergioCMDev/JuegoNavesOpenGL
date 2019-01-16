@@ -20,7 +20,7 @@ Meteor::Meteor(Shader & shader, glm::vec3 position)
 	//const uint32_t initialPositionIndex = rand() % 2;
 	//vec3 positionInitial = positions[initialPositionIndex];
 	SetPosition(position);
-	_velocity = 0.4f;
+	_velocity = 1.0f;
 	_type = 2;
 }
 
@@ -58,6 +58,8 @@ void Meteor::Render(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view)
 	_shader.Set("projection", projection);
 	_shader.Set("view", view);
 	_shader.Set("model", model);
+	_velocity += 0.2f;
+
 	_model.Draw(_shader);
 }
 
