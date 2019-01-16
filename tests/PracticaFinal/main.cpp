@@ -13,10 +13,9 @@
 #include "Camera.h"
 #include "GameObject.h"
 
-//#include "Model.h"
 #include "Player.h"
 #include "Meteor.h"
-#include "main.h"
+#include "Enemy.h"
 
 const float screen_width = 800.0f, screen_height = 600.0f;
 float lastX = (float)screen_width / 2.0f;
@@ -31,6 +30,15 @@ Camera camera(posCamera);
 const float M_PI = 3.14f;
 
 
+float lastFrame = 0.0f;
+bool firstMouse = true;
+
+Window window;
+#pragma endregion
+
+
+#pragma region Comments
+
 //glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 //
 //glm::vec3 pointLightPositions[] = {
@@ -44,10 +52,6 @@ const float M_PI = 3.14f;
 //
 //};
 
-float lastFrame = 0.0f;
-bool firstMouse = true;
-
-Window window;
 
 
 //uint32_t numeroElementosVerticesCubo = 192;
@@ -116,6 +120,7 @@ Window window;
 //	uint32_t numeroTexturas;
 //};
 
+#pragma endregion
 uint32_t numeroElementosVerticesQuad = 20;
 
 float verticesQuad[] = {
@@ -125,6 +130,8 @@ float verticesQuad[] = {
 	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f };
 
 //uint32_t numeroIndicesCubo = 36;
+#pragma endregion
+
 uint32_t numeroIndicesQuad = 6;
 uint32_t indicesQuad[]{
 	0, 1, 2, 0, 2, 3 //Front
@@ -156,7 +163,6 @@ struct TransferObjects {
 
 using namespace std;
 
-#pragma endregion
 Player* GetPlayerReference(GameObject* objectPlayer) {
 	GameObject *g = objectPlayer;
 	Player* player = static_cast<Player*>(objectPlayer);
@@ -244,6 +250,9 @@ void HandlerInput(const double deltaTime, TransferObjects objects) {
 #pragma region Metodos
 
 #pragma region Generacion esfera
+
+
+
 //void generateVerts(float * verts, float * norms, float * tex, unsigned int * el, const uint32_t slices, const uint32_t stacks, const uint32_t radius) {
 //	float theta, phi;       // Generate positions and normals
 //	float thetaFac = (float)((2.0 * M_PI) / slices);
@@ -397,6 +406,8 @@ void HandlerInput(const double deltaTime, TransferObjects objects) {
 #pragma endregion
 
 
+
+
 int Inicializacion() {
 	if (!glfwInit()) {
 		cout << "Error initializing GLFW" << endl;
@@ -405,7 +416,7 @@ int Inicializacion() {
 	}
 	//Window window1 = Window(screen_width, screen_height);
 	window = *Window::GetInstance(screen_width, screen_height);
-	window.AddCamera(camera);
+	//window.AddCamera(camera);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		cout << "Error initializing GLAD" << endl;
@@ -448,8 +459,6 @@ void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view)
 	RenderFigure(*quad.shader, projection, view, model, *quad.VAO, quad.numeroElementosParaDibujar);
 }
 
-
-
 void MoveObjects(const double deltaTim, TransferObjects transfer) {
 	for (size_t i = 0; i < transfer.numeroModelos; i++)
 	{
@@ -462,6 +471,7 @@ void MoveObjects(const double deltaTim, TransferObjects transfer) {
 		}
 	}
 }
+
 void Render(const Shader& shaderCube, const Shader& shaderlight,
 	uint32_t texture1, uint32_t texture2,
 	Quad quad, TransferObjects transfer) {
@@ -525,6 +535,13 @@ void Render(const Shader& shaderCube, const Shader& shaderlight,
 			Meteor* meteor = static_cast<Meteor*>(g);
 
 			meteor->Render(model, projection, view);
+		}
+		else if (transfer.modelos[i]->_type == Constants::TIPO_ENEMIGO){
+			glm::mat4 model = mat4(1.0f);
+			GameObject *g = transfer.modelos[i];
+			Enemy* enemyShip = static_cast<Enemy*>(g);
+
+			enemyShip->Render(model, projection, view);
 		}
 	}
 
@@ -728,27 +745,35 @@ int main(int argc, char* argv[]) {
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
+	//GameObject gameObjectParent();
+
+
 	Player player(shaderNavePlayer, posPlayer);
+	//camera._children[0] = &player;
+	//GameObject naves();
+	vec3 posEnemigo = vec3(3.0f, 0.0f, 0.0f);
+
+	Enemy enemy(shaderNavePlayer, posEnemigo);
+	//camera._children[0] = &naves;
+
 	vec3 posMeteorito = vec3(3.0f, 0.0f, 0.0f);
 	Meteor meteor  = Meteor(shaderMeteorito);
-	Meteor meteor2 = Meteor(shaderMeteorito);
-	Meteor meteor3 = Meteor(shaderMeteorito);
-	Meteor meteor4 = Meteor(shaderMeteorito);
-
-	const uint32_t numeroObjetos = 5;
+	//Meteor meteor2 = Meteor(shaderMeteorito);
+	//Meteor meteor3 = Meteor(shaderMeteorito);
+	//Meteor meteor4 = Meteor(shaderMeteorito);
+	const uint32_t numeroObjetos = 2;
 	GameObject *objectosssArray[numeroObjetos];
-
-
+	
 	TransferObjects transfer = {
 		Constants::MaximoObjectosTransferencia,
 		numeroObjetos,
 		*objectosssArray,
 	};
 	transfer.modelos[0] = &player;
-	transfer.modelos[1] = &meteor;
-	transfer.modelos[2] = &meteor2;
-	transfer.modelos[3] = &meteor3;
-	transfer.modelos[4] = &meteor4;
+	//transfer.modelos[1] = &meteor;
+	//transfer.modelos[2] = &meteor2;
+	//transfer.modelos[3] = &meteor3;
+	transfer.modelos[1] = &enemy;
 
 
 

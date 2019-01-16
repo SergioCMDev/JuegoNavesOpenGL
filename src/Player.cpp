@@ -10,7 +10,7 @@ Player::Player(Shader & shader, glm::vec3 position)
 	_shader = shader;
 	SetPosition(position);
 	_velocity = 2.5f;
-	_type = 1;
+	_type = Constants::TIPO_PLAYER;
 }
 
 Player::~Player() {
@@ -22,7 +22,7 @@ Player::~Player() {
 void Player::Render(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view)
 {
 
-	Player::_shader.Use();
+	_shader.Use();
 	model = glm::translate(model, _position);
 	//model = glm::rotate(model, (float)glm::radians(0.0f), vec3(0.0f, 1.0f, 0.0f));
 

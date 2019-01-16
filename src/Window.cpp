@@ -11,8 +11,8 @@ bool Window::_firstMouse = true;
 double Window::_lastX = 0.0f;
 double Window::_lastY = 0.0f;
 
-void Window::AddCamera(Camera camera) {
-	_camera = camera;
+void Window::AddCamera(Camera* camera) {
+	//_camera = &camera;
 }
 
 Window::~Window() {

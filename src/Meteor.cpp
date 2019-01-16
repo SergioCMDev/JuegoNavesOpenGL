@@ -21,7 +21,7 @@ Meteor::Meteor(Shader & shader, glm::vec3 position)
 	//vec3 positionInitial = positions[initialPositionIndex];
 	SetPosition(position);
 	_velocity = 1.0f;
-	_type = 2;
+	_type = Constants::TIPO_METEOR;
 }
 
 

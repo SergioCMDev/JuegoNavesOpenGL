@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/vec4.hpp>
 #define GLFW_INCLUDE_NONE
-
+#include "GameObject.h"
 #include<GLFW/glfw3.h>
 #include<glm/gtc/matrix_transform.hpp>
 #include<glm/gtc/type_precision.hpp>
@@ -16,7 +16,7 @@ const float k_Pitch = 270.0f; //Camra mirando hacia abajo Grados Eje Y
 const float k_Speed = 2.5f;
 const float k_Sensitivity = 0.1f;
 const float k_FOV = 45.0f;
-class Camera {
+class Camera : public GameObject {
 public:
 	enum class Movement { //Possible options for camera movement
 		Forward = 0,

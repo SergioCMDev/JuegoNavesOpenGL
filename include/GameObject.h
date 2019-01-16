@@ -5,7 +5,7 @@
 #include "Model.h"
 #include "Shader.h"
 #include "Constants.h"
-
+#include <array> 
 class GameObject {
 
 public:
@@ -17,6 +17,9 @@ public:
 	};
 	Model _model;
 	uint32_t _type;
+	GameObject* _parent;
+	std::array<GameObject*, 50> _children;
+
 	Shader &_shader = Shader();
 	virtual ~GameObject() {};
 	GameObject();
