@@ -121,6 +121,9 @@ struct Sphere {
 	Shader *shader;
 	uint32_t numeroIndices = 121 * 8;
 	vec3 scale = glm::vec3(1.4f);
+	vec3 color = vec3(1.0f);
+	vec3 position = vec3(0.0f);
+
 };
 
 
@@ -493,8 +496,11 @@ void RenderCube(Cube &cube, glm::mat4 &projection, glm::mat4 &view, vec3 positio
 void RenderSphere(Sphere &sphere, glm::mat4 &projection, glm::mat4 &view)
 {
 	glm::mat4 model = glm::mat4(1.0f);
+	sphere.shader->Use();
+	sphere.shader->Set("color", sphere.color);
 
 	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+	model = glm::translate(model, sphere.position);
 	model = glm::scale(model, sphere.scale);
 
 	RenderFigure(*sphere.shader, projection, view, model, *sphere.VAO, sphere.numeroIndices);
@@ -506,8 +512,7 @@ void Render(const Shader& shaderlight,
 	Quad quad, TransferObjects transfer, Cube cube, Sphere sphere) {
 
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	//uint32_t elementosParaDibujarEsfera = 121 * 8;
-
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
 
@@ -540,11 +545,8 @@ void Render(const Shader& shaderlight,
 
 	//Dibujamos Suelo
 	RenderQuadSuelo(quad, projection, view);
-	//glm::mat4 model = mat4(1.0f);
 
 	//Dibujamos sphera luz
-	cube.shader->Use();
-
 	RenderSphere(sphere, projection, view);
 
 	//Dibujamos Cubos Meteoritos
@@ -561,8 +563,6 @@ void Render(const Shader& shaderlight,
 		cube.shader->Set("color", vec3(1.0f, 0.0f, 0.0f));
 		RenderCube(cube, projection, view, EnemyShipOriginPositions[i]);
 	}
-
-
 
 	//Dibujamos GameObjects
 	for (size_t i = 0; i < transfer.numeroModelos; i++)
