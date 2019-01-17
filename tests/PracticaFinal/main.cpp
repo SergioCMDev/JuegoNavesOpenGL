@@ -544,8 +544,6 @@ void Render(const Shader& shaderlight,
 
 	//Dibujamos sphera luz
 	cube.shader->Use();
-	cube.shader->Set("projection", projection);
-	cube.shader->Set("view", view);
 
 	RenderSphere(sphere, projection, view);
 
