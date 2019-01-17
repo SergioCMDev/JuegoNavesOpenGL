@@ -551,18 +551,17 @@ void Render(const Shader& shaderlight,
 	}
 
 
-
+	//Dibujamos GameObjects
 	for (size_t i = 0; i < transfer.numeroModelos; i++)
 	{
 		if (transfer.modelos[i]->_type == Constants::TIPO_PLAYER) {
 
-			Player* player = GetPlayerReference(transfer.modelos[0]);
+			Player* player = GetPlayerReference(transfer.modelos[i]);
 
 			player->Render(projection, view);
 		}
 		else if (transfer.modelos[i]->_type == Constants::TIPO_METEOR)
 		{
-			//glm::mat4 model = mat4(1.0f);
 			GameObject *g = transfer.modelos[i];
 			Meteor* meteor = static_cast<Meteor*>(g);
 
@@ -588,32 +587,6 @@ void Render(const Shader& shaderlight,
 
 		//shaderCube.Set("viewPos", camera.GetPosition());
 
-		////DirectionalLight 1
-		//shaderCube.Set("dirLight.direction", -0.2f, -0.1f, -0.3f);
-		//shaderCube.Set("dirLight.ambient", 0.1f, 0.6f, 0.6f);
-		//shaderCube.Set("dirLight.diffuse", 0.3f, 0.3f, 0.3f);
-		//shaderCube.Set("dirLight.specular", 0.5f, 0.5f, 0.5f);
-
-
-		////PointLight 0
-		//shaderCube.Set("pointLights[0].position", pointLightPositions[0]);
-		//shaderCube.Set("pointLights[0].ambient", 0.45f, 0.45f, 0.1f);
-		//shaderCube.Set("pointLights[0].diffuse", 0.5f, 0.5f, 0.5f);
-		//shaderCube.Set("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
-		//shaderCube.Set("pointLights[0].constant", 1.0f);
-		//shaderCube.Set("pointLights[0].linear", 0.09f);
-		//shaderCube.Set("pointLights[0].cuadratic", 0.032f);
-
-		////PointLight 1
-		//shaderCube.Set("pointLights[1].position", pointLightPositions[1]);
-		//shaderCube.Set("pointLights[1].ambient", 0.1f, 0.1f, 1.1f);
-		//shaderCube.Set("pointLights[1].diffuse", 0.5f, 0.5f, 0.5f);
-		//shaderCube.Set("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
-		//shaderCube.Set("pointLights[1].constant", 1.0f);
-		//shaderCube.Set("pointLights[1].linear", 0.09f);
-		//shaderCube.Set("pointLights[1].cuadratic", 0.032f);
-
-
 		////SpotLight 0
 		//shaderCube.Set("spotLights[0].position", spotLightPositions[0]);
 		//shaderCube.Set("spotLights[0].direction", -1.0f, 0.0f, -1.0f);
@@ -627,17 +600,6 @@ void Render(const Shader& shaderlight,
 		//shaderCube.Set("spotLights[0].diffuse", 0.5f, 0.5f, 0.5f);
 		//shaderCube.Set("spotLights[0].specular", 1.0f, 1.0f, 1.0f);
 
-		////SpotLight 1
-		//shaderCube.Set("spotLights[1].position", spotLightPositions[1]);
-		//shaderCube.Set("spotLights[1].direction", -1.0f, 0.0f, -1.0f);
-		//shaderCube.Set("spotLights[1].cutOff", cos(radians(20.0f)));
-		//shaderCube.Set("spotLights[1].outerCutOff", cos(radians(25.0f)));
-		//shaderCube.Set("spotLights[1].direction", -1.0f, 0.0f, -1.0f);
-		//shaderCube.Set("spotLights[1].ambient", 1.0f, 0.15f, 0.1f);
-		//shaderCube.Set("spotLights[1].diffuse", 0.5f, 0.5f, 0.5f);
-		//shaderCube.Set("spotLights[1].constant", 1.0f);
-		//shaderCube.Set("spotLights[1].linear", 0.09f);
-		//shaderCube.Set("spotLights[1].cuadratic", 0.032f);
 
 		//glActiveTexture(GL_TEXTURE0);		//glBindTexture(GL_TEXTURE_2D, texture1);		//glActiveTexture(GL_TEXTURE1);		//glBindTexture(GL_TEXTURE_2D, texture2);
 		//shaderCube.Set("material.diffuse", 1);
@@ -785,7 +747,6 @@ int main(int argc, char* argv[]) {
 	Enemy enemy(shaderNavePlayer, posEnemigo);
 	//camera._children[0] = &naves;
 
-	vec3 posMeteorito = vec3(3.0f, 0.0f, 0.0f);
 	Meteor meteor = Meteor(shaderMeteorito);
 	//Meteor meteor2 = Meteor(shaderMeteorito);
 	//Meteor meteor3 = Meteor(shaderMeteorito);
@@ -835,7 +796,8 @@ int main(int argc, char* argv[]) {
 	}
 
 	//Si se han linkado bien los shaders, los borramos ya que estan linkados
-	//glDeleteVertexArrays(1, &CubeVAO);
+	glDeleteVertexArrays(1, &CubeVAO);
+	glDeleteVertexArrays(1, &QuadVAO);
 
 
 	glfwTerminate();
