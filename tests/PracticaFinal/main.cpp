@@ -75,7 +75,6 @@ glm::vec3 EnemyShipOriginPositions[] = {
 };
 
 
-#pragma endregion
 float verticesCubo[] = {  //vertices      //uvs     //normals
 		  -0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,     0.0f, 0.0f, 1.0f,//front
 		  0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,      0.0f, 0.0f, 1.0f,
@@ -124,7 +123,6 @@ struct Quad {
 	uint32_t numeroVertices;
 	uint32_t numeroElementos;
 	uint32_t numeroElementosVerticesQuad = 20;
-	uint32_t numeroElementosParaDibujar;
 	uint32_t numeroIndicesQuad = 6;
 	uint32_t numeroNormales;
 	uint32_t numeroTexturas;
@@ -137,7 +135,6 @@ struct Quad {
 	};
 };
 
-
 struct Cube {
 	float* vertices;
 	float* normals;
@@ -145,7 +142,6 @@ struct Cube {
 	uint32_t* elementos;
 	uint32_t numeroVertices;
 	uint32_t numeroElementos;
-	uint32_t numeroElementosParaDibujar;
 	uint32_t numeroIndices = 36;
 	vec3 color;
 	Shader *shader;
@@ -480,7 +476,7 @@ void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view)
 	glm::mat4 model = mat4(1.0f);
 	model = glm::translate(model, posSuelo);
 	model = glm::scale(model, vec3(20.0f));
-	RenderFigure(*quad.shader, projection, view, model, *quad.VAO, quad.numeroElementosParaDibujar);
+	RenderFigure(*quad.shader, projection, view, model, *quad.VAO, quad.numeroIndicesQuad);
 }
 
 void RenderCube(Cube &cube, glm::mat4 &projection, glm::mat4 &view, vec3 position)
@@ -492,7 +488,7 @@ void RenderCube(Cube &cube, glm::mat4 &projection, glm::mat4 &view, vec3 positio
 	glm::mat4 model = mat4(1.0f);
 	model = glm::translate(model, position);
 	model = glm::scale(model, vec3(1.0f));
-	RenderFigure(*cube.shader, projection, view, model, *cube.VAO, cube.numeroElementosParaDibujar);
+	RenderFigure(*cube.shader, projection, view, model, *cube.VAO, cube.numeroIndices);
 }
 
 #pragma endregion
@@ -818,13 +814,11 @@ int main(int argc, char* argv[]) {
 
 	cube.shader = &shaderCube;
 	quad.shader = &shaderQuad;
+
 	quad.VAO = &QuadVAO;
 	quad.textures[0] = textureSuelo;
-	quad.numeroElementosParaDibujar = 6;
 
 	cube.VAO = &CubeVAO;
-
-	cube.numeroElementosParaDibujar = 36;
 
 	//Bucle inicial donde se realiza toda la accion del motor
 	while (!glfwWindowShouldClose(window.GetWindow())) {
