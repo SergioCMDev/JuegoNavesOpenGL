@@ -126,7 +126,6 @@ struct Sphere {
 
 };
 
-
 struct Quad {
 
 	uint32_t numeroElementosVerticesQuad = 20;
@@ -157,8 +156,6 @@ struct Cube {
 		,20, 21, 22, 20, 22, 23 //Top
 	};
 };
-
-
 
 struct TransferObjects {
 	const uint32_t maximoModelos = Constants::MaximoObjectosTransferencia;
@@ -491,7 +488,6 @@ void RenderCube(Cube &cube, glm::mat4 &projection, glm::mat4 &view, vec3 positio
 	RenderFigure(*cube.shader, projection, view, model, *cube.VAO, cube.numeroIndices);
 }
 
-#pragma endregion
 
 void RenderSphere(Sphere &sphere, glm::mat4 &projection, glm::mat4 &view)
 {
@@ -506,6 +502,7 @@ void RenderSphere(Sphere &sphere, glm::mat4 &projection, glm::mat4 &view)
 	RenderFigure(*sphere.shader, projection, view, model, *sphere.VAO, sphere.numeroIndices);
 
 }
+#pragma endregion
 
 void Render(const Shader& shaderlight,
 	uint32_t texture1, uint32_t texture2,
