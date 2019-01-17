@@ -54,47 +54,8 @@ Window window;
 
 
 
-uint32_t numeroElementosVerticesCubo = 192;
 
-float verticesCubo[] = {  //vertices      //uvs     //normals
-	  -0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,     0.0f, 0.0f, 1.0f,//front
-	  0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,      0.0f, 0.0f, 1.0f,
-	  0.5f,  0.5f,  0.5f,       1.0f, 1.0f,       0.0f, 0.0f, 1.0f,
-	  -0.5f, 0.5f,  0.5f,       0.0f, 1.0f,       0.0f, 0.0f, 1.0f,
 
-	  0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,      1.0f, 0.0f, 0.0f,//right
-	  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     1.0f, 0.0f, 0.0f,
-	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      1.0f, 0.0f, 0.0f,
-	  0.5f,  0.5f,  0.5f,       0.0f, 1.0f,       1.0f, 0.0f, 0.0f,
-
-	  -0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,    0.0f, 0.0f, -1.0f,//back
-	  -0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,     0.0f, 0.0f, -1.0f,
-	  0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,      0.0f, 0.0f, -1.0f,
-	  0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,     0.0f, 0.0f, -1.0f,
-
-	  -0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,     -1.0f, 0.0f, 0.0f,//left
-	  -0.5f,  0.5f,  0.5f,       1.0f, 1.0f,      -1.0f, 0.0f, 0.0f,
-	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     -1.0f, 0.0f, 0.0f,
-	  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    -1.0f, 0.0f, 0.0f,
-
-	  -0.5f,  -0.5f,  0.5f,       0.0f, 1.0f,     0.0f, -1.0f, 0.0f,//bottom
-	  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    0.0f, -1.0f, 0.0f,
-	  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     0.0f, -1.0f, 0.0f,
-	  0.5f,  -0.5f,  0.5f,       1.0f, 1.0f,      0.0f, -1.0f, 0.0f,
-
-	  -0.5f,  0.5f,  0.5f,       0.0f, 0.0f,      0.0f, 1.0f, 0.0f,//top
-	  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,       0.0f, 1.0f, 0.0f,
-	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      0.0f, 1.0f, 0.0f,
-	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     0.0f, 1.0f, 0.0f };
-
-uint32_t indicesCubo[]{
-	0, 1, 2, 0, 2, 3 //Front
-	,4, 5, 6, 4, 6, 7 //Right
-	,8, 9, 10, 8, 10, 11 //Back
-	,12, 13, 14, 12, 14, 15 //Left
-	,16, 17, 18, 16, 18, 19 //Bottom
-	,20, 21, 22, 20, 22, 23 //Top
-};
 
 glm::vec3 MeteorOriginPositions[] = {
  glm::vec3(0.0f,  0.0f, 15.0f), //z == arriba/abajo, X derecha/izq invertida
@@ -106,40 +67,54 @@ glm::vec3 MeteorOriginPositions[] = {
 
 
 glm::vec3 EnemyShipOriginPositions[] = {
- glm::vec3(0.0f,  0.0f, 12.0f), //z == arriba/abajo, X derecha/izq invertida
- glm::vec3(5.0f,  0.0f, 12.0f),
- glm::vec3(8.0f,  0.0f, 12.0f),
- glm::vec3(-5.0f, 0.0f, 12.0f),
- glm::vec3(-8.0f, 0.0f, 12.0f),
+ glm::vec3(12.0f,  0.0f, 10.0f), // X derecha/izq invertida //z == arriba/abajo,
+ glm::vec3(-12.0f,  0.0f, 10.0f),
+ //glm::vec3(18.0f,  0.0f, 10.0f),
+ //glm::vec3(15.0f, 0.0f, 12.0f),
+ //glm::vec3(18.0f, 0.0f, 10.0f),
 };
 
-//struct Sphere {
-//	float* vertices;
-//	float* normals;
-//	float* textCoords;
-//	uint32_t* elementos;
-//	uint32_t numeroVertices;
-//	uint32_t numeroElementos;
-//	uint32_t numeroNormales;
-//	uint32_t numeroTexturas;
-//};
 
 #pragma endregion
-uint32_t numeroElementosVerticesQuad = 20;
+float verticesCubo[] = {  //vertices      //uvs     //normals
+		  -0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,     0.0f, 0.0f, 1.0f,//front
+		  0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,      0.0f, 0.0f, 1.0f,
+		  0.5f,  0.5f,  0.5f,       1.0f, 1.0f,       0.0f, 0.0f, 1.0f,
+		  -0.5f, 0.5f,  0.5f,       0.0f, 1.0f,       0.0f, 0.0f, 1.0f,
+
+		  0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,      1.0f, 0.0f, 0.0f,//right
+		  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     1.0f, 0.0f, 0.0f,
+		  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      1.0f, 0.0f, 0.0f,
+		  0.5f,  0.5f,  0.5f,       0.0f, 1.0f,       1.0f, 0.0f, 0.0f,
+
+		  -0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,    0.0f, 0.0f, -1.0f,//back
+		  -0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,     0.0f, 0.0f, -1.0f,
+		  0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,      0.0f, 0.0f, -1.0f,
+		  0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,     0.0f, 0.0f, -1.0f,
+
+		  -0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,     -1.0f, 0.0f, 0.0f,//left
+		  -0.5f,  0.5f,  0.5f,       1.0f, 1.0f,      -1.0f, 0.0f, 0.0f,
+		  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     -1.0f, 0.0f, 0.0f,
+		  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    -1.0f, 0.0f, 0.0f,
+
+		  -0.5f,  -0.5f,  0.5f,       0.0f, 1.0f,     0.0f, -1.0f, 0.0f,//bottom
+		  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    0.0f, -1.0f, 0.0f,
+		  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     0.0f, -1.0f, 0.0f,
+		  0.5f,  -0.5f,  0.5f,       1.0f, 1.0f,      0.0f, -1.0f, 0.0f,
+
+		  -0.5f,  0.5f,  0.5f,       0.0f, 0.0f,      0.0f, 1.0f, 0.0f,//top
+		  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,       0.0f, 1.0f, 0.0f,
+		  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      0.0f, 1.0f, 0.0f,
+		  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     0.0f, 1.0f, 0.0f };
 
 float verticesQuad[] = {
 	-0.5f,  0.5f,  0.5f,       0.0f, 0.0f,    //top
 	  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,
 	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,
 	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f };
-
-uint32_t numeroIndicesCubo = 36;
 #pragma endregion
 
-uint32_t numeroIndicesQuad = 6;
-uint32_t indicesQuad[]{
-	0, 1, 2, 0, 2, 3 //Front
-};
+
 
 struct Quad {
 	float* vertices;
@@ -148,12 +123,18 @@ struct Quad {
 	uint32_t* elementos;
 	uint32_t numeroVertices;
 	uint32_t numeroElementos;
+	uint32_t numeroElementosVerticesQuad = 20;
 	uint32_t numeroElementosParaDibujar;
+	uint32_t numeroIndicesQuad = 6;
 	uint32_t numeroNormales;
 	uint32_t numeroTexturas;
 	uint32_t textures[3];
 	Shader *shader;
 	uint32_t* VAO;
+
+	uint32_t indicesQuad[6]{
+	0, 1, 2, 0, 2, 3 //Front
+	};
 };
 
 
@@ -165,10 +146,20 @@ struct Cube {
 	uint32_t numeroVertices;
 	uint32_t numeroElementos;
 	uint32_t numeroElementosParaDibujar;
-
+	uint32_t numeroIndices = 36;
 	vec3 color;
 	Shader *shader;
+	uint32_t numeroElementosVerticesCubo = 192;
 	uint32_t* VAO;
+	
+	uint32_t indicesCubo[36]{
+		0, 1, 2, 0, 2, 3 //Front
+		,4, 5, 6, 4, 6, 7 //Right
+		,8, 9, 10, 8, 10, 11 //Back
+		,12, 13, 14, 12, 14, 15 //Left
+		,16, 17, 18, 16, 18, 19 //Bottom
+		,20, 21, 22, 20, 22, 23 //Top
+	};
 };
 
 
@@ -819,18 +810,18 @@ int main(int argc, char* argv[]) {
 
 
 
-	uint32_t CubeVAO = createVertexData(verticesCubo, numeroElementosVerticesCubo, indicesCubo, numeroIndicesCubo);
-	//uint32_t SphereVAO = createSphere(1);
-	uint32_t QuadVAO = createVertexDataQuad(verticesQuad, numeroElementosVerticesQuad, indicesQuad, numeroIndicesQuad, 5);
-
+	Cube cube = Cube();
 	Quad quad = Quad();
+	uint32_t CubeVAO = createVertexData(verticesCubo, cube.numeroElementosVerticesCubo, cube.indicesCubo, cube.numeroIndices);
+	//uint32_t SphereVAO = createSphere(1);
+	uint32_t QuadVAO = createVertexDataQuad(verticesQuad, quad.numeroElementosVerticesQuad, quad.indicesQuad, quad.numeroIndicesQuad, 5);
+
+	cube.shader = &shaderCube;
 	quad.shader = &shaderQuad;
 	quad.VAO = &QuadVAO;
 	quad.textures[0] = textureSuelo;
 	quad.numeroElementosParaDibujar = 6;
 
-	Cube cube = Cube();
-	cube.shader = &shaderCube;
 	cube.VAO = &CubeVAO;
 
 	cube.numeroElementosParaDibujar = 36;
