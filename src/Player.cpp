@@ -19,9 +19,9 @@ Player::~Player() {
 
 
 
-void Player::Render(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view)
+void Player::Render(glm::mat4 &projection, glm::mat4 &view)
 {
-
+	glm::mat4 model = mat4(1.0f);
 	_shader.Use();
 	model = glm::translate(model, _position);
 	//model = glm::rotate(model, (float)glm::radians(0.0f), vec3(0.0f, 1.0f, 0.0f));

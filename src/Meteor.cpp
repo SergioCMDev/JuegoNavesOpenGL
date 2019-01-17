@@ -47,9 +47,9 @@ Meteor::~Meteor() {
 
 
 
-void Meteor::Render(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view)
+void Meteor::Render(glm::mat4 &projection, glm::mat4 &view)
 {
-
+	glm::mat4 model = mat4(1.0f);
 	_shader.Use();
 	model = glm::translate(model, _position);
 	model = glm::scale(model, _scale);

@@ -15,7 +15,7 @@ public:
 
 	Enemy(Shader & shader, glm::vec3 position);
 	~Enemy();
-	void Render(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view);
+	void Render(glm::mat4 &projection, glm::mat4 &view);
 private:
 	const char* pathToModel = "../assets/obj/E-45-Aircraft/E 45 Aircraft_obj.obj";
 };

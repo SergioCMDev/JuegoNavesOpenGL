@@ -16,7 +16,7 @@ public:
 	Meteor(Shader & shader, glm::vec3 position);
 	~Meteor();
 	vec3 _scale = vec3(1.0f);
-	void Render(glm::mat4 &model, glm::mat4 &projection, glm::mat4 &view);
+	void Render(glm::mat4 &projection, glm::mat4 &view);
 
 private:
 

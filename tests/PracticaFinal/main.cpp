@@ -17,17 +17,17 @@
 #include "Meteor.h"
 #include "Enemy.h"
 
-const float screen_width = 800.0f, screen_height = 600.0f;
-float lastX = (float)screen_width / 2.0f;
-float lastY = (float)screen_height / 2.0f;
-//const vec3 posCamera = glm::vec3(-1.0f, 6.0f, 3.0f);
+
 const vec3 posCamera = glm::vec3(0.0f, 20.0f, 0.0f);
-const vec3 posPlayer = vec3(5.0f, 0.0f, 0.0f);
-const vec3 posSuelo = vec3(0.0f, -16.0f, 0.0f);
 
 Camera camera(posCamera);
 #pragma region Variables Globales
 const float M_PI = 3.14f;
+const vec3 posSuelo = vec3(0.0f, -16.0f, 0.0f);
+const vec3 posPlayer = vec3(5.0f, 0.0f, 0.0f);
+const float screen_width = 800.0f, screen_height = 600.0f;
+float lastY = (float)screen_height / 2.0f;
+float lastX = (float)screen_width / 2.0f;
 
 
 float lastFrame = 0.0f;
@@ -54,60 +54,64 @@ Window window;
 
 
 
-//uint32_t numeroElementosVerticesCubo = 192;
+uint32_t numeroElementosVerticesCubo = 192;
 
-//float verticesCubo[] = {  //vertices      //uvs     //normals
-//	  -0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,     0.0f, 0.0f, 1.0f,//front
-//	  0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,      0.0f, 0.0f, 1.0f,
-//	  0.5f,  0.5f,  0.5f,       1.0f, 1.0f,       0.0f, 0.0f, 1.0f,
-//	  -0.5f, 0.5f,  0.5f,       0.0f, 1.0f,       0.0f, 0.0f, 1.0f,
+float verticesCubo[] = {  //vertices      //uvs     //normals
+	  -0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,     0.0f, 0.0f, 1.0f,//front
+	  0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,      0.0f, 0.0f, 1.0f,
+	  0.5f,  0.5f,  0.5f,       1.0f, 1.0f,       0.0f, 0.0f, 1.0f,
+	  -0.5f, 0.5f,  0.5f,       0.0f, 1.0f,       0.0f, 0.0f, 1.0f,
 
-//	  0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,      1.0f, 0.0f, 0.0f,//right
-//	  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     1.0f, 0.0f, 0.0f,
-//	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      1.0f, 0.0f, 0.0f,
-//	  0.5f,  0.5f,  0.5f,       0.0f, 1.0f,       1.0f, 0.0f, 0.0f,
+	  0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,      1.0f, 0.0f, 0.0f,//right
+	  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     1.0f, 0.0f, 0.0f,
+	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      1.0f, 0.0f, 0.0f,
+	  0.5f,  0.5f,  0.5f,       0.0f, 1.0f,       1.0f, 0.0f, 0.0f,
 
-//	  -0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,    0.0f, 0.0f, -1.0f,//back
-//	  -0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,     0.0f, 0.0f, -1.0f,
-//	  0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,      0.0f, 0.0f, -1.0f,
-//	  0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,     0.0f, 0.0f, -1.0f,
+	  -0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,    0.0f, 0.0f, -1.0f,//back
+	  -0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,     0.0f, 0.0f, -1.0f,
+	  0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,      0.0f, 0.0f, -1.0f,
+	  0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,     0.0f, 0.0f, -1.0f,
 
-//	  -0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,     -1.0f, 0.0f, 0.0f,//left
-//	  -0.5f,  0.5f,  0.5f,       1.0f, 1.0f,      -1.0f, 0.0f, 0.0f,
-//	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     -1.0f, 0.0f, 0.0f,
-//	  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    -1.0f, 0.0f, 0.0f,
+	  -0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,     -1.0f, 0.0f, 0.0f,//left
+	  -0.5f,  0.5f,  0.5f,       1.0f, 1.0f,      -1.0f, 0.0f, 0.0f,
+	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     -1.0f, 0.0f, 0.0f,
+	  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    -1.0f, 0.0f, 0.0f,
 
-//	  -0.5f,  -0.5f,  0.5f,       0.0f, 1.0f,     0.0f, -1.0f, 0.0f,//bottom
-//	  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    0.0f, -1.0f, 0.0f,
-//	  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     0.0f, -1.0f, 0.0f,
-//	  0.5f,  -0.5f,  0.5f,       1.0f, 1.0f,      0.0f, -1.0f, 0.0f,
+	  -0.5f,  -0.5f,  0.5f,       0.0f, 1.0f,     0.0f, -1.0f, 0.0f,//bottom
+	  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    0.0f, -1.0f, 0.0f,
+	  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     0.0f, -1.0f, 0.0f,
+	  0.5f,  -0.5f,  0.5f,       1.0f, 1.0f,      0.0f, -1.0f, 0.0f,
 
-//	  -0.5f,  0.5f,  0.5f,       0.0f, 0.0f,      0.0f, 1.0f, 0.0f,//top
-//	  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,       0.0f, 1.0f, 0.0f,
-//	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      0.0f, 1.0f, 0.0f,
-//	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     0.0f, 1.0f, 0.0f };
+	  -0.5f,  0.5f,  0.5f,       0.0f, 0.0f,      0.0f, 1.0f, 0.0f,//top
+	  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,       0.0f, 1.0f, 0.0f,
+	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      0.0f, 1.0f, 0.0f,
+	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     0.0f, 1.0f, 0.0f };
 
-//uint32_t indicesCubo[]{
-//	0, 1, 2, 0, 2, 3 //Front
-//	,4, 5, 6, 4, 6, 7 //Right
-//	,8, 9, 10, 8, 10, 11 //Back
-//	,12, 13, 14, 12, 14, 15 //Left
-//	,16, 17, 18, 16, 18, 19 //Bottom
-//	,20, 21, 22, 20, 22, 23 //Top
-//};
+uint32_t indicesCubo[]{
+	0, 1, 2, 0, 2, 3 //Front
+	,4, 5, 6, 4, 6, 7 //Right
+	,8, 9, 10, 8, 10, 11 //Back
+	,12, 13, 14, 12, 14, 15 //Left
+	,16, 17, 18, 16, 18, 19 //Bottom
+	,20, 21, 22, 20, 22, 23 //Top
+};
 
-//glm::vec3 cubePositions[] = {
-// glm::vec3(0.0f, 0.0f, 0.0f),
-// glm::vec3(2.0f, 5.0f, -15.0f),
-// glm::vec3(-1.5f, -2.2f, -2.5f),
-// glm::vec3(-3.8f, -2.0f, -12.3f),
-// glm::vec3(2.4f, -0.4f, -3.5f),
-// glm::vec3(-1.7f, 3.0f, -7.5f),
-// glm::vec3(1.3f, -2.0f, -2.5f),
-// glm::vec3(1.5f, 2.0f, -2.5f),
-// glm::vec3(1.5f, 0.2f, -1.5f),
-// glm::vec3(-1.3f, 1.0f, -1.5f)
-//};
+glm::vec3 MeteorOriginPositions[] = {
+ glm::vec3(0.0f,  0.0f, 15.0f), //z == arriba/abajo, X derecha/izq invertida
+ glm::vec3(5.0f,  0.0f, 15.0f),
+ glm::vec3(8.0f, 0.0f, 15.0f),
+ glm::vec3(-5.0f,  0.0f, 15.0f),
+ glm::vec3(-8.0f, 0.0f, 15.0f),
+};
+
+
+glm::vec3 EnemyShipOriginPositions[] = {
+ glm::vec3(0.0f,  0.0f, 12.0f), //z == arriba/abajo, X derecha/izq invertida
+ glm::vec3(5.0f,  0.0f, 12.0f),
+ glm::vec3(8.0f,  0.0f, 12.0f),
+ glm::vec3(-5.0f, 0.0f, 12.0f),
+ glm::vec3(-8.0f, 0.0f, 12.0f),
+};
 
 //struct Sphere {
 //	float* vertices;
@@ -129,7 +133,7 @@ float verticesQuad[] = {
 	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,
 	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f };
 
-//uint32_t numeroIndicesCubo = 36;
+uint32_t numeroIndicesCubo = 36;
 #pragma endregion
 
 uint32_t numeroIndicesQuad = 6;
@@ -153,6 +157,21 @@ struct Quad {
 };
 
 
+struct Cube {
+	float* vertices;
+	float* normals;
+	float* textCoords;
+	uint32_t* elementos;
+	uint32_t numeroVertices;
+	uint32_t numeroElementos;
+	uint32_t numeroElementosParaDibujar;
+
+	vec3 color;
+	Shader *shader;
+	uint32_t* VAO;
+};
+
+
 
 struct TransferObjects {
 	const uint32_t maximoModelos = Constants::MaximoObjectosTransferencia;
@@ -168,6 +187,7 @@ Player* GetPlayerReference(GameObject* objectPlayer) {
 	Player* player = static_cast<Player*>(objectPlayer);
 	return player;
 }
+
 #pragma region Eventos
 
 void OnChangeFrameBufferSize(GLFWwindow* window, const int32_t width, const int32_t height) {
@@ -406,8 +426,6 @@ void HandlerInput(const double deltaTime, TransferObjects objects) {
 #pragma endregion
 
 
-
-
 int Inicializacion() {
 	if (!glfwInit()) {
 		cout << "Error initializing GLFW" << endl;
@@ -431,12 +449,27 @@ int Inicializacion() {
 
 	//cuando la ventana cambie de tamaño
 	//glfwSetCursorPosCallback(window.GetWindow(), &Window::OnMouse);
-	//glfwSetCursorPosCallback(window.GetWindow(), OnMouse);
+	glfwSetCursorPosCallback(window.GetWindow(), OnMouse);
 	glfwSetFramebufferSizeCallback(window.GetWindow(), OnChangeFrameBufferSize);
 	glfwSetScrollCallback(window.GetWindow(), OnScroll);
 	glfwSetInputMode(window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	return 1;
 };
+
+void MoveObjects(const double deltaTim, TransferObjects transfer) {
+	for (size_t i = 0; i < transfer.numeroModelos; i++)
+	{
+		if (transfer.modelos[i]->_type == Constants::TIPO_METEOR)
+		{
+			GameObject *g = transfer.modelos[i];
+			Meteor* meteor = static_cast<Meteor*>(g);
+
+			meteor->Mover(deltaTim);
+		}
+	}
+}
+
+#pragma region Render Figures
 
 void RenderFigure(const Shader & shader, glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model, const uint32_t &VAO, const uint32_t &numeroElementos)
 {
@@ -459,22 +492,23 @@ void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view)
 	RenderFigure(*quad.shader, projection, view, model, *quad.VAO, quad.numeroElementosParaDibujar);
 }
 
-void MoveObjects(const double deltaTim, TransferObjects transfer) {
-	for (size_t i = 0; i < transfer.numeroModelos; i++)
-	{
-		if (transfer.modelos[i]->_type == Constants::TIPO_METEOR)
-		{
-			GameObject *g = transfer.modelos[i];
-			Meteor* meteor = static_cast<Meteor*>(g);
+void RenderCube(Cube &cube, glm::mat4 &projection, glm::mat4 &view, vec3 position)
+{
 
-			meteor->Mover(deltaTim);
-		}
-	}
+	cube.shader->Use();
+	cube.shader->Set("quadTexture", 4);
+	cube.shader->Set("color", cube.color);
+	glm::mat4 model = mat4(1.0f);
+	model = glm::translate(model, position);
+	model = glm::scale(model, vec3(1.0f));
+	RenderFigure(*cube.shader, projection, view, model, *cube.VAO, cube.numeroElementosParaDibujar);
 }
 
-void Render(const Shader& shaderCube, const Shader& shaderlight,
+#pragma endregion
+
+void Render(const Shader& shaderlight,
 	uint32_t texture1, uint32_t texture2,
-	Quad quad, TransferObjects transfer) {
+	Quad quad, TransferObjects transfer, Cube cube) {
 
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	//uint32_t elementosParaDibujarEsfera = 121 * 8;
@@ -507,17 +541,28 @@ void Render(const Shader& shaderCube, const Shader& shaderlight,
 		//RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
 
 
-		//model = mat4(1.0f);
-		//shaderlight.Set("color", vec3(1.0f, 0.15f, 0.1f));
-		//model = translate(model, spotLightPositions[1]);
-		//model = scale(model, vec3(0.4f));
-
-		//RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
 	}
 
 	//Dibujamos Suelo
 	RenderQuadSuelo(quad, projection, view);
-	glm::mat4 model = mat4(1.0f);
+	//glm::mat4 model = mat4(1.0f);
+
+
+	//Dibujamos Cubos Meteoritos
+	cube.color = vec3(1.0f);
+	for (size_t i = 0; i < sizeof(MeteorOriginPositions) / sizeof(glm::vec3); i++)
+	{
+		RenderCube(cube, projection, view, MeteorOriginPositions[i]);
+	}
+
+	//dibujamos cubos naves
+	cube.color = vec3(1.0f, 0.0f, 0.0f);
+	for (size_t i = 0; i < sizeof(EnemyShipOriginPositions) / sizeof(glm::vec3); i++)
+	{
+		cube.shader->Set("color", vec3(1.0f, 0.0f, 0.0f));
+		RenderCube(cube, projection, view, EnemyShipOriginPositions[i]);
+	}
+
 
 
 	for (size_t i = 0; i < transfer.numeroModelos; i++)
@@ -526,24 +571,24 @@ void Render(const Shader& shaderCube, const Shader& shaderlight,
 
 			Player* player = GetPlayerReference(transfer.modelos[0]);
 
-			player->Render(model, projection, view);
+			player->Render(projection, view);
 		}
 		else if (transfer.modelos[i]->_type == Constants::TIPO_METEOR)
 		{
-			glm::mat4 model = mat4(1.0f);
+			//glm::mat4 model = mat4(1.0f);
 			GameObject *g = transfer.modelos[i];
 			Meteor* meteor = static_cast<Meteor*>(g);
 
-			meteor->Render(model, projection, view);
+			meteor->Render(projection, view);
 		}
-		else if (transfer.modelos[i]->_type == Constants::TIPO_ENEMIGO){
-			glm::mat4 model = mat4(1.0f);
+		else if (transfer.modelos[i]->_type == Constants::TIPO_ENEMIGO) {
 			GameObject *g = transfer.modelos[i];
 			Enemy* enemyShip = static_cast<Enemy*>(g);
 
-			enemyShip->Render(model, projection, view);
+			enemyShip->Render(projection, view);
 		}
 	}
+
 
 
 	{
@@ -734,7 +779,7 @@ int main(int argc, char* argv[]) {
 
 
 	Shader shaderlight = Utils::GetFullShader("Shaders/LightVS.vs", "Shaders/LightFS.fs");
-	Shader shader = Utils::GetFullShader("Shaders/vertex.vs", "Shaders/fragment.fs");
+	Shader shaderCube = Utils::GetFullShader("Shaders/CubeVS.vs", "Shaders/CubeFS.fs");
 	Shader shaderQuad = Utils::GetFullShader("Shaders/QuadVS.vs", "Shaders/QuadFS.fs");
 	Shader shaderNavePlayer = Utils::GetFullShader("Shaders/NavePlayerVS.vs", "Shaders/NavePlayerFS.fs");
 	Shader shaderMeteorito = Utils::GetFullShader("Shaders/MetorVS.vs", "Shaders/MetorFS.fs");
@@ -745,25 +790,22 @@ int main(int argc, char* argv[]) {
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	//GameObject gameObjectParent();
-
 
 	Player player(shaderNavePlayer, posPlayer);
-	//camera._children[0] = &player;
-	//GameObject naves();
+
 	vec3 posEnemigo = vec3(3.0f, 0.0f, 0.0f);
 
 	Enemy enemy(shaderNavePlayer, posEnemigo);
 	//camera._children[0] = &naves;
 
 	vec3 posMeteorito = vec3(3.0f, 0.0f, 0.0f);
-	Meteor meteor  = Meteor(shaderMeteorito);
+	Meteor meteor = Meteor(shaderMeteorito);
 	//Meteor meteor2 = Meteor(shaderMeteorito);
 	//Meteor meteor3 = Meteor(shaderMeteorito);
 	//Meteor meteor4 = Meteor(shaderMeteorito);
 	const uint32_t numeroObjetos = 2;
 	GameObject *objectosssArray[numeroObjetos];
-	
+
 	TransferObjects transfer = {
 		Constants::MaximoObjectosTransferencia,
 		numeroObjetos,
@@ -777,7 +819,7 @@ int main(int argc, char* argv[]) {
 
 
 
-	//uint32_t CubeVAO = createVertexData(verticesCubo, numeroElementosVerticesCubo, indicesCubo, numeroIndicesCubo);
+	uint32_t CubeVAO = createVertexData(verticesCubo, numeroElementosVerticesCubo, indicesCubo, numeroIndicesCubo);
 	//uint32_t SphereVAO = createSphere(1);
 	uint32_t QuadVAO = createVertexDataQuad(verticesQuad, numeroElementosVerticesQuad, indicesQuad, numeroIndicesQuad, 5);
 
@@ -787,6 +829,11 @@ int main(int argc, char* argv[]) {
 	quad.textures[0] = textureSuelo;
 	quad.numeroElementosParaDibujar = 6;
 
+	Cube cube = Cube();
+	cube.shader = &shaderCube;
+	cube.VAO = &CubeVAO;
+
+	cube.numeroElementosParaDibujar = 36;
 
 	//Bucle inicial donde se realiza toda la accion del motor
 	while (!glfwWindowShouldClose(window.GetWindow())) {
@@ -797,7 +844,7 @@ int main(int argc, char* argv[]) {
 		HandlerInput(deltaTime, transfer);
 
 		MoveObjects(deltaTime, transfer);
-		Render(shader, shaderlight, texture1, texture2, quad, transfer);
+		Render(shaderlight, texture1, texture2, quad, transfer, cube);
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
 	}
