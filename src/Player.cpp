@@ -3,11 +3,26 @@
 Player::Player() {
 
 }
-Player::Player(Shader & shader, glm::vec3 position)
+Player::Player(glm::vec3 position)
 {
+	Shader shaderNavePlayer = Utils::GetFullShader("Shaders/NavePlayerVS.vs", "Shaders/NavePlayerFS.fs");
+
 	position = vec3(0.0f, 0.0f, 0.0f);
 	_model = Model(pathToModel);
+	_shader = shaderNavePlayer;
+	SetPosition(position);
+	_velocity = 2.5f;
+	_type = Constants::TIPO_PLAYER;
+	_scale = vec3(0.2f);
+
+}
+
+Player::Player(Shader & shader, glm::vec3 position)
+{
 	_shader = shader;
+
+	position = vec3(0.0f, 0.0f, 0.0f);
+	_model = Model(pathToModel);
 	SetPosition(position);
 	_velocity = 2.5f;
 	_type = Constants::TIPO_PLAYER;

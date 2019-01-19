@@ -13,10 +13,24 @@ vec3 positions[5]{
 Meteor::Meteor() {
 
 }
-Meteor::Meteor(Shader & shader, glm::vec3 position)
-{
+
+Meteor::Meteor(Shader & shader, glm::vec3 position) {
 	_model = Model(pathToModel);
 	_shader = shader;
+	//const uint32_t initialPositionIndex = rand() % 2;
+	//vec3 positionInitial = positions[initialPositionIndex];
+	SetPosition(position);
+	_velocity = 1.0f;
+	_type = Constants::TIPO_METEOR;
+}
+
+
+Meteor::Meteor(glm::vec3 position)
+{
+	Shader shaderMeteorito = Utils::GetFullShader("Shaders/MetorVS.vs", "Shaders/MetorFS.fs");
+
+	_model = Model(pathToModel);
+	_shader = shaderMeteorito;
 	//const uint32_t initialPositionIndex = rand() % 2;
 	//vec3 positionInitial = positions[initialPositionIndex];
 	SetPosition(position);

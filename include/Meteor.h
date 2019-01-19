@@ -10,9 +10,9 @@ class Meteor : public GameObject{
 
 public:
 	Meteor();
-
 	void Mover(const float& deltaTime);
 	Meteor(Shader & shader);
+	Meteor(glm::vec3 position);
 	Meteor(Shader & shader, glm::vec3 position);
 	~Meteor();
 	vec3 _scale = vec3(1.0f);

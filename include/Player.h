@@ -18,6 +18,7 @@ public:
 	void Disparar();
 
 	Player(Shader & shader, glm::vec3 position);
+	Player(glm::vec3 position);
 	~Player();
 	void Render(glm::mat4 &projection, glm::mat4 &view);
 private:
