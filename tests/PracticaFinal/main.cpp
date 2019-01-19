@@ -49,20 +49,6 @@ Window window;
 //
 //};
 
-
-
-
-
-
-glm::vec3 MeteorOriginPositions[] = {
- glm::vec3(0.0f,  0.0f, 15.0f), //z == arriba/abajo, X derecha/izq invertida
- glm::vec3(5.0f,  0.0f, 15.0f),
- glm::vec3(8.0f, 0.0f, 15.0f),
- glm::vec3(-5.0f,  0.0f, 15.0f),
- glm::vec3(-8.0f, 0.0f, 15.0f),
-};
-
-
 glm::vec3 EnemyShipOriginPositions[] = {
  glm::vec3(12.0f,  0.0f, 10.0f), // X derecha/izq invertida //z == arriba/abajo,
  glm::vec3(-12.0f,  0.0f, 10.0f),
@@ -158,13 +144,6 @@ struct Cube {
 		,20, 21, 22, 20, 22, 23 //Top
 	};
 };
-
-struct TransferObjects {
-	const uint32_t maximoModelos = Constants::MaximoObjectosTransferencia;
-	uint32_t numeroModelos;
-	GameObject *modelos[10];
-};
-
 
 using namespace std;
 
@@ -507,9 +486,10 @@ void RenderScene(Quad quad, Cube cube, Sphere sphere) {
 
 	//Dibujamos Cubos Meteoritos
 	cube.color = vec3(1.0f);
-	for (size_t i = 0; i < sizeof(MeteorOriginPositions) / sizeof(glm::vec3); i++)
+	for (size_t i = 0; i < Meteor::GetNumberPositions(); i++)
 	{
-		RenderCube(cube, projection, view, MeteorOriginPositions[i]);
+		//RenderCube(cube, projection, view, MeteorOriginPositions[i]);
+		RenderCube(cube, projection, view, Meteor::GetMeteorPosition(i));
 	}
 
 	//dibujamos cubos naves
@@ -533,65 +513,65 @@ void RenderGameObjects(GameObject& gamobjectParent) {
 			RenderGameObjects(*gamobjectParent.GetChildren(i));
 		}
 	}
-	else {
-		if (gamobjectParent._type == Constants::TIPO_PLAYER) {
+	if (gamobjectParent._type == Constants::TIPO_PLAYER) {
 
-			Player* player = GetPlayerReference(&gamobjectParent);
+		Player* player = GetPlayerReference(&gamobjectParent);
 
-			player->Render(projection, view);
-		}
-		else if (gamobjectParent._type == Constants::TIPO_METEOR)
-		{
-			GameObject *g = &gamobjectParent;
-			Meteor* meteor = static_cast<Meteor*>(g);
-
-			meteor->Render(projection, view);
-		}
-		else if (gamobjectParent._type == Constants::TIPO_ENEMIGO) {
-			GameObject *g = &gamobjectParent;
-			Enemy* enemyShip = static_cast<Enemy*>(g);
-
-			enemyShip->Render(projection, view);
-		}
-		else if (gamobjectParent._type == Constants::TIPO_MISIL) {
-			GameObject *g = &gamobjectParent;
-			Missile* missile = static_cast<Missile*>(g);
-
-			missile->Render(projection, view);
-		}
+		player->Render(projection, view);
 	}
+	else if (gamobjectParent._type == Constants::TIPO_METEOR)
+	{
+		GameObject *g = &gamobjectParent;
+		Meteor* meteor = static_cast<Meteor*>(g);
+
+		meteor->Render(projection, view);
+	}
+	else if (gamobjectParent._type == Constants::TIPO_ENEMIGO) {
+		GameObject *g = &gamobjectParent;
+		Enemy* enemyShip = static_cast<Enemy*>(g);
+
+		enemyShip->Render(projection, view);
+	}
+	else if (gamobjectParent._type == Constants::TIPO_MISIL) {
+		GameObject *g = &gamobjectParent;
+		Missile* missile = static_cast<Missile*>(g);
+
+		missile->Render(projection, view);
+
+	}
+
 }
 
-void MoveObjects(const double deltaTime, GameObject node) {
-	if (node.HasChildren()) {
-		for (size_t i = 0; i < node.GetNumberChildren(); i++)
+void MoveObjects(const double deltaTime, GameObject* node) {
+	if (node->HasChildren()) {
+		for (size_t i = 0; i < node->GetNumberChildren(); i++)
 		{
-			MoveObjects(deltaTime, *node.GetChildren(i));
+			return MoveObjects(deltaTime, node->GetChildren(i));
 		}
 	}
-	else {
-		if (node._type == Constants::TIPO_PLAYER) {
 
-			Player* player = GetPlayerReference(&node);
-			MovimientoJugador(deltaTime, player);
-			AccionesJugador(player);
-		}
-		else if (node._type == Constants::TIPO_METEOR)
-		{
-			GameObject *g = &node;
-			Meteor* meteor = static_cast<Meteor*>(g);
-			meteor->Mover(deltaTime);
-		}
-		else if (node._type == Constants::TIPO_ENEMIGO) {
-			GameObject *g = &node;
-			Enemy* enemyShip = static_cast<Enemy*>(g);
-			//enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
-		}
-		else if (node._type == Constants::TIPO_MISIL) {
-			GameObject *g = &node;
-			Missile* missile = static_cast<Missile*>(g);
-			missile->Mover(GameObject::Movement::Backward, deltaTime);
-		}
+	if (node->_type == Constants::TIPO_PLAYER) {
+
+		Player* player = GetPlayerReference(node);
+		MovimientoJugador(deltaTime, player);
+		AccionesJugador(player);
+	}
+	else if (node->._type == Constants::TIPO_METEOR)
+	{
+		GameObject *g = node;
+		Meteor* meteor = static_cast<Meteor*>(g);
+		meteor->Mover(deltaTime);
+	}
+	else if (node._type == Constants::TIPO_ENEMIGO) {
+		GameObject *g = &node;
+		Enemy* enemyShip = static_cast<Enemy*>(g);
+		//enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
+	}
+	else if (node->_type == Constants::TIPO_MISIL) {
+		GameObject *g = node;
+		Missile* missile = static_cast<Missile*>(g);
+		missile->Mover(GameObject::Movement::Backward, deltaTime);
+
 	}
 }
 
@@ -724,9 +704,9 @@ int main(int argc, char* argv[]) {
 	cout << "Creacion Misil " << endl;
 	posEnemigo = vec3(3.0f, 0.0f, 2.0f);
 
-	//Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
-	//Missile missilePlayer = Missile(shaderMissile, posEnemigo, player);
-	Missile missilePlayer = Missile(posEnemigo, player);
+	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
+	Missile missilePlayer = Missile(shaderMissile, posEnemigo, player);
+	player.AddChildren(&missilePlayer);
 
 	camera.AddChildren(&player);
 
@@ -773,15 +753,16 @@ int main(int argc, char* argv[]) {
 		float currentFrame = glfwGetTime();
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
+		RenderScene(quad, cube, sphere);
 
 		HandlerInput(deltaTime, camera);
-		//Create Method for this
-		if (glfwGetKey(window.GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-			glfwSetWindowShouldClose(window.GetWindow(), true);
-		}
-		RenderScene(quad, cube, sphere);
-		MoveObjects(deltaTime, camera);
+
+
+		MoveObjects(deltaTime, &camera);
+
 		RenderGameObjects(camera);
+
+
 		//MoveObjects(deltaTime, transfer);
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();

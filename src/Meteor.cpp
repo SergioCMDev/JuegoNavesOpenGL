@@ -10,6 +10,14 @@ glm::vec3 positions[] = {
 };
 
 
+uint32_t Meteor::GetNumberPositions() {
+	return sizeof(positions) / sizeof(glm::vec3);
+}
+
+vec3 Meteor::GetMeteorPosition(uint32_t index)
+{
+	return positions[index];
+}
 
 Meteor::Meteor() {
 
@@ -51,8 +59,8 @@ Meteor::Meteor(Shader & shader)
 	vec3 positionInitial = positions[initialPositionIndex];
 	cout << "Posicion Meteorito " << positionInitial.x << endl;
 	SetPosition(positionInitial);
-	_velocity = 0.2f;
-	_type = 2;
+	_velocity = 1.2f;
+	_type = Constants::TIPO_METEOR;
 }
 
 Meteor::~Meteor() {

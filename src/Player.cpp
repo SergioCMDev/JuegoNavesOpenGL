@@ -35,8 +35,12 @@ Player::~Player() {
 	//delete(;
 }
 void Player::Disparar() {
-	//Missile missile(_position, this);
-	cout << "disparo" << endl;
+	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
+
+	Missile missile(shaderMissile, _position, *this);
+	//this->GetChildren(0)->AddChildren(&missile);
+	this->AddChildren(&missile);
+	//cout << "disparo" << endl;
 }
 
 //void Player::RenderChildren(glm::mat4 &projection, glm::mat4 &view, GameObject* children[])

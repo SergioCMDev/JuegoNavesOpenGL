@@ -6,7 +6,7 @@
 #include "GameObject.h"
 #include "Constants.h"
 
-class Meteor : public GameObject{
+class Meteor : public GameObject {
 
 public:
 	Meteor();
@@ -17,7 +17,8 @@ public:
 	~Meteor();
 	vec3 _scale = vec3(1.0f);
 	void Render(glm::mat4 &projection, glm::mat4 &view);
-
+	static uint32_t GetNumberPositions();
+	static vec3 GetMeteorPosition(uint32_t index);
 private:
 
 	//float _velocity = 0.5f;
