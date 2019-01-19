@@ -122,7 +122,8 @@ struct Sphere {
 	uint32_t numeroIndices = 121 * 8;
 	vec3 scale = glm::vec3(1.4f);
 	vec3 color = vec3(1.0f);
-	vec3 position = vec3(0.0f);
+	//vec3 position = vec3(0.0f);
+	vec3 position = posCamera;
 
 };
 

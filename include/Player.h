@@ -6,7 +6,7 @@
 #include "GameObject.h"
 #include "Constants.h"
 #include<GLFW/glfw3.h>
-class Player : public GameObject{
+class Player : public GameObject {
 
 public:
 	Player();
@@ -18,5 +18,5 @@ public:
 	void Render(glm::mat4 &projection, glm::mat4 &view);
 private:
 	const char* pathToModel = "../assets/obj/Freighter/Freigther_BI_Export.obj";
-	};
+};
 #endif

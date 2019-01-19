@@ -5,7 +5,7 @@ Player::Player() {
 }
 Player::Player(Shader & shader, glm::vec3 position)
 {
-	position = vec3(0.0f, 0.0f, 5.0f);
+	position = vec3(0.0f, 0.0f, 0.0f);
 	_model = Model(pathToModel);
 	_shader = shader;
 	SetPosition(position);
