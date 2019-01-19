@@ -17,7 +17,7 @@ public:
 	GameObject* GetParent();
 	void Rotate(glm::mat4 &_modelMatrix);
 	Missile(Shader & shader, glm::vec3 position, GameObject parent);
-	Missile(glm::vec3 position, GameObject* parent);
+	Missile(glm::vec3 position, GameObject parent);
 	~Missile();
 	void Render(glm::mat4 &projection, glm::mat4 &view);
 private:
