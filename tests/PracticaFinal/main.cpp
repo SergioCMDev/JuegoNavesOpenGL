@@ -549,87 +549,128 @@ void RenderScene(Quad quad, Cube cube, Sphere sphere) {
 	glBindVertexArray(0);
 }
 
-void RenderGameObjects(TransferObjects transfer) {
+//void RenderGameObjects(TransferObjects transfer) {
+//
+//	glm::mat4 view = camera.GetViewMatrix();
+//	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
+//
+//	//Dibujamos GameObjects
+//	for (size_t i = 0; i < transfer.numeroModelos; i++)
+//	{
+//		if (transfer.modelos[i]->_type == Constants::TIPO_PLAYER) {
+//
+//			Player* player = GetPlayerReference(transfer.modelos[i]);
+//
+//			player->Render(projection, view);
+//		}
+//		else if (transfer.modelos[i]->_type == Constants::TIPO_METEOR)
+//		{
+//			GameObject *g = transfer.modelos[i];
+//			Meteor* meteor = static_cast<Meteor*>(g);
+//
+//			meteor->Render(projection, view);
+//		}
+//		else if (transfer.modelos[i]->_type == Constants::TIPO_ENEMIGO) {
+//			GameObject *g = transfer.modelos[i];
+//			Enemy* enemyShip = static_cast<Enemy*>(g);
+//
+//			enemyShip->Render(projection, view);
+//		}
+//		else if (transfer.modelos[i]->_type == Constants::TIPO_MISIL) {
+//			GameObject *g = transfer.modelos[i];
+//			Missile* missile = static_cast<Missile*>(g);
+//
+//			missile->Render(projection, view);
+//		}
+//	}
+//
+//
+//
+//	{
+//
+//		//modelObjs[0].Draw();
+//		////Dibujamos los cubos 
+//		//shaderCube.Use();
+//		//shaderCube.Set("projection", projection);
+//		//shaderCube.Set("view", view);
+//
+//		//shaderCube.Set("viewPos", camera.GetPosition());
+//
+//		////SpotLight 0
+//		//shaderCube.Set("spotLights[0].position", spotLightPositions[0]);
+//		//shaderCube.Set("spotLights[0].direction", -1.0f, 0.0f, -1.0f);
+//		//shaderCube.Set("spotLights[0].cutOff", cos(radians(20.0f)));
+//		//shaderCube.Set("spotLights[0].outerCutOff", cos(radians(25.0f)));
+//		//shaderCube.Set("spotLights[0].linear", 0.09f);
+//		//shaderCube.Set("spotLights[0].constant", 1.0f);
+//		//shaderCube.Set("spotLights[0].cuadratic", 0.032f);
+//		//shaderCube.Set("spotLights[0].direction", -1.0f, 0.0f, -1.0f);
+//		//shaderCube.Set("spotLights[0].ambient", 0.2f, 1.0f, 0.1f);
+//		//shaderCube.Set("spotLights[0].diffuse", 0.5f, 0.5f, 0.5f);
+//		//shaderCube.Set("spotLights[0].specular", 1.0f, 1.0f, 1.0f);
+//
+//
+//		//glActiveTexture(GL_TEXTURE0);//		//glBindTexture(GL_TEXTURE_2D, texture1);////		//glActiveTexture(GL_TEXTURE1);//		//glBindTexture(GL_TEXTURE_2D, texture2);//
+//		//shaderCube.Set("material.diffuse", 1);
+//		//shaderCube.Set("material.specular", 2);
+//		//shaderCube.Set("material.shininess", 25.6f);
+//
+//		//int numeroRepeticionesElemento = 10;
+//
+//		//for (uint32_t i = 0; i < numeroRepeticionesElemento; i++) {
+//		//	glm::mat4 model = glm::mat4(1.0f);
+//		//	model = glm::translate(model, cubePositions[i]);
+//		//	float angle = 10.0f + (cos(glfwGetTime()) + (sin(glfwGetTime())));
+//		//	model = glm::rotate(model, (float)glfwGetTime() * glm::radians(angle), glm::vec3(0.5f, 1.0f, 0.0f));
+//		//	glm::mat3 normalMat = glm::inverse(glm::transpose(glm::mat3(model)));
+//		//	shaderCube.Set("normalMat", normalMat);
+//		//	RenderFigure(shaderCube, projection, view, model, CubeVAO, 36);
+//		//}
+//	}
+//
+//	glBindVertexArray(0);
+//}
+
+
+void RenderGameObjects2(GameObject& gamobjectParent) {
 
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
+	if (gamobjectParent.HasChildren()) {
+		for (size_t i = 0; i < gamobjectParent.GetNumberChildren(); i++)
+		{
+			RenderGameObjects2(*gamobjectParent.GetChildren(i));
+		}
+	}
+	else {
+		if (gamobjectParent._type == Constants::TIPO_PLAYER) {
 
-	//Dibujamos GameObjects
-	for (size_t i = 0; i < transfer.numeroModelos; i++)
-	{
-		if (transfer.modelos[i]->_type == Constants::TIPO_PLAYER) {
-
-			Player* player = GetPlayerReference(transfer.modelos[i]);
+			Player* player = GetPlayerReference(&gamobjectParent);
 
 			player->Render(projection, view);
 		}
-		else if (transfer.modelos[i]->_type == Constants::TIPO_METEOR)
+		else if (gamobjectParent._type == Constants::TIPO_METEOR)
 		{
-			GameObject *g = transfer.modelos[i];
+			GameObject *g = &gamobjectParent;
 			Meteor* meteor = static_cast<Meteor*>(g);
 
 			meteor->Render(projection, view);
 		}
-		else if (transfer.modelos[i]->_type == Constants::TIPO_ENEMIGO) {
-			GameObject *g = transfer.modelos[i];
+		else if (gamobjectParent._type == Constants::TIPO_ENEMIGO) {
+			GameObject *g = &gamobjectParent;
 			Enemy* enemyShip = static_cast<Enemy*>(g);
 
 			enemyShip->Render(projection, view);
 		}
-		else if (transfer.modelos[i]->_type == Constants::TIPO_MISIL) {
-			GameObject *g = transfer.modelos[i];
+		else if (gamobjectParent._type == Constants::TIPO_MISIL) {
+			GameObject *g = &gamobjectParent;
 			Missile* missile = static_cast<Missile*>(g);
 
 			missile->Render(projection, view);
 		}
 	}
-
-
-
-	{
-
-		//modelObjs[0].Draw();
-		////Dibujamos los cubos 
-		//shaderCube.Use();
-		//shaderCube.Set("projection", projection);
-		//shaderCube.Set("view", view);
-
-		//shaderCube.Set("viewPos", camera.GetPosition());
-
-		////SpotLight 0
-		//shaderCube.Set("spotLights[0].position", spotLightPositions[0]);
-		//shaderCube.Set("spotLights[0].direction", -1.0f, 0.0f, -1.0f);
-		//shaderCube.Set("spotLights[0].cutOff", cos(radians(20.0f)));
-		//shaderCube.Set("spotLights[0].outerCutOff", cos(radians(25.0f)));
-		//shaderCube.Set("spotLights[0].linear", 0.09f);
-		//shaderCube.Set("spotLights[0].constant", 1.0f);
-		//shaderCube.Set("spotLights[0].cuadratic", 0.032f);
-		//shaderCube.Set("spotLights[0].direction", -1.0f, 0.0f, -1.0f);
-		//shaderCube.Set("spotLights[0].ambient", 0.2f, 1.0f, 0.1f);
-		//shaderCube.Set("spotLights[0].diffuse", 0.5f, 0.5f, 0.5f);
-		//shaderCube.Set("spotLights[0].specular", 1.0f, 1.0f, 1.0f);
-
-
-		//glActiveTexture(GL_TEXTURE0);		//glBindTexture(GL_TEXTURE_2D, texture1);		//glActiveTexture(GL_TEXTURE1);		//glBindTexture(GL_TEXTURE_2D, texture2);
-		//shaderCube.Set("material.diffuse", 1);
-		//shaderCube.Set("material.specular", 2);
-		//shaderCube.Set("material.shininess", 25.6f);
-
-		//int numeroRepeticionesElemento = 10;
-
-		//for (uint32_t i = 0; i < numeroRepeticionesElemento; i++) {
-		//	glm::mat4 model = glm::mat4(1.0f);
-		//	model = glm::translate(model, cubePositions[i]);
-		//	float angle = 10.0f + (cos(glfwGetTime()) + (sin(glfwGetTime())));
-		//	model = glm::rotate(model, (float)glfwGetTime() * glm::radians(angle), glm::vec3(0.5f, 1.0f, 0.0f));
-		//	glm::mat3 normalMat = glm::inverse(glm::transpose(glm::mat3(model)));
-		//	shaderCube.Set("normalMat", normalMat);
-		//	RenderFigure(shaderCube, projection, view, model, CubeVAO, 36);
-		//}
-	}
-
-	glBindVertexArray(0);
 }
+
 
 uint32_t createVertexData(const float* vertices, const uint32_t n_verts, const uint32_t* indices, const uint32_t n_indices) {
 	unsigned int VAO, VBO, EBO;
@@ -763,6 +804,15 @@ int main(int argc, char* argv[]) {
 	//Missile missilePlayer = Missile(shaderMissile, posEnemigo, player);
 	Missile missilePlayer = Missile(posEnemigo, player);
 
+	//Camera c(posPlayer);
+	camera.AddChildren(&player);
+	//camera._children[0] = &player;
+
+	Enemy navesEnemigas[4];
+	//navesEnemigas[0] = enemy;
+	//c._children[1] = navesEnemigas;
+
+	//c._children[1][0] = *enemy;
 
 	//Meteor meteor2 = Meteor(shaderMeteorito);
 	//Meteor meteor3 = Meteor(shaderMeteorito);
@@ -811,7 +861,8 @@ int main(int argc, char* argv[]) {
 		HandlerInput(deltaTime, transfer);
 
 		RenderScene(quad, cube, sphere);
-		RenderGameObjects(transfer);
+		//RenderGameObjects(transfer);
+		RenderGameObjects2(camera);
 		MoveObjects(deltaTime, transfer);
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
