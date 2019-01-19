@@ -12,7 +12,7 @@ public:
 	Missile();
 	//float GetVelocity();
 	void Mover(const Movement movement, const float deltaTime);
-
+	GameObject* GetParent();
 	void Rotate(glm::mat4 &_modelMatrix);
 	Missile(Shader & shader, glm::vec3 position, GameObject parent);
 	~Missile();

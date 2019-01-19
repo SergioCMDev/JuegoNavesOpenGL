@@ -8,7 +8,7 @@ Missile::Missile(Shader & shader, glm::vec3 position, GameObject parent)
 	_model = Model(pathToModel);
 	_shader = shader;
 	SetPosition(position);
-	_velocity = 2.5f;
+	_velocity = 0.2f;
 	_type = Constants::TIPO_MISIL;
 	//_modelMatrix = mat4(1.0f);
 	_scale = vec3(0.4f);
@@ -39,6 +39,10 @@ void Missile::Render(glm::mat4 &projection, glm::mat4 &view)
 void Missile::Rotate(glm::mat4 &_modelMatrix) {
 	_modelMatrix = glm::rotate(_modelMatrix, glm::radians(180.0f), glm::vec3(1.0f, 1.0f, 0.0f));
 
+}
+
+GameObject* Missile::GetParent() {
+	return _parent;
 }
 
 void Missile::Mover(const Movement movement, const float deltaTime)

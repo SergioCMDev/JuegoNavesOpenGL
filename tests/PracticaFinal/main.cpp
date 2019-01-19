@@ -446,7 +446,7 @@ int Inicializacion() {
 	return 1;
 };
 
-void MoveObjects(const double deltaTim, TransferObjects transfer) {
+void MoveObjects(const double deltaTime, TransferObjects transfer) {
 	for (size_t i = 0; i < transfer.numeroModelos; i++)
 	{
 		if (transfer.modelos[i]->_type == Constants::TIPO_METEOR)
@@ -454,7 +454,19 @@ void MoveObjects(const double deltaTim, TransferObjects transfer) {
 			GameObject *g = transfer.modelos[i];
 			Meteor* meteor = static_cast<Meteor*>(g);
 
-			meteor->Mover(deltaTim);
+			meteor->Mover(deltaTime);
+		}
+		else if (transfer.modelos[i]->_type == Constants::TIPO_MISIL)
+		{
+			GameObject *g = transfer.modelos[i];
+			Missile* misil = static_cast<Missile*>(g);
+			if (misil->GetParent()->_type == Constants::TIPO_ENEMIGO) {
+				misil->Mover(GameObject::Movement::Forward, deltaTime);
+			}
+			else {
+				misil->Mover(GameObject::Movement::Backward, deltaTime);
+				cout << "Misil Player " << endl;
+			}
 		}
 	}
 }
@@ -820,7 +832,7 @@ int main(int argc, char* argv[]) {
 
 		HandlerInput(deltaTime, transfer);
 
-		//MoveObjects(deltaTime, transfer);
+		MoveObjects(deltaTime, transfer);
 		Render(shaderlight, texture1, texture2, quad, transfer, cube, sphere);
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
