@@ -5,14 +5,13 @@ Missile::Missile() {
 }
 Missile::Missile(glm::vec3 position, GameObject parent)
 {
-	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
-
+	Shader& shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
+	shaderMissile.Use();
 	_model = Model(pathToModel);
 	_shader = shaderMissile;
 	SetPosition(position);
 	_velocity = 0.2f;
 	_type = Constants::TIPO_MISIL;
-	//_modelMatrix = mat4(1.0f);
 	_scale = vec3(0.4f);
 	_parent = &parent;
 }
@@ -20,13 +19,12 @@ Missile::Missile(glm::vec3 position, GameObject parent)
 
 Missile::Missile(Shader& shaderMissile, glm::vec3 position, GameObject parent)
 {
-
+	shaderMissile.Use();
 	_model = Model(pathToModel);
 	_shader = shaderMissile;
 	SetPosition(position);
 	_velocity = 0.2f;
 	_type = Constants::TIPO_MISIL;
-	//_modelMatrix = mat4(1.0f);
 	_scale = vec3(0.4f);
 	_parent = &parent;
 }

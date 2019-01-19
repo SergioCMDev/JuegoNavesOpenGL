@@ -6,7 +6,7 @@ Player::Player() {
 Player::Player(glm::vec3 position)
 {
 	Shader shaderNavePlayer = Utils::GetFullShader("Shaders/NavePlayerVS.vs", "Shaders/NavePlayerFS.fs");
-
+	shaderNavePlayer.Use();
 	position = vec3(0.0f, 0.0f, 0.0f);
 	_model = Model(pathToModel);
 	_shader = shaderNavePlayer;
@@ -19,6 +19,7 @@ Player::Player(glm::vec3 position)
 
 Player::Player(Shader & shader, glm::vec3 position)
 {
+	shader.Use();
 	_shader = shader;
 
 	position = vec3(0.0f, 0.0f, 0.0f);

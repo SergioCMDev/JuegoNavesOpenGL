@@ -461,7 +461,7 @@ void MoveObjects(const double deltaTime, TransferObjects transfer) {
 			}
 			else {
 				misil->Mover(GameObject::Movement::Backward, deltaTime);
-				cout << "Misil Player " << endl;
+				//cout << "Misil Player " << endl;
 			}
 		}
 	}
@@ -745,15 +745,12 @@ int main(int argc, char* argv[]) {
 	cout << "Creacion Textures " << endl;
 	uint32_t textureSuelo = Model::GetTexture("Textures/texture3.png", true);
 
-
 	cout << "Creacion Player " << endl;
 	Player player(posPlayer);
-
 
 	cout << "Creacion Enemigo " << endl;
 	vec3 posEnemigo = vec3(3.0f, 0.0f, 0.0f);
 	Enemy enemy(posEnemigo);
-
 
 	cout << "Creacion Meteorito " << endl;
 	Shader shaderMeteorito = Utils::GetFullShader("Shaders/MetorVS.vs", "Shaders/MetorFS.fs");
@@ -763,7 +760,8 @@ int main(int argc, char* argv[]) {
 	posEnemigo = vec3(3.0f, 0.0f, 2.0f);
 
 	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
-	Missile missilePlayer = Missile(posEnemigo, player);
+	Missile missilePlayer = Missile(shaderMissile, posEnemigo, player);
+	//Missile missilePlayer = Missile(posEnemigo, player);
 
 
 	//Meteor meteor2 = Meteor(shaderMeteorito);
