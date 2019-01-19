@@ -733,33 +733,37 @@ int main(int argc, char* argv[]) {
 	if (!Inicializacion()) {
 		return -1;
 	}
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 
+	cout << "Creacion Shaders " << endl;
 	Shader shaderlight = Utils::GetFullShader("Shaders/LightVS.vs", "Shaders/LightFS.fs");
 	Shader shaderCube = Utils::GetFullShader("Shaders/CubeVS.vs", "Shaders/CubeFS.fs");
 	Shader shaderQuad = Utils::GetFullShader("Shaders/QuadVS.vs", "Shaders/QuadFS.fs");
 	Shader shaderSphere = Utils::GetFullShader("Shaders/SphereVS.vs", "Shaders/SphereFS.fs");
 
-	Shader shaderMeteorito = Utils::GetFullShader("Shaders/MetorVS.vs", "Shaders/MetorFS.fs");
-	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
-	cout << "Creacion Shaders " << endl;
-	uint32_t textureSuelo = Model::GetTexture("Textures/texture3.png", true);
 	cout << "Creacion Textures " << endl;
+	uint32_t textureSuelo = Model::GetTexture("Textures/texture3.png", true);
 
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	Player player(posPlayer);
 	cout << "Creacion Player " << endl;
+	Player player(posPlayer);
 
+
+	cout << "Creacion Enemigo " << endl;
 	vec3 posEnemigo = vec3(3.0f, 0.0f, 0.0f);
-
 	Enemy enemy(posEnemigo);
-	//camera._children[0] = &naves;
 
+
+	cout << "Creacion Meteorito " << endl;
+	Shader shaderMeteorito = Utils::GetFullShader("Shaders/MetorVS.vs", "Shaders/MetorFS.fs");
 	Meteor meteor = Meteor(shaderMeteorito);
+
+	cout << "Creacion Misil " << endl;
 	posEnemigo = vec3(3.0f, 0.0f, 2.0f);
 
-	Missile missilePlayer = Missile(shaderMissile, posEnemigo, player);
+	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
+	Missile missilePlayer = Missile(posEnemigo, player);
 
 
 	//Meteor meteor2 = Meteor(shaderMeteorito);
