@@ -11,6 +11,7 @@ Enemy::Enemy(Shader & shader, glm::vec3 position)
 	SetPosition(position);
 	_velocity = 2.5f;
 	_type = Constants::TIPO_ENEMIGO;
+	_scale = glm::vec3(0.3f);
 }
 
 Enemy::~Enemy() {
@@ -26,7 +27,7 @@ void Enemy::Render(glm::mat4 &projection, glm::mat4 &view)
 	_shader.Use();
 	model = glm::translate(model, _position);
 
-	model = glm::scale(model, glm::vec3(0.3f));
+	model = glm::scale(model, _scale);
 
 	_shader.Set("projection", projection);
 	_shader.Set("view", view);

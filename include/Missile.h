@@ -1,23 +1,24 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef MISSILE_H
+#define MISSILE_H
 #include<iostream>
 #include "string.h"
 #include "Shader.h"
 #include "GameObject.h"
 #include "Constants.h"
 #include<GLFW/glfw3.h>
-class Player : public GameObject {
+class Missile : public GameObject {
 
 public:
-	Player();
+	Missile();
 	//float GetVelocity();
 	void Mover(const Movement movement, const float deltaTime);
-	void Disparar();
 
-	Player(Shader & shader, glm::vec3 position);
-	~Player();
+	void Rotate();
+	Missile(Shader & shader, glm::vec3 position, GameObject parent);
+	~Missile();
 	void Render(glm::mat4 &projection, glm::mat4 &view);
 private:
-	const char* pathToModel = "../assets/obj/Freighter/Freigther_BI_Export.obj";
+	const char* pathToModel = "../assets/obj/Missile/asca.obj";
+	glm::mat4 _modelMatrix;
 };
 #endif

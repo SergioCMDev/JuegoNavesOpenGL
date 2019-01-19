@@ -16,6 +16,7 @@
 #include "Player.h"
 #include "Meteor.h"
 #include "Enemy.h"
+#include "Missile.h"
 
 
 const vec3 posCamera = glm::vec3(0.0f, 20.0f, 0.0f);
@@ -219,29 +220,33 @@ void MovimientoJugador(const float &deltaTime, Player* player)
 {
 	//Player player = ((Player)*objects.modelos[0]);
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_LEFT) == GLFW_PRESS) {
-		//player->_position += vec3(1.0f, 0.0f, 0.0f) * deltaTime;
 		player->Mover(Player::Movement::Left, deltaTime);
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS) {
-		//player->_position -= vec3(1.0f, 0.0f, 0.0f) * deltaTime;
 		player->Mover(Player::Movement::Right, deltaTime);
 
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_UP) == GLFW_PRESS) {
-		//player->_position += vec3(0.0f, 0.0f, 1.0f) * deltaTime;
 		player->Mover(Player::Movement::Forward, deltaTime);
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_DOWN) == GLFW_PRESS) {
-		//player->_position -= vec3(0.0f, 0.0f, 1.0f) * deltaTime;
 		player->Mover(Player::Movement::Backward, deltaTime);
 	}
 }
+
+void AccionesJugador(Player* player) {
+	if (glfwGetKey(window.GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
+		//player->Disparar();
+	}
+}
+
 
 void HandlerInput(const double deltaTime, TransferObjects objects) {
 	MovimientoCamara(deltaTime);
 	if (objects.modelos[0]->_type == Constants::TIPO_PLAYER) {
 		Player* player = GetPlayerReference(objects.modelos[0]);
 		MovimientoJugador(deltaTime, player);
+		AccionesJugador(player);
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window.GetWindow(), true);
@@ -584,6 +589,12 @@ void Render(const Shader& shaderlight,
 
 			enemyShip->Render(projection, view);
 		}
+		else if (transfer.modelos[i]->_type == Constants::TIPO_MISIL) {
+			GameObject *g = transfer.modelos[i];
+			Missile* missile = static_cast<Missile*>(g);
+
+			missile->Render(projection, view);
+		}
 	}
 
 
@@ -744,6 +755,7 @@ int main(int argc, char* argv[]) {
 	Shader shaderSphere = Utils::GetFullShader("Shaders/SphereVS.vs", "Shaders/SphereFS.fs");
 	Shader shaderNavePlayer = Utils::GetFullShader("Shaders/NavePlayerVS.vs", "Shaders/NavePlayerFS.fs");
 	Shader shaderMeteorito = Utils::GetFullShader("Shaders/MetorVS.vs", "Shaders/MetorFS.fs");
+	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
 
 	uint32_t texture1 = Model::GetTexture("Textures/albedo.png", true);
 	uint32_t texture2 = Model::GetTexture("Textures/specular.png", true);
@@ -760,10 +772,13 @@ int main(int argc, char* argv[]) {
 	//camera._children[0] = &naves;
 
 	Meteor meteor = Meteor(shaderMeteorito);
+	posEnemigo = vec3(3.0f, 0.0f, 2.0f);
+
+	Missile missilePlayer = Missile(shaderMissile, posEnemigo, player);
 	//Meteor meteor2 = Meteor(shaderMeteorito);
 	//Meteor meteor3 = Meteor(shaderMeteorito);
 	//Meteor meteor4 = Meteor(shaderMeteorito);
-	const uint32_t numeroObjetos = 2;
+	const uint32_t numeroObjetos = 3;
 	GameObject *objectosssArray[numeroObjetos];
 
 	TransferObjects transfer = {
@@ -776,6 +791,7 @@ int main(int argc, char* argv[]) {
 	//transfer.modelos[2] = &meteor2;
 	//transfer.modelos[3] = &meteor3;
 	transfer.modelos[1] = &enemy;
+	transfer.modelos[2] = &missilePlayer;
 
 
 
@@ -804,7 +820,7 @@ int main(int argc, char* argv[]) {
 
 		HandlerInput(deltaTime, transfer);
 
-		MoveObjects(deltaTime, transfer);
+		//MoveObjects(deltaTime, transfer);
 		Render(shaderlight, texture1, texture2, quad, transfer, cube, sphere);
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();

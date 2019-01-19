@@ -36,6 +36,7 @@ public:
 	const vec3 _right = vec3(1.0f, 0.0f, 0.0f);
 	const vec3 _up = vec3(0.0f, 0.0f, 1.0f);
 	float _velocity = 0.0f;
+	vec3 _scale;
 private:
 };
 #endif

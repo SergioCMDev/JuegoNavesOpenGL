@@ -11,10 +11,15 @@ Player::Player(Shader & shader, glm::vec3 position)
 	SetPosition(position);
 	_velocity = 2.5f;
 	_type = Constants::TIPO_PLAYER;
+	_scale = vec3(0.2f);
+
 }
 
 Player::~Player() {
 	//delete(;
+}
+void Disparar() {
+
 }
 
 
@@ -26,7 +31,7 @@ void Player::Render(glm::mat4 &projection, glm::mat4 &view)
 	model = glm::translate(model, _position);
 	//model = glm::rotate(model, (float)glm::radians(0.0f), vec3(0.0f, 1.0f, 0.0f));
 
-	model = glm::scale(model, glm::vec3(0.1f));
+	model = glm::scale(model, _scale);
 
 	_shader.Set("projection", projection);
 	_shader.Set("view", view);

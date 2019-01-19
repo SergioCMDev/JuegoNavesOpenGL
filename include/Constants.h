@@ -13,6 +13,7 @@ public:
 	static const uint32_t TIPO_PLAYER = 1;
 	static const uint32_t TIPO_METEOR = 2;
 	static const uint32_t TIPO_ENEMIGO = 3;
+	static const uint32_t TIPO_MISIL = 4;
 
 };
 #endif
