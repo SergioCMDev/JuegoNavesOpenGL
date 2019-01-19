@@ -816,6 +816,7 @@ int main(int argc, char* argv[]) {
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
 	}
+	cout << "Fin GameLoop" << endl;
 
 	//Si se han linkado bien los shaders, los borramos ya que estan linkados
 	glDeleteVertexArrays(1, &CubeVAO);
