@@ -1,11 +1,14 @@
 #ifndef PLAYER_H
 #define PLAYER_H
+
 #include<iostream>
 #include "string.h"
 #include "Shader.h"
+#include "Missile.h"
 #include "GameObject.h"
 #include "Constants.h"
 #include<GLFW/glfw3.h>
+
 class Player : public GameObject {
 
 public:

@@ -55,8 +55,8 @@ void Camera::updateCameraVectors() {
 
 	_right = glm::normalize(glm::cross(front, _worldUp));
 	_up = glm::normalize(glm::cross(_right, _front));
-	std::cout << "Camera Position" << std::endl;
-	std::cout << "X" << _position.x << "Y" << _position.x << "Z" << _position.x << std::endl;
+	//std::cout << "Camera Position" << std::endl;
+	//std::cout << "X" << _position.x << "Y" << _position.x << "Z" << _position.x << std::endl;
 }
 
 

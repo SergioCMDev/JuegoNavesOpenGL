@@ -218,7 +218,6 @@ void MovimientoCamara(const double &deltaTime)
 
 void MovimientoJugador(const float &deltaTime, Player* player)
 {
-	//Player player = ((Player)*objects.modelos[0]);
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_LEFT) == GLFW_PRESS) {
 		player->Mover(Player::Movement::Left, deltaTime);
 	}
@@ -236,7 +235,7 @@ void MovimientoJugador(const float &deltaTime, Player* player)
 
 void AccionesJugador(Player* player) {
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
-		//player->Disparar();
+		player->Disparar();
 	}
 }
 
@@ -260,8 +259,6 @@ void HandlerInput(const double deltaTime, TransferObjects objects) {
 #pragma region Metodos
 
 #pragma region Generacion esfera
-
-
 
 void generateVerts(float * verts, float * norms, float * tex, unsigned int * el, const uint32_t slices, const uint32_t stacks, const uint32_t radius) {
 	float theta, phi;       // Generate positions and normals
@@ -415,7 +412,6 @@ uint32_t createSphere(const float radius) {
 }
 #pragma endregion
 
-
 int Inicializacion() {
 	if (!glfwInit()) {
 		cout << "Error initializing GLFW" << endl;
@@ -553,14 +549,10 @@ void RenderScene(Quad quad, Cube cube, Sphere sphere) {
 	glBindVertexArray(0);
 }
 
-
 void RenderGameObjects(TransferObjects transfer) {
 
-
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
-
 
 	//Dibujamos GameObjects
 	for (size_t i = 0; i < transfer.numeroModelos; i++)
@@ -638,7 +630,6 @@ void RenderGameObjects(TransferObjects transfer) {
 
 	glBindVertexArray(0);
 }
-
 
 uint32_t createVertexData(const float* vertices, const uint32_t n_verts, const uint32_t* indices, const uint32_t n_indices) {
 	unsigned int VAO, VBO, EBO;
@@ -751,12 +742,14 @@ int main(int argc, char* argv[]) {
 	Shader shaderNavePlayer = Utils::GetFullShader("Shaders/NavePlayerVS.vs", "Shaders/NavePlayerFS.fs");
 	Shader shaderMeteorito = Utils::GetFullShader("Shaders/MetorVS.vs", "Shaders/MetorFS.fs");
 	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
-
+	cout << "Creacion Shaders " << endl;
 	uint32_t textureSuelo = Model::GetTexture("Textures/texture3.png", true);
+	cout << "Creacion Textures " << endl;
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	Player player(shaderNavePlayer, posPlayer);
+	cout << "Creacion Player " << endl;
 
 	vec3 posEnemigo = vec3(3.0f, 0.0f, 0.0f);
 
@@ -785,14 +778,14 @@ int main(int argc, char* argv[]) {
 	transfer.modelos[1] = &enemy;
 	transfer.modelos[2] = &missilePlayer;
 
-
-
 	Cube cube = Cube();
 	Quad quad = Quad();
 	Sphere sphere = Sphere();
 	uint32_t CubeVAO = createVertexData(verticesCubo, cube.numeroElementosVerticesCubo, cube.indicesCubo, cube.numeroIndices);
 	uint32_t SphereVAO = createSphere(1);
 	uint32_t QuadVAO = createVertexDataQuad(verticesQuad, quad.numeroElementosVerticesQuad, quad.indicesQuad, quad.numeroIndicesQuad, 5);
+
+	cout << "Creacion Geometrias " << endl;
 
 	cube.shader = &shaderCube;
 	quad.shader = &shaderQuad;
@@ -803,6 +796,7 @@ int main(int argc, char* argv[]) {
 
 	cube.VAO = &CubeVAO;
 	sphere.VAO = &SphereVAO;
+	cout << "Inicio GameLoop" << endl;
 
 	//Bucle inicial donde se realiza toda la accion del motor
 	while (!glfwWindowShouldClose(window.GetWindow())) {

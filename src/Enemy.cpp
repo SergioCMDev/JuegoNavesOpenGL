@@ -15,7 +15,7 @@ Enemy::Enemy(Shader & shader, glm::vec3 position)
 }
 
 Enemy::~Enemy() {
-	//delete(;
+
 }
 
 
