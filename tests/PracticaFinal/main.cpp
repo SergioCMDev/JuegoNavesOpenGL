@@ -706,7 +706,7 @@ int main(int argc, char* argv[]) {
 
 	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
 	Missile missilePlayer = Missile(shaderMissile, posEnemigo, player);
-	player.AddChildren(&missilePlayer);
+	//player.AddChildren(&missilePlayer);
 
 	camera.AddChildren(&player);
 
