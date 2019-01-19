@@ -20,6 +20,9 @@ public:
 	Player(Shader & shader, glm::vec3 position);
 	Player(glm::vec3 position);
 	~Player();
+	uint32_t _lastMissileUsed = 0;
+	bool _disparando = false;
+
 	void Render(glm::mat4 &projection, glm::mat4 &view);
 private:
 	const char* pathToModel = "../assets/obj/Freighter/Freigther_BI_Export.obj";

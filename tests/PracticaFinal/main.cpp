@@ -211,24 +211,33 @@ void MovimientoJugador(const float &deltaTime, Player* player)
 	}
 }
 
-void AccionesJugador(Player* player) {
+void AccionesJugador(Player& player) {
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
-		player->Disparar();
+		player.Disparar();
 	}
 }
 
 
-void HandlerInput(const double deltaTime, GameObject node) {
+void HandlerInput(const double deltaTime, GameObject* node) {
 	MovimientoCamara(deltaTime);
-	if (node.GetChildren(0)->_type == Constants::TIPO_PLAYER) {
-		Player* player = GetPlayerReference(node.GetChildren(0));
+	if (node->GetChildren(0)->_type == Constants::TIPO_PLAYER) {
+		Player* player = GetPlayerReference(node->GetChildren(0));
 		MovimientoJugador(deltaTime, player);
-		AccionesJugador(player);
+		if (glfwGetKey(window.GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS && !player->_disparando) {
+			player->_disparando = true;
+
+			player->Disparar();
+			//Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
+
+			//Missile missile(shaderMissile, player->_position);
+			//node->GetChildren(0)->AddChildren(&missile);
+		}
+		player->_disparando = false;
+		//AccionesJugador(player);
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window.GetWindow(), true);
 	}
-
 }
 #pragma endregion
 
@@ -535,18 +544,22 @@ void RenderGameObjects(GameObject* gamobjectParent) {
 	else if (gamobjectParent->_type == Constants::TIPO_MISIL) {
 		GameObject *g = gamobjectParent;
 		Missile* missile = static_cast<Missile*>(g);
+		if (missile->_render) {
+			missile->Render(projection, view);
 
-		missile->Render(projection, view);
+		}
 
 	}
 
 }
 
-void MoveObjects(const double deltaTime, GameObject* node) {
+void MoveObjects(const double deltaTime, GameObject* node, uint32_t lastChildren) {
+	cout << node->_type << endl;
+
 	if (node->HasChildren()) {
-		for (size_t i = 0; i < node->GetNumberChildren(); i++)
-		{
-			return MoveObjects(deltaTime, node->GetChildren(i));
+		while (lastChildren < node->GetNumberChildren()) {
+			MoveObjects(deltaTime, node->GetChildren(lastChildren), lastChildren);
+			lastChildren++;
 		}
 	}
 
@@ -554,7 +567,6 @@ void MoveObjects(const double deltaTime, GameObject* node) {
 
 		Player* player = GetPlayerReference(node);
 		MovimientoJugador(deltaTime, player);
-		AccionesJugador(player);
 	}
 	else if (node->_type == Constants::TIPO_METEOR)
 	{
@@ -570,9 +582,11 @@ void MoveObjects(const double deltaTime, GameObject* node) {
 	else if (node->_type == Constants::TIPO_MISIL) {
 		GameObject *g = node;
 		Missile* missile = static_cast<Missile*>(g);
-		missile->Mover(GameObject::Movement::Backward, deltaTime);
-
+		if (missile->_render) {
+			missile->Mover(GameObject::Movement::Backward, deltaTime);
+		}
 	}
+	return;
 }
 
 
@@ -706,7 +720,20 @@ int main(int argc, char* argv[]) {
 
 	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
 	Missile missilePlayer = Missile(shaderMissile, posEnemigo, player);
-	//player.AddChildren(&missilePlayer);
+	Missile missilePlayer1 = Missile(shaderMissile, posEnemigo, player);
+	Missile missilePlayer2 = Missile(shaderMissile, posEnemigo, player);
+	Missile missilePlayer3 = Missile(shaderMissile, posEnemigo, player);
+	Missile missilePlayer4 = Missile(shaderMissile, posEnemigo, player);
+	Missile missilePlayer5 = Missile(shaderMissile, posEnemigo, player);
+	/*Missile missilePoolPlayer[]{
+		missilePlayer, missilePlayer1, missilePlayer2, missilePlayer3, missilePlayer4, missilePlayer5
+	};*/
+	player.AddChildren(&missilePlayer);
+	player.AddChildren(&missilePlayer1);
+	player.AddChildren(&missilePlayer2);
+	player.AddChildren(&missilePlayer3);
+	player.AddChildren(&missilePlayer4);
+	player.AddChildren(&missilePlayer5);
 
 	camera.AddChildren(&player);
 
@@ -720,13 +747,6 @@ int main(int argc, char* argv[]) {
 	camera.AddChildren(&navesEnemigas);
 
 	camera.AddChildren(&meteorsParent);
-
-
-	//Meteor meteor2 = Meteor(shaderMeteorito);
-	//Meteor meteor3 = Meteor(shaderMeteorito);
-	//Meteor meteor4 = Meteor(shaderMeteorito);
-	//const uint32_t numeroObjetos = 3;
-	//GameObject *objectosssArray[numeroObjetos];
 
 	Cube cube = Cube();
 	Quad quad = Quad();
@@ -755,10 +775,9 @@ int main(int argc, char* argv[]) {
 		lastFrame = currentFrame;
 		RenderScene(quad, cube, sphere);
 
-		HandlerInput(deltaTime, camera);
+		HandlerInput(deltaTime, &camera);
 
-
-		MoveObjects(deltaTime, &camera);
+		MoveObjects(deltaTime, &camera, 0);
 
 		RenderGameObjects(&camera);
 

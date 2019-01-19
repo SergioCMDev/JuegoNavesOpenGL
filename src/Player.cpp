@@ -35,33 +35,22 @@ Player::~Player() {
 	//delete(;
 }
 void Player::Disparar() {
-	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
+	//Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
 
-	Missile missile(shaderMissile, _position, *this);
+	//Missile missile(shaderMissile, _position);
+	//AddChildren(&missile);
+	//Missile missile(shaderMissile, _position, *this);
 	//this->GetChildren(0)->AddChildren(&missile);
-	this->AddChildren(&missile);
-	//cout << "disparo" << endl;
+
+	if (_lastMissileUsed < 5) {
+		_disparando = true;
+		Missile* missile = static_cast<Missile*>(GetChildren(_lastMissileUsed));
+		missile->_position = _position;
+		missile->_render = true;
+		_lastMissileUsed++;
+	}
+	cout << "disparo" << endl;
 }
-
-//void Player::RenderChildren(glm::mat4 &projection, glm::mat4 &view, GameObject* children[])
-//{
-//	for (size_t i = 0; i < ; i++)
-//	{
-//
-//	}
-//	glm::mat4 model = mat4(1.0f);
-//	_shader.Use();
-//	model = glm::translate(model, _position);
-//	//model = glm::rotate(model, (float)glm::radians(0.0f), vec3(0.0f, 1.0f, 0.0f));
-//
-//	model = glm::scale(model, _scale);
-//
-//	_shader.Set("projection", projection);
-//	_shader.Set("view", view);
-//	_shader.Set("model", model);
-//	_model.Draw(_shader);
-//}
-
 
 void Player::Render(glm::mat4 &projection, glm::mat4 &view)
 {
