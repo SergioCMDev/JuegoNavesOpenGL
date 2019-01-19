@@ -8,8 +8,22 @@
 
 class Node {
 public:
-
+	Node();
+	Node(GameObject* gameObject);
+	void Delete();
+	void DeleteChilds();
+	void Node::AddChildren(Node* node);
+	bool Node::HasChildren();
+	Node* Node::GetChildren(uint32_t idChildren);
+	uint32_t Node::GetNumberChildren();
+	GameObject* GetGameObject();
+	bool Seen();
+protected:
+	Node* _childrens[10];
+	uint32_t _lastChildren = 0;
+	bool _hasChildren = false;
 private:
-
+	GameObject* _gameObject;
+	bool _seen = false;
 };
 #endif
