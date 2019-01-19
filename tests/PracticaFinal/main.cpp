@@ -804,33 +804,30 @@ int main(int argc, char* argv[]) {
 	//Missile missilePlayer = Missile(shaderMissile, posEnemigo, player);
 	Missile missilePlayer = Missile(posEnemigo, player);
 
-	//Camera c(posPlayer);
 	camera.AddChildren(&player);
-	//camera._children[0] = &player;
 
-	Enemy navesEnemigas[4];
-	//navesEnemigas[0] = enemy;
-	//c._children[1] = navesEnemigas;
+	Enemy navesEnemigas; //Parent Naves Enemigas
+	navesEnemigas.AddChildren(&enemy);
+	camera.AddChildren(&navesEnemigas);
 
-	//c._children[1][0] = *enemy;
 
 	//Meteor meteor2 = Meteor(shaderMeteorito);
 	//Meteor meteor3 = Meteor(shaderMeteorito);
 	//Meteor meteor4 = Meteor(shaderMeteorito);
-	const uint32_t numeroObjetos = 3;
-	GameObject *objectosssArray[numeroObjetos];
+	//const uint32_t numeroObjetos = 3;
+	//GameObject *objectosssArray[numeroObjetos];
 
-	TransferObjects transfer = {
-		Constants::MaximoObjectosTransferencia,
-		numeroObjetos,
-		*objectosssArray,
-	};
-	transfer.modelos[0] = &player;
-	//transfer.modelos[1] = &meteor;
-	//transfer.modelos[2] = &meteor2;
-	//transfer.modelos[3] = &meteor3;
-	transfer.modelos[1] = &enemy;
-	transfer.modelos[2] = &missilePlayer;
+	//TransferObjects transfer = {
+	//	Constants::MaximoObjectosTransferencia,
+	//	numeroObjetos,
+	//	*objectosssArray,
+	//};
+	//transfer.modelos[0] = &player;
+	////transfer.modelos[1] = &meteor;
+	////transfer.modelos[2] = &meteor2;
+	////transfer.modelos[3] = &meteor3;
+	//transfer.modelos[1] = &enemy;
+	//transfer.modelos[2] = &missilePlayer;
 
 	Cube cube = Cube();
 	Quad quad = Quad();
@@ -858,12 +855,11 @@ int main(int argc, char* argv[]) {
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		HandlerInput(deltaTime, transfer);
+		//HandlerInput(deltaTime, transfer);
 
 		RenderScene(quad, cube, sphere);
-		//RenderGameObjects(transfer);
 		RenderGameObjects2(camera);
-		MoveObjects(deltaTime, transfer);
+		//MoveObjects(deltaTime, transfer);
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
 	}
