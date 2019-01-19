@@ -556,14 +556,14 @@ void MoveObjects(const double deltaTime, GameObject* node) {
 		MovimientoJugador(deltaTime, player);
 		AccionesJugador(player);
 	}
-	else if (node->._type == Constants::TIPO_METEOR)
+	else if (node->_type == Constants::TIPO_METEOR)
 	{
 		GameObject *g = node;
 		Meteor* meteor = static_cast<Meteor*>(g);
 		meteor->Mover(deltaTime);
 	}
-	else if (node._type == Constants::TIPO_ENEMIGO) {
-		GameObject *g = &node;
+	else if (node->_type == Constants::TIPO_ENEMIGO) {
+		GameObject *g = node;
 		Enemy* enemyShip = static_cast<Enemy*>(g);
 		//enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
 	}
