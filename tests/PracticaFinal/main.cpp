@@ -503,37 +503,37 @@ void RenderScene(Quad quad, Cube cube, Sphere sphere) {
 	glBindVertexArray(0);
 }
 
-void RenderGameObjects(GameObject& gamobjectParent) {
+void RenderGameObjects(GameObject* gamobjectParent) {
 
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
-	if (gamobjectParent.HasChildren()) {
-		for (size_t i = 0; i < gamobjectParent.GetNumberChildren(); i++)
+	if (gamobjectParent->HasChildren()) {
+		for (size_t i = 0; i < gamobjectParent->GetNumberChildren(); i++)
 		{
-			RenderGameObjects(*gamobjectParent.GetChildren(i));
+			RenderGameObjects(gamobjectParent->GetChildren(i));
 		}
 	}
-	if (gamobjectParent._type == Constants::TIPO_PLAYER) {
+	if (gamobjectParent->_type == Constants::TIPO_PLAYER) {
 
-		Player* player = GetPlayerReference(&gamobjectParent);
+		Player* player = GetPlayerReference(gamobjectParent);
 
 		player->Render(projection, view);
 	}
-	else if (gamobjectParent._type == Constants::TIPO_METEOR)
+	else if (gamobjectParent->_type == Constants::TIPO_METEOR)
 	{
-		GameObject *g = &gamobjectParent;
+		GameObject *g = gamobjectParent;
 		Meteor* meteor = static_cast<Meteor*>(g);
 
 		meteor->Render(projection, view);
 	}
-	else if (gamobjectParent._type == Constants::TIPO_ENEMIGO) {
-		GameObject *g = &gamobjectParent;
+	else if (gamobjectParent->_type == Constants::TIPO_ENEMIGO) {
+		GameObject *g = gamobjectParent;
 		Enemy* enemyShip = static_cast<Enemy*>(g);
 
 		enemyShip->Render(projection, view);
 	}
-	else if (gamobjectParent._type == Constants::TIPO_MISIL) {
-		GameObject *g = &gamobjectParent;
+	else if (gamobjectParent->_type == Constants::TIPO_MISIL) {
+		GameObject *g = gamobjectParent;
 		Missile* missile = static_cast<Missile*>(g);
 
 		missile->Render(projection, view);
@@ -760,7 +760,7 @@ int main(int argc, char* argv[]) {
 
 		MoveObjects(deltaTime, &camera);
 
-		RenderGameObjects(camera);
+		RenderGameObjects(&camera);
 
 
 		//MoveObjects(deltaTime, transfer);
