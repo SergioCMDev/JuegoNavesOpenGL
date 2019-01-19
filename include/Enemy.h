@@ -12,6 +12,7 @@ public:
 	Enemy();
 	//float GetVelocity();
 	void Mover(const Movement movement, const float deltaTime);
+	void Disparar();
 
 	Enemy(Shader & shader, glm::vec3 position);
 	~Enemy();

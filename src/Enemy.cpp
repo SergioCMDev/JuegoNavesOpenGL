@@ -18,6 +18,10 @@ Enemy::~Enemy() {
 
 }
 
+void Enemy::Disparar() {
+	//Missile missile(_position, this);
+	cout << "disparo" << endl;
+}
 
 
 void Enemy::Render(glm::mat4 &projection, glm::mat4 &view)
