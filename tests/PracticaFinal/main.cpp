@@ -522,41 +522,12 @@ void RenderSphere(Sphere &sphere, glm::mat4 &projection, glm::mat4 &view)
 }
 #pragma endregion
 
-void Render(const Shader& shaderlight,
-	uint32_t texture1, uint32_t texture2,
-	Quad quad, TransferObjects transfer, Cube cube, Sphere sphere) {
+void RenderScene(Quad quad, Cube cube, Sphere sphere) {
 
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
-
-	{
-		//shaderlight.Use();
-		//mat4 model = mat4(1.0f);
-		//shaderlight.Set("color", vec3(0.45f, 0.45f, 0.1f));
-		//model = translate(model, pointLightPositions[0]);
-		//model = scale(model, vec3(0.2f));
-
-		//RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
-
-		//model = mat4(1.0f);
-		//shaderlight.Set("color", vec3(0.1f, 0.1f, 1.1f));
-		//model = translate(model, pointLightPositions[1]);
-		//model = scale(model, vec3(0.2f));
-
-		//RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
-
-
-		//model = mat4(1.0f);
-		//shaderlight.Set("color", vec3(0.2f, 1.0f, 0.1f));
-		//model = translate(model, spotLightPositions[0]);
-		//model = scale(model, vec3(0.4f));
-
-		//RenderFigure(shaderlight, projection, view, model, SphereVAO, elementosParaDibujarEsfera);
-
-
-	}
 
 	//Dibujamos Suelo
 	RenderQuadSuelo(quad, projection, view);
@@ -578,6 +549,18 @@ void Render(const Shader& shaderlight,
 		cube.shader->Set("color", vec3(1.0f, 0.0f, 0.0f));
 		RenderCube(cube, projection, view, EnemyShipOriginPositions[i]);
 	}
+
+	glBindVertexArray(0);
+}
+
+
+void RenderGameObjects(TransferObjects transfer) {
+
+
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glm::mat4 view = camera.GetViewMatrix();
+	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
+
 
 	//Dibujamos GameObjects
 	for (size_t i = 0; i < transfer.numeroModelos; i++)
@@ -769,8 +752,8 @@ int main(int argc, char* argv[]) {
 	Shader shaderMeteorito = Utils::GetFullShader("Shaders/MetorVS.vs", "Shaders/MetorFS.fs");
 	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
 
-	uint32_t texture1 = Model::GetTexture("Textures/albedo.png", true);
-	uint32_t texture2 = Model::GetTexture("Textures/specular.png", true);
+	//uint32_t texture1 = Model::GetTexture("Textures/albedo.png", true);
+	//uint32_t texture2 = Model::GetTexture("Textures/specular.png", true);
 	uint32_t textureSuelo = Model::GetTexture("Textures/texture3.png", true);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -832,8 +815,9 @@ int main(int argc, char* argv[]) {
 
 		HandlerInput(deltaTime, transfer);
 
+		RenderScene(quad, cube, sphere);
+		RenderGameObjects(transfer);
 		MoveObjects(deltaTime, transfer);
-		Render(shaderlight, texture1, texture2, quad, transfer, cube, sphere);
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
 	}
