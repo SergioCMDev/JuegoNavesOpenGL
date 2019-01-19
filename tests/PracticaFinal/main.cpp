@@ -752,12 +752,9 @@ int main(int argc, char* argv[]) {
 	Shader shaderMeteorito = Utils::GetFullShader("Shaders/MetorVS.vs", "Shaders/MetorFS.fs");
 	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
 
-	//uint32_t texture1 = Model::GetTexture("Textures/albedo.png", true);
-	//uint32_t texture2 = Model::GetTexture("Textures/specular.png", true);
 	uint32_t textureSuelo = Model::GetTexture("Textures/texture3.png", true);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
 
 	Player player(shaderNavePlayer, posPlayer);
 
@@ -825,6 +822,7 @@ int main(int argc, char* argv[]) {
 	//Si se han linkado bien los shaders, los borramos ya que estan linkados
 	glDeleteVertexArrays(1, &CubeVAO);
 	glDeleteVertexArrays(1, &QuadVAO);
+	glDeleteVertexArrays(1, &SphereVAO);
 
 
 	glfwTerminate();
