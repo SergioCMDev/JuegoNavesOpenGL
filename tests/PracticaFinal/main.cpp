@@ -759,9 +759,9 @@ int main(int argc, char* argv[]) {
 	cout << "Creacion Misil " << endl;
 	posEnemigo = vec3(3.0f, 0.0f, 2.0f);
 
-	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
-	Missile missilePlayer = Missile(shaderMissile, posEnemigo, player);
-	//Missile missilePlayer = Missile(posEnemigo, player);
+	//Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
+	//Missile missilePlayer = Missile(shaderMissile, posEnemigo, player);
+	Missile missilePlayer = Missile(posEnemigo, player);
 
 
 	//Meteor meteor2 = Meteor(shaderMeteorito);
