@@ -223,7 +223,6 @@ void MovimientoJugador(const float &deltaTime, Player* player)
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS) {
 		player->Mover(Player::Movement::Right, deltaTime);
-
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_UP) == GLFW_PRESS) {
 		player->Mover(Player::Movement::Forward, deltaTime);
@@ -240,10 +239,10 @@ void AccionesJugador(Player* player) {
 }
 
 
-void HandlerInput(const double deltaTime, TransferObjects objects) {
+void HandlerInput(const double deltaTime, GameObject node) {
 	MovimientoCamara(deltaTime);
-	if (objects.modelos[0]->_type == Constants::TIPO_PLAYER) {
-		Player* player = GetPlayerReference(objects.modelos[0]);
+	if (node.GetChildren(0)->_type == Constants::TIPO_PLAYER) {
+		Player* player = GetPlayerReference(node.GetChildren(0));
 		MovimientoJugador(deltaTime, player);
 		AccionesJugador(player);
 	}
@@ -442,30 +441,33 @@ int Inicializacion() {
 	return 1;
 };
 
-void MoveObjects(const double deltaTime, TransferObjects transfer) {
-	for (size_t i = 0; i < transfer.numeroModelos; i++)
-	{
-		if (transfer.modelos[i]->_type == Constants::TIPO_METEOR)
-		{
-			GameObject *g = transfer.modelos[i];
-			Meteor* meteor = static_cast<Meteor*>(g);
+//void MoveObjects(const double deltaTime, TransferObjects transfer) {
+//	for (size_t i = 0; i < transfer.numeroModelos; i++)
+//	{
+//		if (transfer.modelos[i]->_type == Constants::TIPO_METEOR)
+//		{
+//			GameObject *g = transfer.modelos[i];
+//			Meteor* meteor = static_cast<Meteor*>(g);
+//
+//			meteor->Mover(deltaTime);
+//		}
+//		else if (transfer.modelos[i]->_type == Constants::TIPO_MISIL)
+//		{
+//			GameObject *g = transfer.modelos[i];
+//			Missile* misil = static_cast<Missile*>(g);
+//			if (misil->GetParent()->_type == Constants::TIPO_ENEMIGO) {
+//				misil->Mover(GameObject::Movement::Forward, deltaTime);
+//			}
+//			else {
+//				misil->Mover(GameObject::Movement::Backward, deltaTime);
+//				//cout << "Misil Player " << endl;
+//			}
+//		}
+//	}
+//}
 
-			meteor->Mover(deltaTime);
-		}
-		else if (transfer.modelos[i]->_type == Constants::TIPO_MISIL)
-		{
-			GameObject *g = transfer.modelos[i];
-			Missile* misil = static_cast<Missile*>(g);
-			if (misil->GetParent()->_type == Constants::TIPO_ENEMIGO) {
-				misil->Mover(GameObject::Movement::Forward, deltaTime);
-			}
-			else {
-				misil->Mover(GameObject::Movement::Backward, deltaTime);
-				//cout << "Misil Player " << endl;
-			}
-		}
-	}
-}
+
+
 
 #pragma region Render Figures
 
@@ -671,6 +673,39 @@ void RenderGameObjects2(GameObject& gamobjectParent) {
 	}
 }
 
+void MoveObjects2(const double deltaTime, GameObject node) {
+	if (node.HasChildren()) {
+		for (size_t i = 0; i < node.GetNumberChildren(); i++)
+		{
+			MoveObjects2(deltaTime, *node.GetChildren(i));
+		}
+	}
+	else {
+		if (node._type == Constants::TIPO_PLAYER) {
+
+			Player* player = GetPlayerReference(&node);
+			MovimientoJugador(deltaTime, player);
+			AccionesJugador(player);
+		}
+		else if (node._type == Constants::TIPO_METEOR)
+		{
+			GameObject *g = &node;
+			Meteor* meteor = static_cast<Meteor*>(g);
+			meteor->Mover(deltaTime);
+		}
+		else if (node._type == Constants::TIPO_ENEMIGO) {
+			GameObject *g = &node;
+			Enemy* enemyShip = static_cast<Enemy*>(g);
+			enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
+		}
+		else if (node._type == Constants::TIPO_MISIL) {
+			GameObject *g = &node;
+			Missile* missile = static_cast<Missile*>(g);
+			missile->Mover(GameObject::Movement::Backward, deltaTime);
+		}
+	}
+}
+
 
 uint32_t createVertexData(const float* vertices, const uint32_t n_verts, const uint32_t* indices, const uint32_t n_indices) {
 	unsigned int VAO, VBO, EBO;
@@ -855,9 +890,13 @@ int main(int argc, char* argv[]) {
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		//HandlerInput(deltaTime, transfer);
-
+		HandlerInput(deltaTime, camera);
+		//Create Method for this
+		if (glfwGetKey(window.GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+			glfwSetWindowShouldClose(window.GetWindow(), true);
+		}
 		RenderScene(quad, cube, sphere);
+		MoveObjects2(deltaTime, camera);
 		RenderGameObjects2(camera);
 		//MoveObjects(deltaTime, transfer);
 		glfwSwapBuffers(window.GetWindow());
