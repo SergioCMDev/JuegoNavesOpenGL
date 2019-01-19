@@ -1,13 +1,14 @@
 #include "Meteor.h"
 #include<GLFW/glfw3.h>
 
-vec3 positions[5]{
-	vec3(5.0f, 0.0f,  10.0f), //X invertida
-	vec3(0.0f, 0.0f,  10.0f),
-	vec3(-4.0f, 0.0f, 10.0f),
-	vec3(2.0f, 0.0f,  10.0f),
-	vec3(2.0f,0.0f,   10.0f),
+glm::vec3 positions[] = {
+ glm::vec3(0.0f,  0.0f, 15.0f), //z == arriba/abajo, X derecha/izq invertida
+ glm::vec3(5.0f,  0.0f, 15.0f),
+ glm::vec3(8.0f, 0.0f, 15.0f),
+ glm::vec3(-5.0f,  0.0f, 15.0f),
+ glm::vec3(-8.0f, 0.0f, 15.0f),
 };
+
 
 
 Meteor::Meteor() {

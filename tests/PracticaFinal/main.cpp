@@ -585,7 +585,7 @@ void MoveObjects(const double deltaTime, GameObject node) {
 		else if (node._type == Constants::TIPO_ENEMIGO) {
 			GameObject *g = &node;
 			Enemy* enemyShip = static_cast<Enemy*>(g);
-			enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
+			//enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
 		}
 		else if (node._type == Constants::TIPO_MISIL) {
 			GameObject *g = &node;
@@ -734,24 +734,19 @@ int main(int argc, char* argv[]) {
 	navesEnemigas.AddChildren(&enemy);
 	camera.AddChildren(&navesEnemigas);
 
+	Meteor meteorsParent;
+
+	meteorsParent.AddChildren(&meteor);
+	camera.AddChildren(&navesEnemigas);
+
+	camera.AddChildren(&meteorsParent);
+
 
 	//Meteor meteor2 = Meteor(shaderMeteorito);
 	//Meteor meteor3 = Meteor(shaderMeteorito);
 	//Meteor meteor4 = Meteor(shaderMeteorito);
 	//const uint32_t numeroObjetos = 3;
 	//GameObject *objectosssArray[numeroObjetos];
-
-	//TransferObjects transfer = {
-	//	Constants::MaximoObjectosTransferencia,
-	//	numeroObjetos,
-	//	*objectosssArray,
-	//};
-	//transfer.modelos[0] = &player;
-	////transfer.modelos[1] = &meteor;
-	////transfer.modelos[2] = &meteor2;
-	////transfer.modelos[3] = &meteor3;
-	//transfer.modelos[1] = &enemy;
-	//transfer.modelos[2] = &missilePlayer;
 
 	Cube cube = Cube();
 	Quad quad = Quad();
