@@ -739,7 +739,6 @@ int main(int argc, char* argv[]) {
 	Shader shaderCube = Utils::GetFullShader("Shaders/CubeVS.vs", "Shaders/CubeFS.fs");
 	Shader shaderQuad = Utils::GetFullShader("Shaders/QuadVS.vs", "Shaders/QuadFS.fs");
 	Shader shaderSphere = Utils::GetFullShader("Shaders/SphereVS.vs", "Shaders/SphereFS.fs");
-	Shader shaderNavePlayer = Utils::GetFullShader("Shaders/NavePlayerVS.vs", "Shaders/NavePlayerFS.fs");
 	Shader shaderMeteorito = Utils::GetFullShader("Shaders/MetorVS.vs", "Shaders/MetorFS.fs");
 	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
 	cout << "Creacion Shaders " << endl;
@@ -753,7 +752,7 @@ int main(int argc, char* argv[]) {
 
 	vec3 posEnemigo = vec3(3.0f, 0.0f, 0.0f);
 
-	Enemy enemy(shaderNavePlayer, posEnemigo);
+	Enemy enemy(posEnemigo);
 	//camera._children[0] = &naves;
 
 	Meteor meteor = Meteor(shaderMeteorito);

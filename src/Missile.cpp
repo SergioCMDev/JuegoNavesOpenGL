@@ -20,6 +20,7 @@ Missile::Missile(glm::vec3 position, GameObject* parent)
 
 Missile::Missile(Shader& shaderMissile, glm::vec3 position, GameObject parent)
 {
+
 	_model = Model(pathToModel);
 	_shader = shaderMissile;
 	SetPosition(position);
