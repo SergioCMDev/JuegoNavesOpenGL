@@ -3,17 +3,17 @@
 Enemy::Enemy() {
 
 }
-Enemy::Enemy(Shader & shader, glm::vec3 position)
-{
-	shader.Use();
-	position = vec3(0.0f, 0.0f, 5.0f);
-	_model = Model(pathToModel);
-	_shader = shader;
-	SetPosition(position);
-	_velocity = 2.5f;
-	_type = Constants::TIPO_ENEMIGO;
-	_scale = glm::vec3(0.3f);
-}
+//Enemy::Enemy(Shader & shader, glm::vec3 position)
+//{
+//	shader.Use();
+//	position = vec3(0.0f, 0.0f, 5.0f);
+//	_model = Model(pathToModel);
+//	_shader = shader;
+//	SetPosition(position);
+//	_velocity = 2.5f;
+//	_type = Constants::TIPO_ENEMIGO;
+//	_scale = glm::vec3(0.3f);
+//}
 
 Enemy::Enemy(glm::vec3 position)
 {
@@ -23,13 +23,13 @@ Enemy::Enemy(glm::vec3 position)
 	_model = Model(pathToModel);
 	_shader = shaderNaveEnemiga;
 	SetPosition(position);
-	_velocity = 2.5f;
+	_velocity = 0.2f;
 	_type = Constants::TIPO_ENEMIGO;
 	_scale = glm::vec3(0.3f);
 }
 
 Enemy::~Enemy() {
-
+	//delete this;
 }
 
 void Enemy::Disparar() {

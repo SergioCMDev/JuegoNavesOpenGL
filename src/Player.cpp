@@ -33,16 +33,10 @@ Player::Player(Shader & shader, glm::vec3 position)
 }
 
 Player::~Player() {
-	delete this;
+	//delete this;
 }
 
 void Player::Disparar() {
-	//Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
-
-	//Missile missile(shaderMissile, _position);
-	//AddChildren(&missile);
-	//Missile missile(shaderMissile, _position, *this);
-	//this->GetChildren(0)->AddChildren(&missile);
 
 	if (_lastMissileUsed < 5) {
 		_disparando = true;

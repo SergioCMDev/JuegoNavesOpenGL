@@ -15,6 +15,8 @@ Model::Model()
 
 Model::~Model()
 {
+	//delete this;
+
 }
 
 void Model::loadModel(string const path) {

@@ -548,39 +548,31 @@ void RenderGameObjects(Node* node) {
 }
 
 void MoveObjects(const double deltaTime, Node* node) {
-	//cout << node->GetGameObject()->_type << endl;
-
 	if (node->HasChildren()) {
-		cout << "Tiene hijos" << endl;
 		for (size_t i = 0; i < node->GetNumberChildren(); i++)
 		{
 			MoveObjects(deltaTime, node->GetChildren(i));
 		}
 	}
 	if (node->GetGameObject() != NULL) {
-		cout << "Entramos en move" << endl;
 		cout << node->GetGameObject()->_type << endl;
 		if (node->GetGameObject()->_type == Constants::TIPO_PLAYER) {
-			cout << "Movemos player" << endl;
 
 			Player* player = GetPlayerReference(node->GetGameObject());
 			MovimientoJugador(deltaTime, player);
 		}
 		else if (node->GetGameObject()->_type == Constants::TIPO_METEOR)
 		{
-			cout << "Movemos meteor" << endl;
 			GameObject *g = node->GetGameObject();
 			Meteor* meteor = static_cast<Meteor*>(g);
 			meteor->Mover(deltaTime);
 		}
 		else if (node->GetGameObject()->_type == Constants::TIPO_ENEMIGO) {
-			cout << "Movemos enemigo" << endl;
 			GameObject *g = node->GetGameObject();
 			Enemy* enemyShip = static_cast<Enemy*>(g);
-			//enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
+			enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
 		}
 		else if (node->GetGameObject()->_type == Constants::TIPO_MISIL) {
-			cout << "Movemos misil" << endl;
 			GameObject *g = node->GetGameObject();
 			Missile* missile = static_cast<Missile*>(g);
 			if (missile->_render) {

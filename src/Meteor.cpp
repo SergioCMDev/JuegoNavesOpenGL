@@ -64,7 +64,7 @@ Meteor::Meteor(Shader & shader)
 }
 
 Meteor::~Meteor() {
-	/*_instance = nullptr;*/
+	//delete this;
 }
 
 

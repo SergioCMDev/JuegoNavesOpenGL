@@ -8,10 +8,13 @@ Camera::Camera() :
 	_yaw(k_Yaw), _pitch(k_Pitch), _fov(k_FOV) {
 	updateCameraVectors();
 }
-Camera::~Camera() {}
+Camera::~Camera() {
+	//delete this;
 
-Camera::Camera(const glm::vec3 position, 
-			   const glm::vec3 up, const float yaw, const float pitch) :
+}
+
+Camera::Camera(const glm::vec3 position,
+	const glm::vec3 up, const float yaw, const float pitch) :
 	_position(position),
 	_worldUp(up),
 	_yaw(yaw), _pitch(pitch), _fov(k_FOV) {

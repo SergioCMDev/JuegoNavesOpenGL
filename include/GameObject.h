@@ -23,7 +23,7 @@ public:
 	uint32_t _type;
 
 	Shader &_shader = Shader();
-	virtual ~GameObject() {};
+	~GameObject() {};
 	GameObject();
 	float GetVelocity();
 	glm::vec3 GetRightVector();

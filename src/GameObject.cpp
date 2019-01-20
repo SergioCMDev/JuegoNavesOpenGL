@@ -18,6 +18,11 @@ GameObject::GameObject()
 //	_position = position;
 //}
 
+//GameObject::~GameObject()
+//{
+//	delete this;
+//}
+
 Node* GameObject::GetActualNode() {
 	return _actualNode;
 }

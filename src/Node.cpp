@@ -12,9 +12,11 @@ Node::Node(GameObject* gameObject)
 	}
 }
 
-void Node::Delete()
+Node::~Node()
 {
-	delete  this;
+	//GetGameObject()->~GameObject();
+	//DeleteChilds();
+	//delete this;
 }
 bool Node::Seen() {
 	return _seen;
@@ -22,9 +24,13 @@ bool Node::Seen() {
 
 void Node::DeleteChilds()
 {
-	for (size_t i = 0; i < 10; i++)
-	{
-		_childrens[i]->Delete();
+	if (this != NULL) {
+		if (HasChildren()) {
+			for (size_t i = 0; i < GetNumberChildren() - 1; i++)
+			{
+				_childrens[i]->~Node();
+			}
+		}
 	}
 }
 

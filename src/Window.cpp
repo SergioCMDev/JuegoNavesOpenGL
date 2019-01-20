@@ -17,6 +17,8 @@ void Window::AddCamera(Camera* camera) {
 
 Window::~Window() {
 	_window = nullptr;
+	//delete this;
+
 }
 
 Window* Window::Instance()

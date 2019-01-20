@@ -44,7 +44,7 @@ Missile::Missile(Shader& shaderMissile, glm::vec3 position)
 
 
 Missile::~Missile() {
-	//delete(;
+	//delete this;
 }
 
 void Missile::Render(glm::mat4 &projection, glm::mat4 &view)

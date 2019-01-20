@@ -11,7 +11,7 @@ public:
 	Node();
 	Node(GameObject* gameObject);
 	GameObject* GetGameObject();
-	void Delete();
+	~Node();
 	void DeleteChilds();
 	void AddChildren(Node* node);
 	bool HasChildren();
