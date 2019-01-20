@@ -16,14 +16,15 @@ public:
 	Meteor(Shader & shader);
 	Meteor(glm::vec3 position);
 	Meteor(Shader & shader, glm::vec3 position);
+
 	~Meteor();
-	vec3 _scale = vec3(1.0f);
 	void Render(glm::mat4 &projection, glm::mat4 &view);
 	static uint32_t GetNumberPositions();
 	static vec3 GetMeteorPosition(uint32_t index);
+	//vec3 GetScale();
 private:
 
-	//float _velocity = 0.5f;
+	vec3 _scale = vec3(1.0f);
 	const char* pathToModel = "../assets/obj/Meteor/Meteor.obj";
 
 };

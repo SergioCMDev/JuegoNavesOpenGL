@@ -31,6 +31,25 @@ void GameObject::SetActualNode(Node * node) {
 	_actualNode = node;
 }
 
+vec3 GameObject::GetScale()
+{
+	return _scale;
+}
+
+void GameObject::SetScale(vec3 scale)
+{
+	_scale = scale;
+}
+
+uint32_t GameObject::GetType()
+{
+	return _type;
+}
+
+void GameObject::SetType(uint32_t type)
+{
+	_type = type;
+}
 
 glm::vec3 GameObject::GetPosition()
 {
@@ -42,13 +61,10 @@ void GameObject::SetPosition(glm::vec3 position)
 	_position = position;
 }
 
-
-
 glm::vec3 GameObject::GetUpVector()
 {
 	return _up;
 }
-
 
 glm::vec3 GameObject::GetRightVector()
 {
@@ -58,4 +74,17 @@ glm::vec3 GameObject::GetRightVector()
 float GameObject::GetVelocity()
 {
 	return _velocity;
+}
+
+void GameObject::SetVelocity(float velocity)
+{
+	_velocity = velocity;
+}
+
+Model GameObject::GetModel() {
+	return _model;
+}
+
+void GameObject::SetModel(Model model) {
+	_model = model;
 }

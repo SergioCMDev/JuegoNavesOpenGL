@@ -22,8 +22,11 @@ public:
 	void Rotate(glm::mat4 &_modelMatrix);
 	~Missile();
 	void Render(glm::mat4 &projection, glm::mat4 &view);
-	bool _render = false;
+	bool Rendered();
+	void Activate();
+	void Deactivate();
 private:
+	bool _active = false;
 	const char* pathToModel = "../assets/obj/Missile/asca.obj";
 	glm::mat4 _modelMatrix;
 };

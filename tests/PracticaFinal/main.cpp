@@ -220,7 +220,7 @@ void AccionesJugador(Player* player) {
 
 void HandlerInput(const double deltaTime, Node* node) {
 	MovimientoCamara(deltaTime);
-	if (node->GetChildren(0)->GetGameObject()->_type == Constants::TIPO_PLAYER) {
+	if (node->GetChildren(0)->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
 		Player* player = GetPlayerReference(node->GetChildren(0)->GetGameObject());
 		MovimientoJugador(deltaTime, player);
 		AccionesJugador(player);
@@ -512,13 +512,13 @@ void RenderGameObjects(Node* node) {
 		}
 	}
 	if (node->GetGameObject() != NULL) {
-		if (node->GetGameObject()->_type == Constants::TIPO_PLAYER) {
+		if (node->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
 			Player* player = GetPlayerReference(node->GetGameObject());
 
 			//cout << "Player " << endl;
 			player->Render(projection, view);
 		}
-		else if (node->GetGameObject()->_type == Constants::TIPO_METEOR)
+		else if (node->GetGameObject()->GetType() == Constants::TIPO_METEOR)
 		{
 			GameObject *g = node->GetGameObject();
 			//cout << "Meteor " << endl;
@@ -526,7 +526,7 @@ void RenderGameObjects(Node* node) {
 
 			meteor->Render(projection, view);
 		}
-		else if (node->GetGameObject()->_type == Constants::TIPO_ENEMIGO) {
+		else if (node->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
 			GameObject *g = node->GetGameObject();
 			//cout << "Enemigo " << endl;
 
@@ -534,11 +534,11 @@ void RenderGameObjects(Node* node) {
 
 			enemyShip->Render(projection, view);
 		}
-		else if (node->GetGameObject()->_type == Constants::TIPO_MISIL) {
+		else if (node->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
 			GameObject *g = node->GetGameObject();
 			Missile* missile = static_cast<Missile*>(g);
 			//cout << "Missil " << endl;
-			if (missile->_render) {
+			if (missile->Rendered()) {
 				missile->Render(projection, view);
 			}
 
@@ -555,27 +555,27 @@ void MoveObjects(const double deltaTime, Node* node) {
 		}
 	}
 	if (node->GetGameObject() != NULL) {
-		cout << node->GetGameObject()->_type << endl;
-		if (node->GetGameObject()->_type == Constants::TIPO_PLAYER) {
+		//cout << node->GetGameObject()->_type << endl;
+		if (node->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
 
 			Player* player = GetPlayerReference(node->GetGameObject());
 			MovimientoJugador(deltaTime, player);
 		}
-		else if (node->GetGameObject()->_type == Constants::TIPO_METEOR)
+		else if (node->GetGameObject()->GetType() == Constants::TIPO_METEOR)
 		{
 			GameObject *g = node->GetGameObject();
 			Meteor* meteor = static_cast<Meteor*>(g);
 			meteor->Mover(deltaTime);
 		}
-		else if (node->GetGameObject()->_type == Constants::TIPO_ENEMIGO) {
+		else if (node->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
 			GameObject *g = node->GetGameObject();
 			Enemy* enemyShip = static_cast<Enemy*>(g);
 			enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
 		}
-		else if (node->GetGameObject()->_type == Constants::TIPO_MISIL) {
+		else if (node->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
 			GameObject *g = node->GetGameObject();
 			Missile* missile = static_cast<Missile*>(g);
-			if (missile->_render) {
+			if (missile->Rendered()) {
 				missile->Mover(GameObject::Movement::Backward, deltaTime);
 			}
 		}

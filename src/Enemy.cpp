@@ -20,12 +20,12 @@ Enemy::Enemy(glm::vec3 position)
 	Shader shaderNaveEnemiga = Utils::GetFullShader("Shaders/NaveEnemyVS.vs", "Shaders/NaveEnemyFS.fs");
 	shaderNaveEnemiga.Use();
 	position = vec3(0.0f, 0.0f, 5.0f);
-	_model = Model(pathToModel);
+	SetModel(Model(pathToModel));
 	_shader = shaderNaveEnemiga;
 	SetPosition(position);
-	_velocity = 0.2f;
-	_type = Constants::TIPO_ENEMIGO;
-	_scale = glm::vec3(0.3f);
+	SetVelocity(0.2f);
+	SetType(Constants::TIPO_ENEMIGO);
+	SetScale(glm::vec3(0.3f));
 }
 
 Enemy::~Enemy() {
@@ -43,28 +43,32 @@ void Enemy::Render(glm::mat4 &projection, glm::mat4 &view)
 	glm::mat4 model = mat4(1.0f);
 
 	_shader.Use();
-	model = glm::translate(model, _position);
+	model = glm::translate(model, GetPosition());
 
-	model = glm::scale(model, _scale);
+	model = glm::scale(model, GetScale());
 
 	_shader.Set("projection", projection);
 	_shader.Set("view", view);
 	_shader.Set("model", model);
-	_model.Draw(_shader);
+	GetModel().Draw(_shader);
 }
 
 void Enemy::Mover(const Movement movement, const float deltaTime)
 {
 	float actualVelocity = GetVelocity() * deltaTime;
-	float prev_y = _position.y;
 	switch (movement) {
 	case Movement::Forward:
-		_position += GetUpVector() * actualVelocity; break;
+		SetPosition(GetPosition() + GetUpVector() * actualVelocity); break;
 	case Movement::Backward:
-		_position -= GetUpVector() * actualVelocity; break;
+		SetPosition(GetPosition() - GetUpVector() * actualVelocity); break;
+
+		//_position -= GetUpVector() * actualVelocity; break;
 	case Movement::Left:
-		_position += GetRightVector() * actualVelocity; break;
+		SetPosition(GetPosition() + GetRightVector() * actualVelocity); break;
+
+		//_position += GetRightVector() * actualVelocity; break;
 	case Movement::Right:
-		_position -= GetRightVector() * actualVelocity; break;
+		SetPosition(GetPosition() - GetRightVector() * actualVelocity); break;
+		//_position -= GetRightVector() * actualVelocity; break;
 	}
 }

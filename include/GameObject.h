@@ -19,30 +19,38 @@ public:
 		Left = 2,
 		Right = 3,
 	};
-	Model _model;
-	uint32_t _type;
 
 	Shader &_shader = Shader();
 	~GameObject() {};
 	GameObject();
 	float GetVelocity();
+	void SetVelocity(float velocity);
+
 	glm::vec3 GetRightVector();
 	glm::vec3 GetUpVector();
+
 	glm::vec3 GetPosition();
 	void SetPosition(glm::vec3 position);
+
 	Node* GetActualNode();
 	void SetActualNode(Node * node);
-
+	vec3 GetScale();
+	void SetScale(vec3 scale);
+	uint32_t GetType();
+	void GameObject::SetType(uint32_t type);
 	GameObject(Model * model, Shader& shader, glm::vec3 position);
 	GameObject(const char* pathToModel, Shader& shader, glm::vec3 position);
+	Model GetModel();
+	void SetModel(Model model);
 
-	vec3 _position;
-
+private:
+	Model _model;
+	uint32_t _type;
 	const vec3 _right = vec3(1.0f, 0.0f, 0.0f);
 	const vec3 _up = vec3(0.0f, 0.0f, 1.0f);
 	vec3 _scale;
 	float _velocity = 0.0f;
-private:
+	vec3 _position;
 	Node * _actualNode;
 };
 #endif
