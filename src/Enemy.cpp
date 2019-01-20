@@ -19,7 +19,7 @@ Enemy::Enemy(glm::vec3 position)
 {
 	Shader shaderNaveEnemiga = Utils::GetFullShader("Shaders/NaveEnemyVS.vs", "Shaders/NaveEnemyFS.fs");
 	shaderNaveEnemiga.Use();
-	position = vec3(0.0f, 0.0f, 5.0f);
+	//position = vec3(0.0f, 0.0f, 15.0f);
 	SetModel(Model(pathToModel));
 	_shader = shaderNaveEnemiga;
 	SetPosition(position);

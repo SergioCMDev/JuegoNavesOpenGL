@@ -18,6 +18,7 @@
 #include "Meteor.h"
 #include "Enemy.h"
 #include "Missile.h"
+#include "Cube.h"
 
 
 const vec3 posCamera = glm::vec3(0.0f, 20.0f, 0.0f);
@@ -31,7 +32,7 @@ const float screen_width = 800.0f, screen_height = 600.0f;
 float lastY = (float)screen_height / 2.0f;
 float lastX = (float)screen_width / 2.0f;
 
-
+bool debug = true;
 float lastFrame = 0.0f;
 bool firstMouse = true;
 
@@ -128,13 +129,13 @@ struct Quad {
 	};
 };
 
-struct Cube {
+struct CubeStruct {
 	uint32_t numeroIndices = 36;
 	vec3 color;
 	Shader *shader;
 	uint32_t numeroElementosVerticesCubo = 192;
 	uint32_t* VAO;
-
+	vec3 scale = vec3(1.0f);
 	uint32_t indicesCubo[36]{
 		0, 1, 2, 0, 2, 3 //Front
 		,4, 5, 6, 4, 6, 7 //Right
@@ -143,6 +144,7 @@ struct Cube {
 		,16, 17, 18, 16, 18, 19 //Bottom
 		,20, 21, 22, 20, 22, 23 //Top
 	};
+	vec3 position;
 };
 
 using namespace std;
@@ -412,7 +414,7 @@ int Inicializacion() {
 
 	//cuando la ventana cambie de tamaño
 	//glfwSetCursorPosCallback(window.GetWindow(), &Window::OnMouse);
-	//glfwSetCursorPosCallback(window.GetWindow(), OnMouse);
+	glfwSetCursorPosCallback(window.GetWindow(), OnMouse);
 	glfwSetFramebufferSizeCallback(window.GetWindow(), OnChangeFrameBufferSize);
 	glfwSetScrollCallback(window.GetWindow(), OnScroll);
 	glfwSetInputMode(window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -421,7 +423,7 @@ int Inicializacion() {
 
 #pragma region Render Figures
 
-void RenderFigure(const Shader & shader, glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model, const uint32_t &VAO, const uint32_t &numeroElementos)
+void RenderFigureMain(const Shader & shader, glm::mat4 &projection, glm::mat4 &view, glm::mat4 &model, const uint32_t &VAO, const uint32_t &numeroElementos)
 {
 	shader.Set("projection", projection);
 	shader.Set("view", view);
@@ -439,19 +441,18 @@ void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view)
 	glm::mat4 model = mat4(1.0f);
 	model = glm::translate(model, posSuelo);
 	model = glm::scale(model, vec3(20.0f));
-	RenderFigure(*quad.shader, projection, view, model, *quad.VAO, quad.numeroIndicesQuad);
+	RenderFigureMain(*quad.shader, projection, view, model, *quad.VAO, quad.numeroIndicesQuad);
 }
 
-void RenderCube(Cube &cube, glm::mat4 &projection, glm::mat4 &view, vec3 position)
+void RenderCube(CubeStruct &cube, glm::mat4 &projection, glm::mat4 &view, vec3 position)
 {
 
-	cube.shader->Use();
-	cube.shader->Set("quadTexture", 4);
-	cube.shader->Set("color", cube.color);
 	glm::mat4 model = mat4(1.0f);
+	cube.shader->Use();
+	cube.shader->Set("color", cube.color);
 	model = glm::translate(model, position);
-	model = glm::scale(model, vec3(1.0f));
-	RenderFigure(*cube.shader, projection, view, model, *cube.VAO, cube.numeroIndices);
+	model = glm::scale(model, cube.scale);
+	RenderFigureMain(*cube.shader, projection, view, model, *cube.VAO, cube.numeroIndices);
 }
 
 
@@ -465,38 +466,42 @@ void RenderSphere(Sphere &sphere, glm::mat4 &projection, glm::mat4 &view)
 	model = glm::translate(model, sphere.position);
 	model = glm::scale(model, sphere.scale);
 
-	RenderFigure(*sphere.shader, projection, view, model, *sphere.VAO, sphere.numeroIndices);
+	RenderFigureMain(*sphere.shader, projection, view, model, *sphere.VAO, sphere.numeroIndices);
 
 }
 #pragma endregion
 
-void RenderScene(Quad quad, Cube cube, Sphere sphere) {
+void RenderScene(Quad quad, CubeStruct cube, Sphere sphere, Cube cubeClass) {
 
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
 
+	cubeClass._color = vec3(1.0f);
+	cubeClass.Render(projection, view, vec3(0.0f));
 	//Dibujamos Suelo
 	RenderQuadSuelo(quad, projection, view);
+	if (debug) {
 
-	//Dibujamos sphera luz
-	RenderSphere(sphere, projection, view);
+		//Dibujamos sphera luz
+		RenderSphere(sphere, projection, view);
 
-	//Dibujamos Cubos Meteoritos
-	cube.color = vec3(1.0f);
-	for (size_t i = 0; i < Meteor::GetNumberPositions(); i++)
-	{
-		//RenderCube(cube, projection, view, MeteorOriginPositions[i]);
-		RenderCube(cube, projection, view, Meteor::GetMeteorPosition(i));
-	}
+		//Dibujamos Cubos Meteoritos
+		cube.color = vec3(1.0f);
+		cube.scale = vec3(1.0f);
+		for (size_t i = 0; i < Meteor::GetNumberPositions(); i++)
+		{
+			RenderCube(cube, projection, view, Meteor::GetMeteorPosition(i));
+		}
 
-	//dibujamos cubos naves
-	cube.color = vec3(1.0f, 0.0f, 0.0f);
-	for (size_t i = 0; i < sizeof(EnemyShipOriginPositions) / sizeof(glm::vec3); i++)
-	{
-		cube.shader->Set("color", vec3(1.0f, 0.0f, 0.0f));
-		RenderCube(cube, projection, view, EnemyShipOriginPositions[i]);
+		//dibujamos cubos naves
+		cube.color = vec3(1.0f, 0.0f, 0.0f);
+		for (size_t i = 0; i < sizeof(EnemyShipOriginPositions) / sizeof(glm::vec3); i++)
+		{
+			cube.shader->Set("color", cube.color);
+			RenderCube(cube, projection, view, EnemyShipOriginPositions[i]);
+		}
 	}
 
 	glBindVertexArray(0);
@@ -558,7 +563,6 @@ void MoveObjects(const double deltaTime, Node* node) {
 		}
 	}
 	if (node->GetGameObject() != NULL) {
-		//cout << node->GetGameObject()->_type << endl;
 		if (node->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
 
 			Player* player = GetPlayerReference(node->GetGameObject());
@@ -691,18 +695,64 @@ uint32_t createVertexDataQuad(const float* vertices, const uint32_t n_verts, con
 
 bool CheckCollisionsGameObjects(GameObject* x, GameObject* y) {
 	bool collision = false;
+	//cout << "X " << x->GetType() << endl;
+	//cout << x->GetPosition().x << x->GetPosition().y << endl;
+	//cout << "Y " << y->GetType() << endl;
+	//cout << y->GetPosition().x << y->GetPosition().y << endl;
+	//if (x->GetPosition().y == y->GetPosition().y) {
+	//	cout << "Misma altura" << endl;
+	//}
+	bool collisionX = x->GetPosition().x + 2 >= y->GetPosition().x  &&  y->GetPosition().x >= x->GetPosition().x;
+	bool collisionZ = x->GetPosition().z >= y->GetPosition().z  &&  y->GetPosition().z >= x->GetPosition().z;
 
-	bool collisionX = x->GetPosition().x >= y->GetPosition().x  &&  y->GetPosition().x >= x->GetPosition().x;
+	//collisionX = x->GetPosition().x >= y->GetPosition().x;
+	//collisionZ = true;
 	if (collisionX) {
-		cout << "collisionX " << endl;
+		cout << "MISMA X" << endl;
 	}
+	else {
+
+		cout << "DISTINTA X" << endl;
+	}
+	if (collisionZ) {
+		cout << "MISMA Z " << endl;
+	}
+	else {
+
+		cout << "DISTINTA Z" << endl;
+	}
+	//if (collisionX && collisionZ) {
+
+	//	cout << "COLLISION " << endl;
+	//}
+	//else {
+
+	//	cout << "NOOOOOOOOOOOOOOOOOOOOOOOOO COLLISION " << endl;
+	//}
 	return collision;
 }
 
 void CheckCollisions(Node* node) {
-	CheckCollisionsGameObjects(node->GetChildren(0)->GetGameObject(), node->GetChildren(1)->GetGameObject());
+	CheckCollisionsGameObjects(node->GetChildren(0)->GetGameObject(), node->GetChildren(1)->GetChildren(0)->GetGameObject());
 }
 
+
+void ColliderPlayer(Player * player, Cube &cube)
+{
+	vec3 position = player->GetPosition();
+	glm::mat4 view = camera.GetViewMatrix();
+	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
+	cube._scale = vec3(3.0f, 4.0f, 5.5f);
+	cube._color = vec3(1.0f);
+	cube.Render(projection, view, position);
+	//RenderCube(cube, projection, view, position);
+}
+
+void RenderColliders(Node * node, Cube cube) {
+	Player* player = GetPlayerReference(node->GetChildren(0)->GetGameObject());
+	ColliderPlayer(player, cube);
+
+}
 
 int main(int argc, char* argv[]) {
 	if (!Inicializacion()) {
@@ -723,8 +773,9 @@ int main(int argc, char* argv[]) {
 	cout << "Creacion Player " << endl;
 	Player player(posPlayer);
 
+
 	cout << "Creacion Enemigo " << endl;
-	vec3 posEnemigo = vec3(3.0f, 0.0f, 0.0f);
+	vec3 posEnemigo = vec3(0.0f, 0.0f, 15.0f);
 	Enemy enemyGameObject(posEnemigo);
 
 	cout << "Creacion Meteorito " << endl;
@@ -779,14 +830,17 @@ int main(int argc, char* argv[]) {
 	root.AddChildren(&enemiesParentNode);
 	root.AddChildren(&MeteorsParentNode);
 
-	Cube cube = Cube();
+	Cube cubeClasss = Cube(shaderCube);
+	CubeStruct cube = CubeStruct();
 	Quad quad = Quad();
 	Sphere sphere = Sphere();
+
 	uint32_t CubeVAO = createVertexData(verticesCubo, cube.numeroElementosVerticesCubo, cube.indicesCubo, cube.numeroIndices);
 	uint32_t SphereVAO = createSphere(1);
 	uint32_t QuadVAO = createVertexDataQuad(verticesQuad, quad.numeroElementosVerticesQuad, quad.indicesQuad, quad.numeroIndicesQuad, 5);
 
 	cout << "Creacion Geometrias " << endl;
+
 
 	cube.shader = &shaderCube;
 	quad.shader = &shaderQuad;
@@ -804,14 +858,13 @@ int main(int argc, char* argv[]) {
 		float currentFrame = glfwGetTime();
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-		RenderScene(quad, cube, sphere);
-
-		HandlerInput(deltaTime, &root);
-
-
-		MoveObjects(deltaTime, &root);
+		RenderScene(quad, cube, sphere, cubeClasss);
+		//RenderColliders(&root, cube);
+		//HandlerInput(deltaTime, &root);
 		//CheckCollisions(&root);
-		RenderGameObjects(&root);
+
+		//MoveObjects(deltaTime, &root);
+		//RenderGameObjects(&root);
 
 
 		//MoveObjects(deltaTime, transfer);
