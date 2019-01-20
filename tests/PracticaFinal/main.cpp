@@ -507,6 +507,45 @@ void RenderScene(Quad quad, CubeStruct cube, Sphere sphere, Cube cubeClass) {
 	glBindVertexArray(0);
 }
 
+
+void RenderScene(Quad quad, Sphere sphere, Cube cube) {
+
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glm::mat4 view = camera.GetViewMatrix();
+	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
+
+
+	//Dibujamos Suelo
+	RenderQuadSuelo(quad, projection, view);
+	if (debug) {
+
+		//Dibujamos sphera luz
+		RenderSphere(sphere, projection, view);
+
+		//Dibujamos Cubos Meteoritos
+		cube._color = vec3(1.0f);
+		cube._scale = vec3(1.0f);
+		for (size_t i = 0; i < Meteor::GetNumberPositions(); i++)
+		{
+			cube.Render(projection, view, Meteor::GetMeteorPosition(i));
+			//RenderCube(cube, projection, view, Meteor::GetMeteorPosition(i));
+		}
+
+		//dibujamos cubos naves
+		cube._color = vec3(1.0f, 0.0f, 0.0f);
+		for (size_t i = 0; i < sizeof(EnemyShipOriginPositions) / sizeof(glm::vec3); i++)
+		{
+			cube._shader->Set("color", cube._color);
+			//RenderCube(cube, projection, view, EnemyShipOriginPositions[i]);
+			cube.Render(projection, view, EnemyShipOriginPositions[i]);
+
+		}
+	}
+
+	glBindVertexArray(0);
+}
+
 void RenderGameObjects(Node* node) {
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
@@ -858,13 +897,14 @@ int main(int argc, char* argv[]) {
 		float currentFrame = glfwGetTime();
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-		RenderScene(quad, cube, sphere, cubeClasss);
-		//RenderColliders(&root, cube);
-		//HandlerInput(deltaTime, &root);
-		//CheckCollisions(&root);
+		//RenderScene(quad, cube, sphere, cubeClasss);
+		RenderScene(quad, sphere, cubeClasss);
+		RenderColliders(&root, cubeClasss);
+		HandlerInput(deltaTime, &root);
+		CheckCollisions(&root);
 
-		//MoveObjects(deltaTime, &root);
-		//RenderGameObjects(&root);
+		MoveObjects(deltaTime, &root);
+		RenderGameObjects(&root);
 
 
 		//MoveObjects(deltaTime, transfer);
