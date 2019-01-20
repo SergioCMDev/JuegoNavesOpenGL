@@ -1,3 +1,4 @@
+#pragma once
 #ifndef MISSILE_H
 #define MISSILE_H
 #include<iostream>
@@ -12,8 +13,8 @@ class Missile : public GameObject {
 
 public:
 	Missile();
-	Missile(Shader & shader, glm::vec3 position, GameObject parent);
-	Missile(glm::vec3 position, GameObject parent);
+	Missile(Shader & shader, glm::vec3 position, GameObject* parent);
+	Missile(glm::vec3 position, GameObject* parent);
 	Missile(Shader& shaderMissile, glm::vec3 position);
 	//float GetVelocity();
 	void Mover(const Movement movement, const float deltaTime);
@@ -25,6 +26,5 @@ public:
 private:
 	const char* pathToModel = "../assets/obj/Missile/asca.obj";
 	glm::mat4 _modelMatrix;
-	GameObject* _parent;
 };
 #endif

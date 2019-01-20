@@ -1,5 +1,3 @@
-#include "Model.h"
-
 #include "GameObject.h"
 
 GameObject::GameObject()
@@ -20,6 +18,15 @@ GameObject::GameObject()
 //	_position = position;
 //}
 
+//Node* GameObject::GetActualNode() {
+//	return _actualNode;
+//}
+//
+//void* GameObject::SetActualNode(Node * node) {
+//	_actualNode = node;
+//}
+
+
 glm::vec3 GameObject::GetPosition()
 {
 	return _position;
@@ -30,32 +37,13 @@ void GameObject::SetPosition(glm::vec3 position)
 	_position = position;
 }
 
-bool GameObject::HasChildren() {
-	return _hasChildren;
-}
+
 
 glm::vec3 GameObject::GetUpVector()
 {
 	return _up;
 }
 
-uint32_t GameObject::GetNumberChildren() {
-	return _lastChildren+1;
-}
-
-void GameObject::AddChildren(GameObject* objectChildren) {
-	if (_hasChildren) {
-		_lastChildren++;
-	}
-	else {
-		_hasChildren = true;
-	}
-	_children[_lastChildren] = objectChildren;
-}
-
-GameObject* GameObject::GetChildren(uint32_t idChildren) {
-	return _children[idChildren];
-}
 
 glm::vec3 GameObject::GetRightVector()
 {

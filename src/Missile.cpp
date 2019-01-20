@@ -3,7 +3,7 @@
 Missile::Missile() {
 
 }
-Missile::Missile(glm::vec3 position, GameObject parent)
+Missile::Missile(glm::vec3 position, GameObject* parent)
 {
 	Shader& shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
 
@@ -14,11 +14,11 @@ Missile::Missile(glm::vec3 position, GameObject parent)
 	_velocity = 0.2f;
 	_type = Constants::TIPO_MISIL;
 	_scale = vec3(0.4f);
-	_parent = &parent;
+	//_parent = parent;
 }
 
 
-Missile::Missile(Shader& shaderMissile, glm::vec3 position, GameObject parent)
+Missile::Missile(Shader& shaderMissile, glm::vec3 position, GameObject* parent)
 {
 	shaderMissile.Use();
 	_model = Model(pathToModel);
@@ -27,7 +27,7 @@ Missile::Missile(Shader& shaderMissile, glm::vec3 position, GameObject parent)
 	_velocity = 0.2f;
 	_type = Constants::TIPO_MISIL;
 	_scale = vec3(0.4f);
-	_parent = &parent;
+	//_parent = parent;
 }
 
 Missile::Missile(Shader& shaderMissile, glm::vec3 position)
@@ -55,9 +55,9 @@ void Missile::Render(glm::mat4 &projection, glm::mat4 &view)
 	_modelMatrix = glm::translate(_modelMatrix, _position);
 
 	_modelMatrix = glm::scale(_modelMatrix, _scale);
-	if (_parent->_type == Constants::TIPO_ENEMIGO) {
-		Rotate(_modelMatrix);
-	}
+	//if (_parent->_type == Constants::TIPO_ENEMIGO) {
+	//	Rotate(_modelMatrix);
+	//}
 	_shader.Set("projection", projection);
 	_shader.Set("view", view);
 	_shader.Set("model", _modelMatrix);
@@ -69,9 +69,9 @@ void Missile::Rotate(glm::mat4 &_modelMatrix) {
 
 }
 
-GameObject* Missile::GetParent() {
-	return _parent;
-}
+//GameObject* Missile::GetParent() {
+//	return _parent;
+//}
 
 void Missile::Mover(const Movement movement, const float deltaTime)
 {

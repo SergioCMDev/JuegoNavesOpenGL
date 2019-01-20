@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef METEOR_H
 #define METEOR_H
 #include<iostream>

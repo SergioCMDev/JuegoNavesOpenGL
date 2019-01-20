@@ -5,19 +5,19 @@
 #include<cstdint>
 #include<stdio.h>
 
+#include "Node.h"
 #include "Constants.h"
 #include "Shader.h"
 #include "Utils.h"
 
 #include "Window.h"
 #include "Camera.h"
-#include "GameObject.h"
+//#include "GameObject.h"
 
 #include "Player.h"
 #include "Meteor.h"
 #include "Enemy.h"
 #include "Missile.h"
-#include "Node.h"
 
 
 const vec3 posCamera = glm::vec3(0.0f, 20.0f, 0.0f);
@@ -514,7 +514,6 @@ void RenderScene(Quad quad, Cube cube, Sphere sphere) {
 }
 
 void RenderGameObjects(Node* node) {
-
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
 	if (node->HasChildren()) {
@@ -524,6 +523,7 @@ void RenderGameObjects(Node* node) {
 		}
 	}
 	if (node->GetGameObject() != NULL) {
+		//cout << node->GetGameObject()->_type;
 
 		if (node->GetGameObject()->_type == Constants::TIPO_PLAYER) {
 
@@ -560,12 +560,12 @@ void RenderGameObjects(Node* node) {
 void MoveObjects(const double deltaTime, Node* node) {
 	cout << node->GetGameObject()->_type << endl;
 
-	//if (node->HasChildren()) {
-	//	while (lastChildren < node->GetNumberChildren()) {
-	//		MoveObjects(deltaTime, node->GetChildren(lastChildren), lastChildren);
-	//		lastChildren++;
-	//	}
-	//}
+	if (node->HasChildren()) {
+		for (size_t i = 0; i < node->GetNumberChildren(); i++)
+		{
+			RenderGameObjects(node->GetChildren(i));
+		}
+	}
 
 	if (node->GetGameObject()->_type == Constants::TIPO_PLAYER) {
 
@@ -590,7 +590,7 @@ void MoveObjects(const double deltaTime, Node* node) {
 			missile->Mover(GameObject::Movement::Backward, deltaTime);
 		}
 	}
-	return;
+	//return;
 }
 
 
@@ -723,26 +723,33 @@ int main(int argc, char* argv[]) {
 	posEnemigo = vec3(3.0f, 0.0f, 2.0f);
 
 	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
-	Missile missilePlayer = Missile(shaderMissile, posEnemigo, player);
-	Missile missilePlayer1 = Missile(shaderMissile, posEnemigo, player);
-	Missile missilePlayer2 = Missile(shaderMissile, posEnemigo, player);
-	Missile missilePlayer3 = Missile(shaderMissile, posEnemigo, player);
-	Missile missilePlayer4 = Missile(shaderMissile, posEnemigo, player);
-	Missile missilePlayer5 = Missile(shaderMissile, posEnemigo, player);
-	/*Missile missilePoolPlayer[]{
-		missilePlayer, missilePlayer1, missilePlayer2, missilePlayer3, missilePlayer4, missilePlayer5
-	};*/
-	//player.AddChildren(&missilePlayer);
-	//player.AddChildren(&missilePlayer1);
-	//player.AddChildren(&missilePlayer2);
-	//player.AddChildren(&missilePlayer3);
-	//player.AddChildren(&missilePlayer4);
-	//player.AddChildren(&missilePlayer5);
+	Missile missilePlayer = Missile(shaderMissile, vec3(0.0f), &player);
+	Missile missilePlayer1 = Missile(shaderMissile, vec3(0.0f), &player);
+	Missile missilePlayer2 = Missile(shaderMissile, vec3(0.0f), &player);
+	Missile missilePlayer3 = Missile(shaderMissile, vec3(0.0f), &player);
+	Missile missilePlayer4 = Missile(shaderMissile, vec3(0.0f), &player);
+	Missile missilePlayer5 = Missile(shaderMissile, vec3(0.0f), &player);
+
+	Node missilePool(NULL);
+	Node missile1(&missilePlayer);
+	Node missile2(&missilePlayer1);
+	Node missile3(&missilePlayer2);
+	Node missile4(&missilePlayer3);
+	Node missile5(&missilePlayer4);
+	Node missile6(&missilePlayer5);
+
+	missilePool.AddChildren(&missile1);
+	missilePool.AddChildren(&missile2);
+	missilePool.AddChildren(&missile3);
+	missilePool.AddChildren(&missile4);
+	missilePool.AddChildren(&missile5);
+	missilePool.AddChildren(&missile6);
 
 	//1 level
 	Node root(&camera);
 	//2 level
 	Node playerNode(&player);
+	playerNode.AddChildren(&missilePool);
 	//Enemies
 	Node enemiesParentNode(NULL);
 	Node enemies(&enemyGameObject);

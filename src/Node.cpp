@@ -7,6 +7,8 @@ Node::Node()
 Node::Node(GameObject* gameObject)
 {
 	_gameObject = gameObject;
+	///
+	//_gameObject->SetActualNode(nullptr);
 }
 
 void Node::Delete()
@@ -41,6 +43,7 @@ void Node::AddChildren(Node* node) {
 	else {
 		_hasChildren = true;
 	}
+
 	_childrens[_lastChildren] = node;
 }
 uint32_t Node::GetNumberChildren() {
