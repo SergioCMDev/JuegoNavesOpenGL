@@ -433,7 +433,7 @@ void RenderScene(Quad quad, Sphere sphere, Cube cube) {
 		cube._scale = vec3(1.0f);
 		for (size_t i = 0; i < Meteor::GetNumberPositions(); i++)
 		{
-			cube.Render(projection, view, Meteor::GetMeteorPosition(i));
+			cube.Render(projection, view, Meteor::GetMeteorPosition(i), 1.0f);
 		}
 
 		//dibujamos cubos naves
@@ -441,7 +441,7 @@ void RenderScene(Quad quad, Sphere sphere, Cube cube) {
 		for (size_t i = 0; i < sizeof(EnemyShipOriginPositions) / sizeof(glm::vec3); i++)
 		{
 			cube._shader->Set("color", cube._color);
-			cube.Render(projection, view, EnemyShipOriginPositions[i]);
+			cube.Render(projection, view, EnemyShipOriginPositions[i], 1.0f);
 
 		}
 	}
@@ -616,7 +616,9 @@ bool CheckCollisionsGameObjects(GameObject* x, GameObject* y) {
 
 void CheckCollisions(Node* node) {
 
-	CheckCollisionsGameObjects(node->GetChildren(0)->GetGameObject(), node->GetChildren(1)->GetChildren(0)->GetGameObject());
+	if (CheckCollisionsGameObjects(node->GetChildren(0)->GetGameObject(), node->GetChildren(1)->GetChildren(0)->GetGameObject())) {
+		node->GetChildren(1)->GetChildren(0)->GetGameObject()->Deactivate();
+	}
 }
 
 
@@ -630,7 +632,7 @@ void ColliderPlayer(Player * player, Cube *cube)
 	cube->_position = position;
 
 	player->_collider = cube;
-	cube->Render(projection, view, position);
+	//cube->Render(projection, view, position, 0.0f);
 }
 
 void RenderColliders(Node * node, Cube *cube) {

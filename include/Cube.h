@@ -8,7 +8,7 @@ public:
 	Cube(Shader& shader);
 	Shader *_shader;
 	glm::vec3 _position;
-	void Cube::Render(glm::mat4 projection, glm::mat4 view, vec3 position);
+	void Cube::Render(glm::mat4 projection, glm::mat4 view, vec3 position, float transparency);
 	glm::uint32_t CreateVAO();
 	uint32_t _numeroIndices = 36;
 	glm::vec3 _color;

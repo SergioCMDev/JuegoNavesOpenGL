@@ -12,7 +12,7 @@ Cube::Cube(Shader& shader)
 }
 
 
-void Cube::Render(glm::mat4 projection, glm::mat4 view, vec3 position)
+void Cube::Render(glm::mat4 projection, glm::mat4 view, vec3 position, float transparency)
 {
 
 	glm::mat4 model = mat4(1.0f);
@@ -23,6 +23,7 @@ void Cube::Render(glm::mat4 projection, glm::mat4 view, vec3 position)
 	_shader->Set("projection", projection);
 	_shader->Set("view", view);
 	_shader->Set("model", model);
+	_shader->Set("transparency", transparency);
 	glBindVertexArray(_VAO);
 	glDrawElements(GL_TRIANGLES, _numeroIndices, GL_UNSIGNED_INT, 0);
 }
