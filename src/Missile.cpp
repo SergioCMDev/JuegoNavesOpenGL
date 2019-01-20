@@ -67,20 +67,6 @@ void Missile::Render(glm::mat4 &projection, glm::mat4 &view)
 	GetModel().Draw(_shader);
 }
 
-bool Missile::Rendered()
-{
-	return _active;
-}
-
-void Missile::Activate()
-{
-	_active = true;
-}
-
-void Missile::Deactivate()
-{
-	_active = false;
-}
 
 void Missile::Rotate(glm::mat4 &_modelMatrix) {
 	_modelMatrix = glm::rotate(_modelMatrix, glm::radians(180.0f), glm::vec3(1.0f, 1.0f, 0.0f));

@@ -26,6 +26,7 @@ Enemy::Enemy(glm::vec3 position)
 	SetVelocity(0.2f);
 	SetType(Constants::TIPO_ENEMIGO);
 	SetScale(glm::vec3(0.3f));
+	Deactivate();
 }
 
 Enemy::~Enemy() {
@@ -73,17 +74,3 @@ void Enemy::Mover(const Movement movement, const float deltaTime)
 	}
 }
 
-bool Enemy::Rendered()
-{
-	return _active;
-}
-
-void Enemy::Activate()
-{
-	_active = true;
-}
-
-void Enemy::Deactivate()
-{
-	_active = false;
-}

@@ -88,3 +88,18 @@ Model GameObject::GetModel() {
 void GameObject::SetModel(Model model) {
 	_model = model;
 }
+
+bool GameObject::Rendered()
+{
+	return _active;
+}
+
+void GameObject::Activate()
+{
+	_active = true;
+}
+
+void GameObject::Deactivate()
+{
+	_active = false;
+}

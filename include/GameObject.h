@@ -42,7 +42,9 @@ public:
 	GameObject(const char* pathToModel, Shader& shader, glm::vec3 position);
 	Model GetModel();
 	void SetModel(Model model);
-
+	bool Rendered();
+	void Activate();
+	void Deactivate();
 private:
 	Model _model;
 	uint32_t _type;
@@ -52,5 +54,7 @@ private:
 	float _velocity = 0.0f;
 	vec3 _position;
 	Node * _actualNode;
+	bool _active = false;
+
 };
 #endif

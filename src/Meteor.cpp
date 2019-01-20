@@ -83,14 +83,11 @@ void Meteor::Render(glm::mat4 &projection, glm::mat4 &view)
 	_shader.Set("view", view);
 	_shader.Set("model", model);
 	SetVelocity(GetVelocity() + 0.2f);
-	//_velocity += 0.2f;
 	GetModel().Draw(_shader);
-	//_model.Draw(_shader);
 }
 
 void Meteor::Mover(const float& deltaTime)
 {
 	float actualVelocity = GetVelocity() * deltaTime;
 	SetPosition(GetPosition() - GetUpVector() * actualVelocity);
-	//_position -= GetUpVector() * actualVelocity;
 }

@@ -19,12 +19,8 @@ public:
 	Enemy(Shader & shader, glm::vec3 position);
 	~Enemy();
 	void Render(glm::mat4 &projection, glm::mat4 &view);
-	bool Rendered();
-	void Activate();
-	void Deactivate();
-private:
-	bool _active = false;
 
+private:
 	const char* pathToModel = "../assets/obj/E-45-Aircraft/E 45 Aircraft_obj.obj";
 };
 #endif

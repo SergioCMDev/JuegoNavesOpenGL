@@ -523,16 +523,18 @@ void RenderGameObjects(Node* node) {
 			GameObject *g = node->GetGameObject();
 			//cout << "Meteor " << endl;
 			Meteor* meteor = static_cast<Meteor*>(g);
-
-			meteor->Render(projection, view);
+			if (meteor->Rendered()) {
+				meteor->Render(projection, view);
+			}
 		}
 		else if (node->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
 			GameObject *g = node->GetGameObject();
 			//cout << "Enemigo " << endl;
 
 			Enemy* enemyShip = static_cast<Enemy*>(g);
-
-			enemyShip->Render(projection, view);
+			if (enemyShip->Rendered()) {
+				enemyShip->Render(projection, view);
+			}
 		}
 		else if (node->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
 			GameObject *g = node->GetGameObject();
@@ -565,7 +567,9 @@ void MoveObjects(const double deltaTime, Node* node) {
 		{
 			GameObject *g = node->GetGameObject();
 			Meteor* meteor = static_cast<Meteor*>(g);
-			meteor->Mover(deltaTime);
+			if (meteor->Rendered()) {
+				meteor->Mover(deltaTime);
+			}
 		}
 		else if (node->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
 			GameObject *g = node->GetGameObject();
