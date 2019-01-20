@@ -546,8 +546,9 @@ void RenderGameObjects(Node* node) {
 
 		}
 	}
-
 }
+
+
 
 void MoveObjects(const double deltaTime, Node* node) {
 	if (node->HasChildren()) {
@@ -577,7 +578,6 @@ void MoveObjects(const double deltaTime, Node* node) {
 			if (enemyShip->Rendered()) {
 				enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
 			}
-			enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
 		}
 		else if (node->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
 			GameObject *g = node->GetGameObject();
@@ -688,6 +688,22 @@ uint32_t createVertexDataQuad(const float* vertices, const uint32_t n_verts, con
 	return VAO;
 }
 
+
+bool CheckCollisionsGameObjects(GameObject* x, GameObject* y) {
+	bool collision = false;
+
+	bool collisionX = x->GetPosition().x >= y->GetPosition().x  &&  y->GetPosition().x >= x->GetPosition().x;
+	if (collisionX) {
+		cout << "collisionX " << endl;
+	}
+	return collision;
+}
+
+void CheckCollisions(Node* node) {
+	CheckCollisionsGameObjects(node->GetChildren(0)->GetGameObject(), node->GetChildren(1)->GetGameObject());
+}
+
+
 int main(int argc, char* argv[]) {
 	if (!Inicializacion()) {
 		return -1;
@@ -749,6 +765,7 @@ int main(int argc, char* argv[]) {
 	//Enemies
 	Node enemiesParentNode(NULL);
 	Node enemies(&enemyGameObject);
+	enemyGameObject.Activate();
 	enemiesParentNode.AddChildren(&enemies);
 	//Meteors
 
@@ -791,8 +808,9 @@ int main(int argc, char* argv[]) {
 
 		HandlerInput(deltaTime, &root);
 
-		MoveObjects(deltaTime, &root);
 
+		MoveObjects(deltaTime, &root);
+		//CheckCollisions(&root);
 		RenderGameObjects(&root);
 
 
