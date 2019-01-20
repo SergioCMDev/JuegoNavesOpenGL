@@ -7,8 +7,9 @@ Node::Node()
 Node::Node(GameObject* gameObject)
 {
 	_gameObject = gameObject;
-	///
-	//_gameObject->SetActualNode(nullptr);
+	if (gameObject != NULL) {
+		_gameObject->SetActualNode(this);
+	}
 }
 
 void Node::Delete()

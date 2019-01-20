@@ -31,7 +31,7 @@ public:
 	glm::vec3 GetPosition();
 	void SetPosition(glm::vec3 position);
 	Node* GetActualNode();
-	//void* SetActualNode(Node * node);
+	void SetActualNode(Node * node);
 
 	GameObject(Model * model, Shader& shader, glm::vec3 position);
 	GameObject(const char* pathToModel, Shader& shader, glm::vec3 position);

@@ -18,13 +18,13 @@ GameObject::GameObject()
 //	_position = position;
 //}
 
-//Node* GameObject::GetActualNode() {
-//	return _actualNode;
-//}
+Node* GameObject::GetActualNode() {
+	return _actualNode;
+}
 //
-//void* GameObject::SetActualNode(Node * node) {
-//	_actualNode = node;
-//}
+void GameObject::SetActualNode(Node * node) {
+	_actualNode = node;
+}
 
 
 glm::vec3 GameObject::GetPosition()

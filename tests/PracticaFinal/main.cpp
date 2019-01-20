@@ -12,7 +12,7 @@
 
 #include "Window.h"
 #include "Camera.h"
-//#include "GameObject.h"
+#include "GameObject.h"
 
 #include "Player.h"
 #include "Meteor.h"
