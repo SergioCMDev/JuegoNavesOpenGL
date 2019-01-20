@@ -15,8 +15,9 @@ public:
 	uint32_t _numeroElementosVerticesCubo = 192;
 	glm::uint32_t _VAO;
 	vec3 _scale = vec3(1.0f);
-
+	~Cube();
 
 private:
+
 };
 #endif

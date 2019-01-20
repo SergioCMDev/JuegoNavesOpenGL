@@ -114,3 +114,8 @@ glm::uint32_t Cube::CreateVAO() {
 
 	return VAO;
 }
+
+Cube::~Cube() {
+	//glDeleteVertexArrays(1, &_VAO);
+
+}
