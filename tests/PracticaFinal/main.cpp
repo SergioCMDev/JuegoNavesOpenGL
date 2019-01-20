@@ -212,9 +212,9 @@ void MovimientoJugador(const float &deltaTime, Player* player)
 	}
 }
 
-void AccionesJugador(Player& player) {
+void AccionesJugador(Player* player) {
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
-		player.Disparar();
+		player->Disparar();
 	}
 }
 
@@ -224,17 +224,8 @@ void HandlerInput(const double deltaTime, Node* node) {
 	if (node->GetChildren(0)->GetGameObject()->_type == Constants::TIPO_PLAYER) {
 		Player* player = GetPlayerReference(node->GetChildren(0)->GetGameObject());
 		MovimientoJugador(deltaTime, player);
-		if (glfwGetKey(window.GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS && !player->_disparando) {
-			player->_disparando = true;
+		AccionesJugador(player);
 
-			player->Disparar();
-			//Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
-
-			//Missile missile(shaderMissile, player->_position);
-			//node->GetChildren(0)->AddChildren(&missile);
-		}
-		player->_disparando = false;
-		//AccionesJugador(player);
 	}
 	if (glfwGetKey(window.GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window.GetWindow(), true);
@@ -423,7 +414,7 @@ int Inicializacion() {
 
 	//cuando la ventana cambie de tamaño
 	//glfwSetCursorPosCallback(window.GetWindow(), &Window::OnMouse);
-	glfwSetCursorPosCallback(window.GetWindow(), OnMouse);
+	//glfwSetCursorPosCallback(window.GetWindow(), OnMouse);
 	glfwSetFramebufferSizeCallback(window.GetWindow(), OnChangeFrameBufferSize);
 	glfwSetScrollCallback(window.GetWindow(), OnScroll);
 	glfwSetInputMode(window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -523,23 +514,24 @@ void RenderGameObjects(Node* node) {
 		}
 	}
 	if (node->GetGameObject() != NULL) {
-		//cout << node->GetGameObject()->_type;
-
 		if (node->GetGameObject()->_type == Constants::TIPO_PLAYER) {
-
 			Player* player = GetPlayerReference(node->GetGameObject());
 
+			//cout << "Player " << endl;
 			player->Render(projection, view);
 		}
 		else if (node->GetGameObject()->_type == Constants::TIPO_METEOR)
 		{
 			GameObject *g = node->GetGameObject();
+			//cout << "Meteor " << endl;
 			Meteor* meteor = static_cast<Meteor*>(g);
 
 			meteor->Render(projection, view);
 		}
 		else if (node->GetGameObject()->_type == Constants::TIPO_ENEMIGO) {
 			GameObject *g = node->GetGameObject();
+			//cout << "Enemigo " << endl;
+
 			Enemy* enemyShip = static_cast<Enemy*>(g);
 
 			enemyShip->Render(projection, view);
@@ -547,6 +539,7 @@ void RenderGameObjects(Node* node) {
 		else if (node->GetGameObject()->_type == Constants::TIPO_MISIL) {
 			GameObject *g = node->GetGameObject();
 			Missile* missile = static_cast<Missile*>(g);
+			//cout << "Missil " << endl;
 			if (missile->_render) {
 				missile->Render(projection, view);
 
@@ -558,39 +551,46 @@ void RenderGameObjects(Node* node) {
 }
 
 void MoveObjects(const double deltaTime, Node* node) {
-	cout << node->GetGameObject()->_type << endl;
+	//cout << node->GetGameObject()->_type << endl;
 
 	if (node->HasChildren()) {
+		cout << "Tiene hijos" << endl;
 		for (size_t i = 0; i < node->GetNumberChildren(); i++)
 		{
-			RenderGameObjects(node->GetChildren(i));
+			MoveObjects(deltaTime, node->GetChildren(i));
 		}
 	}
+	if (node->GetGameObject() != NULL) {
+		cout << "Entramos en move" << endl;
+		cout << node->GetGameObject()->_type << endl;
+		if (node->GetGameObject()->_type == Constants::TIPO_PLAYER) {
+			cout << "Movemos player" << endl;
 
-	if (node->GetGameObject()->_type == Constants::TIPO_PLAYER) {
-
-		Player* player = GetPlayerReference(node->GetGameObject());
-		MovimientoJugador(deltaTime, player);
-	}
-	else if (node->GetGameObject()->_type == Constants::TIPO_METEOR)
-	{
-		GameObject *g = node->GetGameObject();
-		Meteor* meteor = static_cast<Meteor*>(g);
-		meteor->Mover(deltaTime);
-	}
-	else if (node->GetGameObject()->_type == Constants::TIPO_ENEMIGO) {
-		GameObject *g = node->GetGameObject();
-		Enemy* enemyShip = static_cast<Enemy*>(g);
-		//enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
-	}
-	else if (node->GetGameObject()->_type == Constants::TIPO_MISIL) {
-		GameObject *g = node->GetGameObject();
-		Missile* missile = static_cast<Missile*>(g);
-		if (missile->_render) {
-			missile->Mover(GameObject::Movement::Backward, deltaTime);
+			Player* player = GetPlayerReference(node->GetGameObject());
+			MovimientoJugador(deltaTime, player);
+		}
+		else if (node->GetGameObject()->_type == Constants::TIPO_METEOR)
+		{
+			cout << "Movemos meteor" << endl;
+			GameObject *g = node->GetGameObject();
+			Meteor* meteor = static_cast<Meteor*>(g);
+			meteor->Mover(deltaTime);
+		}
+		else if (node->GetGameObject()->_type == Constants::TIPO_ENEMIGO) {
+			cout << "Movemos enemigo" << endl;
+			GameObject *g = node->GetGameObject();
+			Enemy* enemyShip = static_cast<Enemy*>(g);
+			//enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
+		}
+		else if (node->GetGameObject()->_type == Constants::TIPO_MISIL) {
+			cout << "Movemos misil" << endl;
+			GameObject *g = node->GetGameObject();
+			Missile* missile = static_cast<Missile*>(g);
+			if (missile->_render) {
+				missile->Mover(GameObject::Movement::Backward, deltaTime);
+			}
 		}
 	}
-	//return;
 }
 
 

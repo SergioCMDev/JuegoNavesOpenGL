@@ -45,12 +45,12 @@ void Player::Disparar() {
 	if (_lastMissileUsed < 5) {
 		_disparando = true;
 		///TODO
-		/*Missile* missile = static_cast<Missile*>(GetActualNode()->GetChildren(_lastMissileUsed)->GetGameObject());
-		missile->_position = _position;
-		missile->_render = true;*/
+		//Missile* missile = static_cast<Missile*>(GetActualNode()->GetChildren(_lastMissileUsed)->GetGameObject());
+		//missile->_position = _position;
+		//missile->_render = true;
 		_lastMissileUsed++;
+		cout << "disparo" << endl;
 	}
-	cout << "disparo" << endl;
 }
 
 void Player::Render(glm::mat4 &projection, glm::mat4 &view)
