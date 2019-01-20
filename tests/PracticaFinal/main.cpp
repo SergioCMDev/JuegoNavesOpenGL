@@ -586,60 +586,54 @@ uint32_t createVertexDataQuad(const float* vertices, const uint32_t n_verts, con
 
 bool CheckCollisionsGameObjects(GameObject* x, GameObject* y) {
 	bool collision = false;
-	//cout << "X " << x->GetType() << endl;
-	//cout << x->GetPosition().x << x->GetPosition().y << endl;
-	//cout << "Y " << y->GetType() << endl;
-	//cout << y->GetPosition().x << y->GetPosition().y << endl;
-	//if (x->GetPosition().y == y->GetPosition().y) {
-	//	cout << "Misma altura" << endl;
-	//}
-	bool collisionX = x->GetPosition().x + 2 >= y->GetPosition().x  &&  y->GetPosition().x >= x->GetPosition().x;
-	bool collisionZ = x->GetPosition().z >= y->GetPosition().z  &&  y->GetPosition().z >= x->GetPosition().z;
+	float posX1 = x->GetPosition().x + x->_collider->_scale.x;
+	bool collisionColliderX1 = posX1 >= y->GetPosition().x		&&		y->GetPosition().x >= x->GetPosition().x;
+	//bool collisionColliderX2 = posX1 == y->GetPosition().x		&&		y->GetPosition().x == x->GetPosition().x;
+	//bool collisionColliderX3 = posX1 <= y->GetPosition().x		&&		y->GetPosition().x <= x->GetPosition().x;
 
-	//collisionX = x->GetPosition().x >= y->GetPosition().x;
-	//collisionZ = true;
-	if (collisionX) {
-		cout << "MISMA X" << endl;
+
+	//bool collisionX1 = x->GetPosition().x + 2 >= y->GetPosition().x;
+	//bool collisionX2 = x->GetPosition().x + 2 == y->GetPosition().x;
+	//bool collisionX2 = x->GetPosition().x + 2 <= y->GetPosition().x;
+
+	float posZ1 = x->GetPosition().z + x->_collider->_scale.z;
+	bool collisionColliderZ1 = posZ1 >= y->GetPosition().z		&&		y->GetPosition().z >= x->GetPosition().z;
+	//bool collisionColliderZ2 = posZ1 == y->GetPosition().z		&&		y->GetPosition().z == x->GetPosition().z;
+	//bool collisionColliderZ3 = posZ1 <= y->GetPosition().z		&&		y->GetPosition().z <= x->GetPosition().z;
+
+	if (collisionColliderZ1 && collisionColliderX1) {
+		cout << "KO" << endl;
+		collision = true;
+
 	}
 	else {
+		cout << " NO KO" << endl;
 
-		cout << "DISTINTA X" << endl;
 	}
-	if (collisionZ) {
-		cout << "MISMA Z " << endl;
-	}
-	else {
 
-		cout << "DISTINTA Z" << endl;
-	}
-	//if (collisionX && collisionZ) {
-
-	//	cout << "COLLISION " << endl;
-	//}
-	//else {
-
-	//	cout << "NOOOOOOOOOOOOOOOOOOOOOOOOO COLLISION " << endl;
-	//}
 	return collision;
 }
 
 void CheckCollisions(Node* node) {
-	
+
 	CheckCollisionsGameObjects(node->GetChildren(0)->GetGameObject(), node->GetChildren(1)->GetChildren(0)->GetGameObject());
 }
 
 
-void ColliderPlayer(Player * player, Cube &cube)
+void ColliderPlayer(Player * player, Cube *cube)
 {
 	vec3 position = player->GetPosition();
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
-	cube._scale = vec3(3.0f, 4.0f, 5.5f);
-	cube._color = vec3(1.0f);
-	cube.Render(projection, view, position);
+	cube->_scale = vec3(3.0f, 4.0f, 5.5f);
+	cube->_color = vec3(1.0f);
+	cube->_position = position;
+
+	player->_collider = cube;
+	cube->Render(projection, view, position);
 }
 
-void RenderColliders(Node * node, Cube cube) {
+void RenderColliders(Node * node, Cube *cube) {
 	Player* player = GetPlayerReference(node->GetChildren(0)->GetGameObject());
 	ColliderPlayer(player, cube);
 
@@ -666,7 +660,7 @@ int main(int argc, char* argv[]) {
 
 
 	cout << "Creacion Enemigo " << endl;
-	vec3 posEnemigo = vec3(0.0f, 0.0f, 15.0f);
+	vec3 posEnemigo = vec3(2.0f, 0.0f, 15.0f);
 	Enemy enemyGameObject(posEnemigo);
 
 	cout << "Creacion Meteorito " << endl;
@@ -674,7 +668,7 @@ int main(int argc, char* argv[]) {
 	Meteor meteorGameObject = Meteor(shaderMeteorito);
 
 	cout << "Creacion Misil " << endl;
-	posEnemigo = vec3(3.0f, 0.0f, 2.0f);
+	//posEnemigo = vec3(3.0f, 0.0f, 2.0f);
 
 	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
 	Missile missilePlayer = Missile(shaderMissile, vec3(0.0f), &player);
@@ -744,7 +738,7 @@ int main(int argc, char* argv[]) {
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		RenderScene(quad, sphere, cubeClasss);
-		RenderColliders(&root, cubeClasss);
+		RenderColliders(&root, &cubeClasss);
 		HandlerInput(deltaTime, &root);
 		CheckCollisions(&root);
 

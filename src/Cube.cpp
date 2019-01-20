@@ -119,3 +119,4 @@ Cube::~Cube() {
 	//glDeleteVertexArrays(1, &_VAO);
 
 }
+

@@ -46,7 +46,7 @@ public:
 	bool Rendered();
 	void Activate();
 	void Deactivate();
-	Cube _collider;
+	Cube *_collider;
 private:
 	Model _model;
 	uint32_t _type;
