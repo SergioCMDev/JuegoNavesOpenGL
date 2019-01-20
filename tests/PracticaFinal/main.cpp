@@ -570,6 +570,9 @@ void MoveObjects(const double deltaTime, Node* node) {
 		else if (node->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
 			GameObject *g = node->GetGameObject();
 			Enemy* enemyShip = static_cast<Enemy*>(g);
+			if (enemyShip->Rendered()) {
+				enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
+			}
 			enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
 		}
 		else if (node->GetGameObject()->GetType() == Constants::TIPO_MISIL) {

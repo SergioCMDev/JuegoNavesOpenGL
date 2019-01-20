@@ -4,6 +4,8 @@
 #include "GameObject.h"
 #include "string.h"
 #include "Shader.h"
+#include "Missile.h"
+#include "Enemy.h"
 #include "Constants.h"
 
 class Node {
@@ -17,6 +19,8 @@ public:
 	bool HasChildren();
 	Node* GetChildren(uint32_t idChildren);
 	uint32_t GetNumberChildren();
+	uint32_t GetNumberChildrenActives();
+
 	bool Seen();
 private:
 	Node* _childrens[10];

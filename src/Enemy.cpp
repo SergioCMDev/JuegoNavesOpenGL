@@ -72,3 +72,18 @@ void Enemy::Mover(const Movement movement, const float deltaTime)
 		//_position -= GetRightVector() * actualVelocity; break;
 	}
 }
+
+bool Enemy::Rendered()
+{
+	return _active;
+}
+
+void Enemy::Activate()
+{
+	_active = true;
+}
+
+void Enemy::Deactivate()
+{
+	_active = false;
+}
