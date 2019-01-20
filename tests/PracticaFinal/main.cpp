@@ -59,37 +59,6 @@ glm::vec3 EnemyShipOriginPositions[] = {
  //glm::vec3(18.0f, 0.0f, 10.0f),
 };
 
-//
-//float verticesCubo[] = {  //vertices      //uvs     //normals
-//		  -0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,     0.0f, 0.0f, 1.0f,//front
-//		  0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,      0.0f, 0.0f, 1.0f,
-//		  0.5f,  0.5f,  0.5f,       1.0f, 1.0f,       0.0f, 0.0f, 1.0f,
-//		  -0.5f, 0.5f,  0.5f,       0.0f, 1.0f,       0.0f, 0.0f, 1.0f,
-//
-//		  0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,      1.0f, 0.0f, 0.0f,//right
-//		  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     1.0f, 0.0f, 0.0f,
-//		  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      1.0f, 0.0f, 0.0f,
-//		  0.5f,  0.5f,  0.5f,       0.0f, 1.0f,       1.0f, 0.0f, 0.0f,
-//
-//		  -0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,    0.0f, 0.0f, -1.0f,//back
-//		  -0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,     0.0f, 0.0f, -1.0f,
-//		  0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,      0.0f, 0.0f, -1.0f,
-//		  0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,     0.0f, 0.0f, -1.0f,
-//
-//		  -0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,     -1.0f, 0.0f, 0.0f,//left
-//		  -0.5f,  0.5f,  0.5f,       1.0f, 1.0f,      -1.0f, 0.0f, 0.0f,
-//		  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     -1.0f, 0.0f, 0.0f,
-//		  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    -1.0f, 0.0f, 0.0f,
-//
-//		  -0.5f,  -0.5f,  0.5f,       0.0f, 1.0f,     0.0f, -1.0f, 0.0f,//bottom
-//		  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    0.0f, -1.0f, 0.0f,
-//		  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     0.0f, -1.0f, 0.0f,
-//		  0.5f,  -0.5f,  0.5f,       1.0f, 1.0f,      0.0f, -1.0f, 0.0f,
-//
-//		  -0.5f,  0.5f,  0.5f,       0.0f, 0.0f,      0.0f, 1.0f, 0.0f,//top
-//		  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,       0.0f, 1.0f, 0.0f,
-//		  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      0.0f, 1.0f, 0.0f,
-//		  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     0.0f, 1.0f, 0.0f };
 
 float verticesQuad[] = {
 	-0.5f,  0.5f,  0.5f,       0.0f, 0.0f,    //top
@@ -465,7 +434,6 @@ void RenderScene(Quad quad, Sphere sphere, Cube cube) {
 		for (size_t i = 0; i < Meteor::GetNumberPositions(); i++)
 		{
 			cube.Render(projection, view, Meteor::GetMeteorPosition(i));
-			//RenderCube(cube, projection, view, Meteor::GetMeteorPosition(i));
 		}
 
 		//dibujamos cubos naves
@@ -473,7 +441,6 @@ void RenderScene(Quad quad, Sphere sphere, Cube cube) {
 		for (size_t i = 0; i < sizeof(EnemyShipOriginPositions) / sizeof(glm::vec3); i++)
 		{
 			cube._shader->Set("color", cube._color);
-			//RenderCube(cube, projection, view, EnemyShipOriginPositions[i]);
 			cube.Render(projection, view, EnemyShipOriginPositions[i]);
 
 		}
@@ -527,7 +494,6 @@ void RenderGameObjects(Node* node) {
 		}
 	}
 }
-
 
 
 void MoveObjects(const double deltaTime, Node* node) {
@@ -658,6 +624,7 @@ bool CheckCollisionsGameObjects(GameObject* x, GameObject* y) {
 }
 
 void CheckCollisions(Node* node) {
+	
 	CheckCollisionsGameObjects(node->GetChildren(0)->GetGameObject(), node->GetChildren(1)->GetChildren(0)->GetGameObject());
 }
 
@@ -670,7 +637,6 @@ void ColliderPlayer(Player * player, Cube &cube)
 	cube._scale = vec3(3.0f, 4.0f, 5.5f);
 	cube._color = vec3(1.0f);
 	cube.Render(projection, view, position);
-	//RenderCube(cube, projection, view, position);
 }
 
 void RenderColliders(Node * node, Cube cube) {
@@ -744,7 +710,6 @@ int main(int argc, char* argv[]) {
 	enemyGameObject.Activate();
 	enemiesParentNode.AddChildren(&enemies);
 	//Meteors
-
 	Node MeteorsParentNode(NULL);
 	Node meteor(&meteorGameObject);
 
@@ -756,25 +721,20 @@ int main(int argc, char* argv[]) {
 	root.AddChildren(&MeteorsParentNode);
 
 	Cube cubeClasss = Cube(shaderCube);
-	//CubeStruct cube = CubeStruct();
 	Quad quad = Quad();
 	Sphere sphere = Sphere();
 
-	//uint32_t CubeVAO = createVertexData(verticesCubo, cube.numeroElementosVerticesCubo, cube.indicesCubo, cube.numeroIndices);
 	uint32_t SphereVAO = createSphere(1);
 	uint32_t QuadVAO = createVertexDataQuad(verticesQuad, quad.numeroElementosVerticesQuad, quad.indicesQuad, quad.numeroIndicesQuad, 5);
 
 	cout << "Creacion Geometrias " << endl;
 
-
-	//cube.shader = &shaderCube;
 	quad.shader = &shaderQuad;
 	sphere.shader = &shaderSphere;
 
 	quad.VAO = &QuadVAO;
 	quad.textures[0] = textureSuelo;
 
-	//cube.VAO = &CubeVAO;
 	sphere.VAO = &SphereVAO;
 	cout << "Inicio GameLoop" << endl;
 
@@ -783,7 +743,6 @@ int main(int argc, char* argv[]) {
 		float currentFrame = glfwGetTime();
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-		//RenderScene(quad, cube, sphere, cubeClasss);
 		RenderScene(quad, sphere, cubeClasss);
 		RenderColliders(&root, cubeClasss);
 		HandlerInput(deltaTime, &root);
@@ -792,15 +751,12 @@ int main(int argc, char* argv[]) {
 		MoveObjects(deltaTime, &root);
 		RenderGameObjects(&root);
 
-
-		//MoveObjects(deltaTime, transfer);
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
 	}
 	cout << "Fin GameLoop" << endl;
 
 	//Si se han linkado bien los shaders, los borramos ya que estan linkados
-	//glDeleteVertexArrays(1, &CubeVAO);
 	glDeleteVertexArrays(1, &QuadVAO);
 	glDeleteVertexArrays(1, &SphereVAO);
 	glDeleteVertexArrays(1, &cubeClasss._VAO);

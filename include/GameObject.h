@@ -6,7 +6,8 @@
 #include "Model.h"
 #include "Constants.h"
 #include "Utils.h"
-//#include "Node.h"
+#include "Cube.h"
+
 
 class Node;
 
@@ -45,6 +46,7 @@ public:
 	bool Rendered();
 	void Activate();
 	void Deactivate();
+	Cube _collider;
 private:
 	Model _model;
 	uint32_t _type;
