@@ -3,6 +3,7 @@
 Player::Player() {
 
 }
+
 Player::Player(glm::vec3 position)
 {
 	Shader shaderNavePlayer = Utils::GetFullShader("Shaders/NavePlayerVS.vs", "Shaders/NavePlayerFS.fs");
@@ -32,8 +33,9 @@ Player::Player(Shader & shader, glm::vec3 position)
 }
 
 Player::~Player() {
-	//delete(;
+	delete this;
 }
+
 void Player::Disparar() {
 	//Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
 
@@ -45,12 +47,15 @@ void Player::Disparar() {
 	if (_lastMissileUsed < 5) {
 		_disparando = true;
 		///TODO
+
+
 		//Missile* missile = static_cast<Missile*>(GetActualNode()->GetChildren(_lastMissileUsed)->GetGameObject());
 		//missile->_position = _position;
 		//missile->_render = true;
 		_lastMissileUsed++;
 		cout << "disparo" << endl;
 	}
+		cout << "disparo erroneo" << endl;
 }
 
 void Player::Render(glm::mat4 &projection, glm::mat4 &view)

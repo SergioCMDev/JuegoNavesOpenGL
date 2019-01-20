@@ -4,12 +4,11 @@
 #include<iostream>
 #include "Shader.h"
 #include "Model.h"
-#include "Shader.h"
 #include "Constants.h"
-#include <array> 
 #include "Utils.h"
 //#include "Node.h"
 
+class Node;
 
 class GameObject {
 
@@ -31,8 +30,9 @@ public:
 	glm::vec3 GetUpVector();
 	glm::vec3 GetPosition();
 	void SetPosition(glm::vec3 position);
-	//Node* GetActualNode();
+	Node* GetActualNode();
 	//void* SetActualNode(Node * node);
+
 	GameObject(Model * model, Shader& shader, glm::vec3 position);
 	GameObject(const char* pathToModel, Shader& shader, glm::vec3 position);
 
@@ -40,9 +40,9 @@ public:
 
 	const vec3 _right = vec3(1.0f, 0.0f, 0.0f);
 	const vec3 _up = vec3(0.0f, 0.0f, 1.0f);
-	float _velocity = 0.0f;
 	vec3 _scale;
+	float _velocity = 0.0f;
 private:
-	//Node * _actualNode;
+	Node * _actualNode;
 };
 #endif

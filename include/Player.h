@@ -4,9 +4,10 @@
 #define PLAYER_H
 
 #include<iostream>
-#include "string.h"
+//#include "string.h"
 #include "Shader.h"
 #include "Missile.h"
+#include "Node.h"
 #include "Constants.h"
 #include<GLFW/glfw3.h>
 

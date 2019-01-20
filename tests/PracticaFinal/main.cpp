@@ -110,7 +110,6 @@ struct Sphere {
 	uint32_t numeroIndices = 121 * 8;
 	vec3 scale = glm::vec3(1.4f);
 	vec3 color = vec3(1.0f);
-	//vec3 position = vec3(0.0f);
 	vec3 position = posCamera;
 
 };
@@ -397,7 +396,6 @@ int Inicializacion() {
 		glfwTerminate();
 		return -1;
 	}
-	//Window window1 = Window(screen_width, screen_height);
 	window = *Window::GetInstance(screen_width, screen_height);
 	//window.AddCamera(camera);
 
@@ -542,7 +540,6 @@ void RenderGameObjects(Node* node) {
 			//cout << "Missil " << endl;
 			if (missile->_render) {
 				missile->Render(projection, view);
-
 			}
 
 		}
