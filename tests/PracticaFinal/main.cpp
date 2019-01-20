@@ -602,14 +602,14 @@ bool CheckCollisionsGameObjects(GameObject* x, GameObject* y) {
 	//bool collisionColliderZ3 = posZ1 <= y->GetPosition().z		&&		y->GetPosition().z <= x->GetPosition().z;
 
 	if (collisionColliderZ1 && collisionColliderX1) {
-		cout << "KO" << endl;
+		//cout << "KO" << endl;
 		collision = true;
 
 	}
-	else {
-		cout << " NO KO" << endl;
+	//else {
+	//	cout << " NO KO" << endl;
 
-	}
+	//}
 
 	return collision;
 }
