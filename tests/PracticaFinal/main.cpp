@@ -59,37 +59,37 @@ glm::vec3 EnemyShipOriginPositions[] = {
  //glm::vec3(18.0f, 0.0f, 10.0f),
 };
 
-
-float verticesCubo[] = {  //vertices      //uvs     //normals
-		  -0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,     0.0f, 0.0f, 1.0f,//front
-		  0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,      0.0f, 0.0f, 1.0f,
-		  0.5f,  0.5f,  0.5f,       1.0f, 1.0f,       0.0f, 0.0f, 1.0f,
-		  -0.5f, 0.5f,  0.5f,       0.0f, 1.0f,       0.0f, 0.0f, 1.0f,
-
-		  0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,      1.0f, 0.0f, 0.0f,//right
-		  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     1.0f, 0.0f, 0.0f,
-		  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      1.0f, 0.0f, 0.0f,
-		  0.5f,  0.5f,  0.5f,       0.0f, 1.0f,       1.0f, 0.0f, 0.0f,
-
-		  -0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,    0.0f, 0.0f, -1.0f,//back
-		  -0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,     0.0f, 0.0f, -1.0f,
-		  0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,      0.0f, 0.0f, -1.0f,
-		  0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,     0.0f, 0.0f, -1.0f,
-
-		  -0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,     -1.0f, 0.0f, 0.0f,//left
-		  -0.5f,  0.5f,  0.5f,       1.0f, 1.0f,      -1.0f, 0.0f, 0.0f,
-		  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     -1.0f, 0.0f, 0.0f,
-		  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    -1.0f, 0.0f, 0.0f,
-
-		  -0.5f,  -0.5f,  0.5f,       0.0f, 1.0f,     0.0f, -1.0f, 0.0f,//bottom
-		  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    0.0f, -1.0f, 0.0f,
-		  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     0.0f, -1.0f, 0.0f,
-		  0.5f,  -0.5f,  0.5f,       1.0f, 1.0f,      0.0f, -1.0f, 0.0f,
-
-		  -0.5f,  0.5f,  0.5f,       0.0f, 0.0f,      0.0f, 1.0f, 0.0f,//top
-		  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,       0.0f, 1.0f, 0.0f,
-		  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      0.0f, 1.0f, 0.0f,
-		  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     0.0f, 1.0f, 0.0f };
+//
+//float verticesCubo[] = {  //vertices      //uvs     //normals
+//		  -0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,     0.0f, 0.0f, 1.0f,//front
+//		  0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,      0.0f, 0.0f, 1.0f,
+//		  0.5f,  0.5f,  0.5f,       1.0f, 1.0f,       0.0f, 0.0f, 1.0f,
+//		  -0.5f, 0.5f,  0.5f,       0.0f, 1.0f,       0.0f, 0.0f, 1.0f,
+//
+//		  0.5f,  -0.5f,  0.5f,       0.0f, 0.0f,      1.0f, 0.0f, 0.0f,//right
+//		  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     1.0f, 0.0f, 0.0f,
+//		  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      1.0f, 0.0f, 0.0f,
+//		  0.5f,  0.5f,  0.5f,       0.0f, 1.0f,       1.0f, 0.0f, 0.0f,
+//
+//		  -0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,    0.0f, 0.0f, -1.0f,//back
+//		  -0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,     0.0f, 0.0f, -1.0f,
+//		  0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,      0.0f, 0.0f, -1.0f,
+//		  0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,     0.0f, 0.0f, -1.0f,
+//
+//		  -0.5f,  -0.5f,  0.5f,       1.0f, 0.0f,     -1.0f, 0.0f, 0.0f,//left
+//		  -0.5f,  0.5f,  0.5f,       1.0f, 1.0f,      -1.0f, 0.0f, 0.0f,
+//		  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     -1.0f, 0.0f, 0.0f,
+//		  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    -1.0f, 0.0f, 0.0f,
+//
+//		  -0.5f,  -0.5f,  0.5f,       0.0f, 1.0f,     0.0f, -1.0f, 0.0f,//bottom
+//		  -0.5f,  -0.5f,  -0.5f,       0.0f, 0.0f,    0.0f, -1.0f, 0.0f,
+//		  0.5f,  -0.5f,  -0.5f,       1.0f, 0.0f,     0.0f, -1.0f, 0.0f,
+//		  0.5f,  -0.5f,  0.5f,       1.0f, 1.0f,      0.0f, -1.0f, 0.0f,
+//
+//		  -0.5f,  0.5f,  0.5f,       0.0f, 0.0f,      0.0f, 1.0f, 0.0f,//top
+//		  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,       0.0f, 1.0f, 0.0f,
+//		  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,      0.0f, 1.0f, 0.0f,
+//		  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f,     0.0f, 1.0f, 0.0f };
 
 float verticesQuad[] = {
 	-0.5f,  0.5f,  0.5f,       0.0f, 0.0f,    //top
@@ -129,23 +129,6 @@ struct Quad {
 	};
 };
 
-struct CubeStruct {
-	uint32_t numeroIndices = 36;
-	vec3 color;
-	Shader *shader;
-	uint32_t numeroElementosVerticesCubo = 192;
-	uint32_t* VAO;
-	vec3 scale = vec3(1.0f);
-	uint32_t indicesCubo[36]{
-		0, 1, 2, 0, 2, 3 //Front
-		,4, 5, 6, 4, 6, 7 //Right
-		,8, 9, 10, 8, 10, 11 //Back
-		,12, 13, 14, 12, 14, 15 //Left
-		,16, 17, 18, 16, 18, 19 //Bottom
-		,20, 21, 22, 20, 22, 23 //Top
-	};
-	vec3 position;
-};
 
 using namespace std;
 
@@ -444,17 +427,6 @@ void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view)
 	RenderFigureMain(*quad.shader, projection, view, model, *quad.VAO, quad.numeroIndicesQuad);
 }
 
-void RenderCube(CubeStruct &cube, glm::mat4 &projection, glm::mat4 &view, vec3 position)
-{
-
-	glm::mat4 model = mat4(1.0f);
-	cube.shader->Use();
-	cube.shader->Set("color", cube.color);
-	model = glm::translate(model, position);
-	model = glm::scale(model, cube.scale);
-	RenderFigureMain(*cube.shader, projection, view, model, *cube.VAO, cube.numeroIndices);
-}
-
 
 void RenderSphere(Sphere &sphere, glm::mat4 &projection, glm::mat4 &view)
 {
@@ -470,42 +442,6 @@ void RenderSphere(Sphere &sphere, glm::mat4 &projection, glm::mat4 &view)
 
 }
 #pragma endregion
-
-void RenderScene(Quad quad, CubeStruct cube, Sphere sphere, Cube cubeClass) {
-
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glm::mat4 view = camera.GetViewMatrix();
-	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
-
-	cubeClass._color = vec3(1.0f);
-	cubeClass.Render(projection, view, vec3(0.0f));
-	//Dibujamos Suelo
-	RenderQuadSuelo(quad, projection, view);
-	if (debug) {
-
-		//Dibujamos sphera luz
-		RenderSphere(sphere, projection, view);
-
-		//Dibujamos Cubos Meteoritos
-		cube.color = vec3(1.0f);
-		cube.scale = vec3(1.0f);
-		for (size_t i = 0; i < Meteor::GetNumberPositions(); i++)
-		{
-			RenderCube(cube, projection, view, Meteor::GetMeteorPosition(i));
-		}
-
-		//dibujamos cubos naves
-		cube.color = vec3(1.0f, 0.0f, 0.0f);
-		for (size_t i = 0; i < sizeof(EnemyShipOriginPositions) / sizeof(glm::vec3); i++)
-		{
-			cube.shader->Set("color", cube.color);
-			RenderCube(cube, projection, view, EnemyShipOriginPositions[i]);
-		}
-	}
-
-	glBindVertexArray(0);
-}
 
 
 void RenderScene(Quad quad, Sphere sphere, Cube cube) {
@@ -630,56 +566,6 @@ void MoveObjects(const double deltaTime, Node* node) {
 			}
 		}
 	}
-}
-
-
-uint32_t createVertexData(const float* vertices, const uint32_t n_verts, const uint32_t* indices, const uint32_t n_indices) {
-	unsigned int VAO, VBO, EBO;
-
-	glGenVertexArrays(1, &VAO);
-	//Generamos 2 buffer, elementos y objetos
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-
-	//Bindeamos el VAO
-	glBindVertexArray(VAO);
-
-	uint32_t _numberOfElementsPerLine = 8;
-	uint32_t stride = 3;
-
-	//Bindeamos buffer vertices
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//Subida de vertices al buffer
-	glBufferData(GL_ARRAY_BUFFER, n_verts * sizeof(float) * _numberOfElementsPerLine, vertices, GL_STATIC_DRAW);
-
-	//Bindeo buffer indices
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, n_indices * sizeof(float), indices, GL_STATIC_DRAW);
-
-	//vertices del triangulo 6 por que hay 6 elementos hasta el proximo inicio de linea
-	uint32_t atributteNumber = 0;
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, _numberOfElementsPerLine * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	//Vertices de textura
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, _numberOfElementsPerLine * sizeof(float), (void*)(stride * sizeof(float)));
-	glEnableVertexAttribArray(1);
-	stride += 2;
-	//Vertices normal
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, _numberOfElementsPerLine * sizeof(float), (void*)(stride * sizeof(float)));
-	glEnableVertexAttribArray(2);
-
-	//desbindeamos buffer objetos
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	//Desbindeo
-	glBindVertexArray(0);
-
-	//desbindeamos buffer elements
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	return VAO;
 }
 
 uint32_t createVertexDataQuad(const float* vertices, const uint32_t n_verts, const uint32_t* indices, const uint32_t n_indices, const uint32_t numberOfElementsPerLine) {
@@ -870,25 +756,25 @@ int main(int argc, char* argv[]) {
 	root.AddChildren(&MeteorsParentNode);
 
 	Cube cubeClasss = Cube(shaderCube);
-	CubeStruct cube = CubeStruct();
+	//CubeStruct cube = CubeStruct();
 	Quad quad = Quad();
 	Sphere sphere = Sphere();
 
-	uint32_t CubeVAO = createVertexData(verticesCubo, cube.numeroElementosVerticesCubo, cube.indicesCubo, cube.numeroIndices);
+	//uint32_t CubeVAO = createVertexData(verticesCubo, cube.numeroElementosVerticesCubo, cube.indicesCubo, cube.numeroIndices);
 	uint32_t SphereVAO = createSphere(1);
 	uint32_t QuadVAO = createVertexDataQuad(verticesQuad, quad.numeroElementosVerticesQuad, quad.indicesQuad, quad.numeroIndicesQuad, 5);
 
 	cout << "Creacion Geometrias " << endl;
 
 
-	cube.shader = &shaderCube;
+	//cube.shader = &shaderCube;
 	quad.shader = &shaderQuad;
 	sphere.shader = &shaderSphere;
 
 	quad.VAO = &QuadVAO;
 	quad.textures[0] = textureSuelo;
 
-	cube.VAO = &CubeVAO;
+	//cube.VAO = &CubeVAO;
 	sphere.VAO = &SphereVAO;
 	cout << "Inicio GameLoop" << endl;
 
@@ -914,9 +800,10 @@ int main(int argc, char* argv[]) {
 	cout << "Fin GameLoop" << endl;
 
 	//Si se han linkado bien los shaders, los borramos ya que estan linkados
-	glDeleteVertexArrays(1, &CubeVAO);
+	//glDeleteVertexArrays(1, &CubeVAO);
 	glDeleteVertexArrays(1, &QuadVAO);
 	glDeleteVertexArrays(1, &SphereVAO);
+	glDeleteVertexArrays(1, &cubeClasss._VAO);
 
 
 	glfwTerminate();
