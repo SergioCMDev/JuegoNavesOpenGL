@@ -19,6 +19,7 @@
 #include "Enemy.h"
 #include "Missile.h"
 #include "Cube.h"
+#include "GameControl.h"
 
 
 const vec3 posCamera = glm::vec3(0.0f, 20.0f, 0.0f);
@@ -461,9 +462,10 @@ void RenderGameObjects(Node* node) {
 	if (node->GetGameObject() != NULL) {
 		if (node->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
 			Player* player = GetPlayerReference(node->GetGameObject());
-
+			if (player->Rendered()) {
+				player->Render(projection, view);
+			}
 			//cout << "Player " << endl;
-			player->Render(projection, view);
 		}
 		else if (node->GetGameObject()->GetType() == Constants::TIPO_METEOR)
 		{
@@ -584,43 +586,6 @@ uint32_t createVertexDataQuad(const float* vertices, const uint32_t n_verts, con
 }
 
 
-bool CheckCollisionsGameObjects(GameObject* x, GameObject* y) {
-	bool collision = false;
-	float posX1 = x->GetPosition().x + x->_collider->_scale.x;
-	bool collisionColliderX1 = posX1 >= y->GetPosition().x		&&		y->GetPosition().x >= x->GetPosition().x;
-	//bool collisionColliderX2 = posX1 == y->GetPosition().x		&&		y->GetPosition().x == x->GetPosition().x;
-	//bool collisionColliderX3 = posX1 <= y->GetPosition().x		&&		y->GetPosition().x <= x->GetPosition().x;
-
-
-	//bool collisionX1 = x->GetPosition().x + 2 >= y->GetPosition().x;
-	//bool collisionX2 = x->GetPosition().x + 2 == y->GetPosition().x;
-	//bool collisionX2 = x->GetPosition().x + 2 <= y->GetPosition().x;
-
-	float posZ1 = x->GetPosition().z + x->_collider->_scale.z;
-	bool collisionColliderZ1 = posZ1 >= y->GetPosition().z		&&		y->GetPosition().z >= x->GetPosition().z;
-	//bool collisionColliderZ2 = posZ1 == y->GetPosition().z		&&		y->GetPosition().z == x->GetPosition().z;
-	//bool collisionColliderZ3 = posZ1 <= y->GetPosition().z		&&		y->GetPosition().z <= x->GetPosition().z;
-
-	if (collisionColliderZ1 && collisionColliderX1) {
-		//cout << "KO" << endl;
-		collision = true;
-
-	}
-	//else {
-	//	cout << " NO KO" << endl;
-
-	//}
-
-	return collision;
-}
-
-void CheckCollisions(Node* node) {
-
-	if (CheckCollisionsGameObjects(node->GetChildren(0)->GetGameObject(), node->GetChildren(1)->GetChildren(0)->GetGameObject())) {
-		node->GetChildren(1)->GetChildren(0)->GetGameObject()->Deactivate();
-	}
-}
-
 
 void ColliderPlayer(Player * player, Cube *cube)
 {
@@ -664,14 +629,22 @@ int main(int argc, char* argv[]) {
 	cout << "Creacion Enemigo " << endl;
 	vec3 posEnemigo = vec3(2.0f, 0.0f, 15.0f);
 	Enemy enemyGameObject(posEnemigo);
+	Enemy enemyGameObject1(posEnemigo);
+	Enemy enemyGameObject2(posEnemigo);
+	Enemy enemyGameObject3(posEnemigo);
+	Enemy enemyGameObject4(posEnemigo);
+	Enemy enemyGameObject5(posEnemigo);
 
 	cout << "Creacion Meteorito " << endl;
 	Shader shaderMeteorito = Utils::GetFullShader("Shaders/MetorVS.vs", "Shaders/MetorFS.fs");
-	Meteor meteorGameObject = Meteor(shaderMeteorito);
+	Meteor meteorGameObject1 = Meteor(shaderMeteorito);
+	Meteor meteorGameObject2 = Meteor(shaderMeteorito);
+	Meteor meteorGameObject3 = Meteor(shaderMeteorito);
+	Meteor meteorGameObject4 = Meteor(shaderMeteorito);
+	Meteor meteorGameObject5 = Meteor(shaderMeteorito);
+	Meteor meteorGameObject6 = Meteor(shaderMeteorito);
 
-	cout << "Creacion Misil " << endl;
-	//posEnemigo = vec3(3.0f, 0.0f, 2.0f);
-
+	cout << "Creacion Misiles " << endl;
 	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
 	Missile missilePlayer = Missile(shaderMissile, vec3(0.0f), &player);
 	Missile missilePlayer1 = Missile(shaderMissile, vec3(0.0f), &player);
@@ -679,6 +652,15 @@ int main(int argc, char* argv[]) {
 	Missile missilePlayer3 = Missile(shaderMissile, vec3(0.0f), &player);
 	Missile missilePlayer4 = Missile(shaderMissile, vec3(0.0f), &player);
 	Missile missilePlayer5 = Missile(shaderMissile, vec3(0.0f), &player);
+	Missile missilePlayer6 = Missile(shaderMissile, vec3(0.0f), &player);
+	Missile missilePlayer7 = Missile(shaderMissile, vec3(0.0f), &player);
+	Missile missilePlayer8 = Missile(shaderMissile, vec3(0.0f), &player);
+	Missile missilePlayer9 = Missile(shaderMissile, vec3(0.0f), &player);
+	Missile missilePlayer10 = Missile(shaderMissile, vec3(0.0f), &player);
+	Missile missilePlayer11 = Missile(shaderMissile, vec3(0.0f), &player);
+	Missile missilePlayer12 = Missile(shaderMissile, vec3(0.0f), &player);
+	Missile missilePlayer13 = Missile(shaderMissile, vec3(0.0f), &player);
+	Missile missilePlayer14 = Missile(shaderMissile, vec3(0.0f), &player);
 
 	Node missilePool(NULL);
 	Node missile1(&missilePlayer);
@@ -687,6 +669,11 @@ int main(int argc, char* argv[]) {
 	Node missile4(&missilePlayer3);
 	Node missile5(&missilePlayer4);
 	Node missile6(&missilePlayer5);
+	Node missile7(&missilePlayer6);
+	Node missile8(&missilePlayer7);
+	Node missile9(&missilePlayer8);
+	Node missile10(&missilePlayer9);
+	Node missile11(&missilePlayer10);
 
 	missilePool.AddChildren(&missile1);
 	missilePool.AddChildren(&missile2);
@@ -694,6 +681,10 @@ int main(int argc, char* argv[]) {
 	missilePool.AddChildren(&missile4);
 	missilePool.AddChildren(&missile5);
 	missilePool.AddChildren(&missile6);
+	missilePool.AddChildren(&missile7);
+	missilePool.AddChildren(&missile8);
+	missilePool.AddChildren(&missile9);
+	missilePool.AddChildren(&missile10);
 
 	//1 level
 	Node root(&camera);
@@ -703,14 +694,34 @@ int main(int argc, char* argv[]) {
 	//Enemies
 	Node enemiesParentNode(NULL);
 	Node enemies(&enemyGameObject);
-	enemyGameObject.Activate();
+	Node enemies1(&enemyGameObject1);
+	Node enemies2(&enemyGameObject2);
+	Node enemies3(&enemyGameObject3);
+	Node enemies4(&enemyGameObject4);
+	Node enemies5(&enemyGameObject5);
+
 	enemiesParentNode.AddChildren(&enemies);
+	enemiesParentNode.AddChildren(&enemies2);
+	enemiesParentNode.AddChildren(&enemies3);
+	enemiesParentNode.AddChildren(&enemies4);
+	enemiesParentNode.AddChildren(&enemies5);
+
 	//Meteors
 	Node MeteorsParentNode(NULL);
-	Node meteor(&meteorGameObject);
+	Node meteor(&meteorGameObject1);
+	Node meteor1(&meteorGameObject2);
+	Node meteor2(&meteorGameObject3);
+	Node meteor3(&meteorGameObject4);
+	Node meteor4(&meteorGameObject5);
+	Node meteor5(&meteorGameObject6);
 
 
 	MeteorsParentNode.AddChildren(&meteor);
+	MeteorsParentNode.AddChildren(&meteor1);
+	MeteorsParentNode.AddChildren(&meteor2);
+	MeteorsParentNode.AddChildren(&meteor3);
+	MeteorsParentNode.AddChildren(&meteor4);
+	MeteorsParentNode.AddChildren(&meteor5);
 
 	root.AddChildren(&playerNode);
 	root.AddChildren(&enemiesParentNode);
@@ -734,17 +745,20 @@ int main(int argc, char* argv[]) {
 	sphere.VAO = &SphereVAO;
 	cout << "Inicio GameLoop" << endl;
 
+	GameControl control(&playerNode, &enemiesParentNode, &MeteorsParentNode);
+
+
 	//Bucle inicial donde se realiza toda la accion del motor
-	while (!glfwWindowShouldClose(window.GetWindow())) {
+	while (!glfwWindowShouldClose(window.GetWindow()) || !control._playerAlive) {
 		float currentFrame = glfwGetTime();
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		RenderScene(quad, sphere, cubeClasss);
-		RenderColliders(&root, &cubeClasss);
+		//RenderColliders(&root, &cubeClasss);
 		HandlerInput(deltaTime, &root);
-		CheckCollisions(&root);
-
-		MoveObjects(deltaTime, &root);
+		control.CheckCollisions();
+		control.MoveObjects(deltaTime);
+		//MoveObjects(deltaTime, &root);
 		RenderGameObjects(&root);
 
 		glfwSwapBuffers(window.GetWindow());

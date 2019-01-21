@@ -32,6 +32,7 @@ Meteor::Meteor(Shader & shader, glm::vec3 position) {
 	SetPosition(position);
 	SetVelocity(1.0f);
 	SetType(Constants::TIPO_METEOR);
+	Deactivate();
 }
 
 
@@ -46,6 +47,8 @@ Meteor::Meteor(glm::vec3 position)
 	SetPosition(position);
 	SetVelocity(1.0f);
 	SetType(Constants::TIPO_METEOR);
+	Deactivate();
+
 }
 
 
@@ -53,7 +56,6 @@ Meteor::Meteor(Shader & shader)
 {
 
 	SetModel(Model(pathToModel));
-	//_model = Model(pathToModel);
 	_shader = shader;
 	srand(rand());
 	const uint32_t initialPositionIndex = rand() % 5;
@@ -62,6 +64,8 @@ Meteor::Meteor(Shader & shader)
 	SetPosition(positionInitial);
 	SetVelocity(1.0f);
 	SetType(Constants::TIPO_METEOR);
+	Deactivate();
+
 }
 
 Meteor::~Meteor() {

@@ -9,15 +9,15 @@ Missile::Missile(glm::vec3 position, GameObject* parent)
 
 	shaderMissile.Use();
 	SetModel(Model(pathToModel));
-	//_model = ;
-	//_shader = shaderMissile;
+
 	SetPosition(position);
 	SetVelocity(0.2f);
 	SetType(Constants::TIPO_MISIL);
 
-	//_type = Constants::TIPO_MISIL;
 	SetScale(vec3(0.4f));
 	//_parent = parent;
+	Deactivate();
+
 }
 
 
@@ -31,6 +31,8 @@ Missile::Missile(Shader& shaderMissile, glm::vec3 position, GameObject* parent)
 	SetType(Constants::TIPO_MISIL);
 	SetScale(vec3(0.4f));
 	//_parent = parent;
+	Deactivate();
+
 }
 
 Missile::Missile(Shader& shaderMissile, glm::vec3 position)
@@ -43,6 +45,8 @@ Missile::Missile(Shader& shaderMissile, glm::vec3 position)
 	SetType(Constants::TIPO_MISIL);
 	SetScale(vec3(0.4f));
 	//_parent = &parent;
+	Deactivate();
+
 }
 
 
