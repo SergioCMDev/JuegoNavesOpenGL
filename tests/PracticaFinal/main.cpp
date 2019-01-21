@@ -444,53 +444,6 @@ void RenderScene(Quad quad, Sphere sphere, Cube cube) {
 	glBindVertexArray(0);
 }
 
-void RenderGameObjects(Node* node) {
-	glm::mat4 view = camera.GetViewMatrix();
-	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
-	if (node->HasChildren()) {
-		for (size_t i = 0; i < node->GetNumberChildren(); i++)
-		{
-			RenderGameObjects(node->GetChildren(i));
-		}
-	}
-	if (node->GetGameObject() != NULL) {
-		if (node->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
-			Player* player = GetPlayerReference(node->GetGameObject());
-			if (player->Rendered()) {
-				player->Render(projection, view);
-			}
-			//cout << "Player " << endl;
-		}
-		else if (node->GetGameObject()->GetType() == Constants::TIPO_METEOR)
-		{
-			GameObject *g = node->GetGameObject();
-			//cout << "Meteor " << endl;
-			Meteor* meteor = static_cast<Meteor*>(g);
-			if (meteor->Rendered()) {
-				meteor->Render(projection, view);
-			}
-		}
-		else if (node->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
-			GameObject *g = node->GetGameObject();
-			//cout << "Enemigo " << endl;
-
-			Enemy* enemyShip = static_cast<Enemy*>(g);
-			if (enemyShip->Rendered()) {
-				enemyShip->Render(projection, view);
-			}
-		}
-		else if (node->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
-			GameObject *g = node->GetGameObject();
-			Missile* missile = static_cast<Missile*>(g);
-			//cout << "Missil " << endl;
-			if (missile->Rendered()) {
-				missile->Render(projection, view);
-			}
-
-		}
-	}
-}
-
 
 void MoveObjects(const double deltaTime, Node* node) {
 	if (node->HasChildren()) {
@@ -578,8 +531,6 @@ uint32_t createVertexDataQuad(const float* vertices, const uint32_t n_verts, con
 
 	return VAO;
 }
-
-
 
 void ColliderPlayer(Player * player, Cube *cube)
 {
@@ -739,7 +690,8 @@ int main(int argc, char* argv[]) {
 	sphere.VAO = &SphereVAO;
 	cout << "Inicio GameLoop" << endl;
 
-	GameControl control(&playerNode, &enemiesParentNode, &MeteorsParentNode);
+	//GameControl control(&playerNode, &enemiesParentNode, &MeteorsParentNode);
+	GameControl control(&playerNode, &enemiesParentNode, &MeteorsParentNode, &camera, &root);
 
 
 	//Bucle inicial donde se realiza toda la accion del motor
@@ -753,8 +705,9 @@ int main(int argc, char* argv[]) {
 		control.CheckCollisions();
 		control.MoveObjects(deltaTime);
 		control.ActivacionGameObjects();
+		control.RenderGameObjects(&root);
 		//MoveObjects(deltaTime, &root);
-		RenderGameObjects(&root);
+
 
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();

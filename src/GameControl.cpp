@@ -1,9 +1,18 @@
 #include "GameControl.h"
+const float screen_width = 800.0f, screen_height = 600.0f;
 
 GameControl::GameControl(Node* player, Node* enemyships, Node* meteors) {
 	_player = player;
 	_enemyShips = enemyships;
 	_meteors = meteors;
+}
+
+GameControl::GameControl(Node* player, Node* enemyships, Node* meteors, Camera* camera, Node* root) {
+	_player = player;
+	_enemyShips = enemyships;
+	_meteors = meteors;
+	_camera = camera;
+	_root = root;
 }
 
 
@@ -227,49 +236,49 @@ void GameControl::MoveObjects(const double deltaTime) {
 
 
 
-//void RenderGameObjects(Node* node) {
-//	glm::mat4 view = camera.GetViewMatrix();
-//	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
-//	if (node->HasChildren()) {
-//		for (size_t i = 0; i < node->GetNumberChildren(); i++)
-//		{
-//			RenderGameObjects(node->GetChildren(i));
-//		}
-//	}
-//	if (node->GetGameObject() != NULL) {
-//		if (node->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
-//			Player* player = GetPlayerReference(node->GetGameObject());
-//			if (player->Rendered()) {
-//				player->Render(projection, view);
-//			}
-//			//cout << "Player " << endl;
-//		}
-//		else if (node->GetGameObject()->GetType() == Constants::TIPO_METEOR)
-//		{
-//			GameObject *g = node->GetGameObject();
-//			//cout << "Meteor " << endl;
-//			Meteor* meteor = static_cast<Meteor*>(g);
-//			if (meteor->Rendered()) {
-//				meteor->Render(projection, view);
-//			}
-//		}
-//		else if (node->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
-//			GameObject *g = node->GetGameObject();
-//			//cout << "Enemigo " << endl;
-//
-//			Enemy* enemyShip = static_cast<Enemy*>(g);
-//			if (enemyShip->Rendered()) {
-//				enemyShip->Render(projection, view);
-//			}
-//		}
-//		else if (node->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
-//			GameObject *g = node->GetGameObject();
-//			Missile* missile = static_cast<Missile*>(g);
-//			//cout << "Missil " << endl;
-//			if (missile->Rendered()) {
-//				missile->Render(projection, view);
-//			}
-//
-//		}
-//	}
-//}
+void GameControl::RenderGameObjects(Node * _root) {
+	glm::mat4 view = _camera->GetViewMatrix();
+	glm::mat4 projection = glm::perspective(glm::radians(_camera->GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
+	if (_root->HasChildren()) {
+		for (size_t i = 0; i < _root->GetNumberChildren(); i++)
+		{
+			RenderGameObjects(_root->GetChildren(i));
+		}
+	}
+	if (_root->GetGameObject() != NULL) {
+		if (_root->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
+			Player* player = GetPlayerReference(_root->GetGameObject());
+			if (player->Rendered()) {
+				player->Render(projection, view);
+			}
+			//cout << "Player " << endl;
+		}
+		else if (_root->GetGameObject()->GetType() == Constants::TIPO_METEOR)
+		{
+			GameObject *g = _root->GetGameObject();
+			//cout << "Meteor " << endl;
+			Meteor* meteor = static_cast<Meteor*>(g);
+			if (meteor->Rendered()) {
+				meteor->Render(projection, view);
+			}
+		}
+		else if (_root->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
+			GameObject *g = _root->GetGameObject();
+			//cout << "Enemigo " << endl;
+
+			Enemy* enemyShip = static_cast<Enemy*>(g);
+			if (enemyShip->Rendered()) {
+				enemyShip->Render(projection, view);
+			}
+		}
+		else if (_root->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
+			GameObject *g = _root->GetGameObject();
+			Missile* missile = static_cast<Missile*>(g);
+			//cout << "Missil " << endl;
+			if (missile->Rendered()) {
+				missile->Render(projection, view);
+			}
+
+		}
+	}
+}
