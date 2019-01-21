@@ -1,4 +1,21 @@
 #include "Enemy.h"
+glm::vec3 EnemyShipOriginPositions[] = {
+ glm::vec3(12.0f,  0.0f, 10.0f), // X derecha/izq invertida //z == arriba/abajo,
+ glm::vec3(-12.0f,  0.0f, 10.0f),
+ //glm::vec3(18.0f,  0.0f, 10.0f),
+ //glm::vec3(15.0f, 0.0f, 12.0f),
+ //glm::vec3(18.0f, 0.0f, 10.0f),
+};
+
+
+uint32_t Enemy::GetNumberPositions() {
+	return sizeof(EnemyShipOriginPositions) / sizeof(glm::vec3);
+}
+
+vec3 Enemy::GetEnemyPosition(uint32_t index)
+{
+	return EnemyShipOriginPositions[index];
+}
 
 Enemy::Enemy() {
 
@@ -52,6 +69,18 @@ void Enemy::Render(glm::mat4 &projection, glm::mat4 &view)
 	_shader.Set("view", view);
 	_shader.Set("model", model);
 	GetModel().Draw(_shader);
+}
+
+void Enemy::SetRandomPosition()
+{
+	srand(rand());
+	uint32_t initialPositionIndex = -1;
+	do {
+		initialPositionIndex = rand() % GetNumberPositions();
+	} while (initialPositionIndex <0 || initialPositionIndex >GetNumberPositions());
+
+	vec3 positionInitial = EnemyShipOriginPositions[initialPositionIndex];
+	SetPosition(positionInitial);
 }
 
 void Enemy::Mover(const Movement movement, const float deltaTime)

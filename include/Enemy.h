@@ -19,7 +19,9 @@ public:
 	Enemy(Shader & shader, glm::vec3 position);
 	~Enemy();
 	void Render(glm::mat4 &projection, glm::mat4 &view);
-
+	void SetRandomPosition();
+	static uint32_t GetNumberPositions();
+	static vec3 GetEnemyPosition(uint32_t index);
 private:
 	const char* pathToModel = "../assets/obj/E-45-Aircraft/E 45 Aircraft_obj.obj";
 };

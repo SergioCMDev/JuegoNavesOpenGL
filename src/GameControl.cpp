@@ -109,7 +109,8 @@ void GameControl::CheckCollisions()
 
 bool GameControl::CheckCollisionsGameObjects(GameObject* x, GameObject* y) {
 	bool collision = false;
-	float posX1 = x->GetPosition().x + x->_collider->_scale.x;
+	//float posX1 = x->GetPosition().x + x->_collider->_scale.x;
+	float posX1 = x->GetPosition().x + 1;
 	bool collisionColliderX1 = posX1 >= y->GetPosition().x		&&		y->GetPosition().x >= x->GetPosition().x;
 	//bool collisionColliderX2 = posX1 == y->GetPosition().x		&&		y->GetPosition().x == x->GetPosition().x;
 	//bool collisionColliderX3 = posX1 <= y->GetPosition().x		&&		y->GetPosition().x <= x->GetPosition().x;
@@ -119,7 +120,8 @@ bool GameControl::CheckCollisionsGameObjects(GameObject* x, GameObject* y) {
 	//bool collisionX2 = x->GetPosition().x + 2 == y->GetPosition().x;
 	//bool collisionX2 = x->GetPosition().x + 2 <= y->GetPosition().x;
 
-	float posZ1 = x->GetPosition().z + x->_collider->_scale.z;
+	//float posZ1 = x->GetPosition().z + x->_collider->_scale.z;
+	float posZ1 = x->GetPosition().z + 1;
 	bool collisionColliderZ1 = posZ1 >= y->GetPosition().z		&&		y->GetPosition().z >= x->GetPosition().z;
 	//bool collisionColliderZ2 = posZ1 == y->GetPosition().z		&&		y->GetPosition().z == x->GetPosition().z;
 	//bool collisionColliderZ3 = posZ1 <= y->GetPosition().z		&&		y->GetPosition().z <= x->GetPosition().z;
@@ -198,6 +200,21 @@ void GameControl::MoveMissiles(const double deltaTime)
 	}
 }
 
+void GameControl::ActivacionGameObjects() {
+	for (size_t ship = 0; ship < _enemyShips->GetNumberChildren(); ship++)
+	{
+		if (!_enemyShips->GetChildren(ship)->GetGameObject()->Rendered()) {
+
+			GameObject *g = _enemyShips->GetChildren(ship)->GetGameObject();
+			Enemy* EnemyShip = static_cast<Enemy*>(g);
+			EnemyShip->SetRandomPosition();
+			EnemyShip->Activate();
+
+		}
+	}
+}
+
+
 
 
 
@@ -207,3 +224,52 @@ void GameControl::MoveObjects(const double deltaTime) {
 	MoveEnemyShips(deltaTime);
 	MoveMissiles(deltaTime);
 }
+
+
+
+//void RenderGameObjects(Node* node) {
+//	glm::mat4 view = camera.GetViewMatrix();
+//	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
+//	if (node->HasChildren()) {
+//		for (size_t i = 0; i < node->GetNumberChildren(); i++)
+//		{
+//			RenderGameObjects(node->GetChildren(i));
+//		}
+//	}
+//	if (node->GetGameObject() != NULL) {
+//		if (node->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
+//			Player* player = GetPlayerReference(node->GetGameObject());
+//			if (player->Rendered()) {
+//				player->Render(projection, view);
+//			}
+//			//cout << "Player " << endl;
+//		}
+//		else if (node->GetGameObject()->GetType() == Constants::TIPO_METEOR)
+//		{
+//			GameObject *g = node->GetGameObject();
+//			//cout << "Meteor " << endl;
+//			Meteor* meteor = static_cast<Meteor*>(g);
+//			if (meteor->Rendered()) {
+//				meteor->Render(projection, view);
+//			}
+//		}
+//		else if (node->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
+//			GameObject *g = node->GetGameObject();
+//			//cout << "Enemigo " << endl;
+//
+//			Enemy* enemyShip = static_cast<Enemy*>(g);
+//			if (enemyShip->Rendered()) {
+//				enemyShip->Render(projection, view);
+//			}
+//		}
+//		else if (node->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
+//			GameObject *g = node->GetGameObject();
+//			Missile* missile = static_cast<Missile*>(g);
+//			//cout << "Missil " << endl;
+//			if (missile->Rendered()) {
+//				missile->Render(projection, view);
+//			}
+//
+//		}
+//	}
+//}

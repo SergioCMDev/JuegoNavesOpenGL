@@ -89,18 +89,11 @@ void Player::Mover(const Movement movement, const float deltaTime)
 	switch (movement) {
 	case Movement::Forward:
 		SetPosition(GetPosition() + GetUpVector() * actualVelocity); break;
-		//_position += GetUpVector() * actualVelocity; break;
 	case Movement::Backward:
 		SetPosition(GetPosition() - GetUpVector() * actualVelocity); break;
-
-		//_position -= GetUpVector() * actualVelocity; break;
 	case Movement::Left:
 		SetPosition(GetPosition() + GetRightVector() * actualVelocity); break;
-
-		//_position += GetRightVector() * actualVelocity; break;
 	case Movement::Right:
 		SetPosition(GetPosition() - GetRightVector() * actualVelocity); break;
-
-		//_position -= GetRightVector() * actualVelocity; break;
 	}
 }

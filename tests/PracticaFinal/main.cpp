@@ -52,13 +52,7 @@ Window window;
 //
 //};
 
-glm::vec3 EnemyShipOriginPositions[] = {
- glm::vec3(12.0f,  0.0f, 10.0f), // X derecha/izq invertida //z == arriba/abajo,
- glm::vec3(-12.0f,  0.0f, 10.0f),
- //glm::vec3(18.0f,  0.0f, 10.0f),
- //glm::vec3(15.0f, 0.0f, 12.0f),
- //glm::vec3(18.0f, 0.0f, 10.0f),
-};
+
 
 
 float verticesQuad[] = {
@@ -439,10 +433,10 @@ void RenderScene(Quad quad, Sphere sphere, Cube cube) {
 
 		//dibujamos cubos naves
 		cube._color = vec3(1.0f, 0.0f, 0.0f);
-		for (size_t i = 0; i < sizeof(EnemyShipOriginPositions) / sizeof(glm::vec3); i++)
+		for (size_t i = 0; i < Enemy::GetNumberPositions(); i++)
 		{
 			cube._shader->Set("color", cube._color);
-			cube.Render(projection, view, EnemyShipOriginPositions[i], 1.0f);
+			cube.Render(projection, view, Enemy::GetEnemyPosition(i), 1.0f);
 
 		}
 	}
@@ -749,7 +743,7 @@ int main(int argc, char* argv[]) {
 
 
 	//Bucle inicial donde se realiza toda la accion del motor
-	while (!glfwWindowShouldClose(window.GetWindow()) || !control._playerAlive) {
+	while (!glfwWindowShouldClose(window.GetWindow()) && control._playerAlive) {
 		float currentFrame = glfwGetTime();
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
@@ -758,6 +752,7 @@ int main(int argc, char* argv[]) {
 		HandlerInput(deltaTime, &root);
 		control.CheckCollisions();
 		control.MoveObjects(deltaTime);
+		control.ActivacionGameObjects();
 		//MoveObjects(deltaTime, &root);
 		RenderGameObjects(&root);
 
