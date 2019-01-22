@@ -7,6 +7,8 @@
 #include "Shader.h"
 #include "GameObject.h"
 #include "Constants.h"
+#include "Missile.h"
+#include "Node.h"
 #include<GLFW/glfw3.h>
 class Enemy : public GameObject {
 
@@ -21,7 +23,13 @@ public:
 	void SetRandomPosition();
 	static uint32_t GetNumberPositions();
 	static vec3 GetEnemyPosition(uint32_t index);
+	uint32_t GetLastMissileUsed();
+	void SumLastMissileUsed();
+	bool Shooting();
+	void NoShooting();
 private:
+	bool _disparando = false;
+	uint32_t _lastMissileUsed = 0;
 	const char* pathToModel = "../assets/obj/E-45-Aircraft/E 45 Aircraft_obj.obj";
 };
 #endif

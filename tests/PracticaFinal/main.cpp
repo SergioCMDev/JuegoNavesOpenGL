@@ -445,49 +445,6 @@ void RenderScene(Quad quad, Sphere sphere, Cube cube) {
 }
 
 
-//void MovweObjects(const double deltaTime, Node* node) {
-//	if (node->HasChildren()) {
-//		for (size_t i = 0; i < node->GetNumberChildren(); i++)
-//		{
-//			MoveObjects(deltaTime, node->GetChildren(i));
-//		}
-//	}
-//	if (node->GetGameObject() != NULL) {
-//		if (node->GetGameObject()->OutsideBoundaries()) {
-//			node->GetGameObject()->Deactivate();
-//		}
-//		else {
-//			if (node->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
-//
-//				Player* player = GetPlayerReference(node->GetGameObject());
-//					MovimientoJugador(deltaTime, player);
-//			}
-//			else if (node->GetGameObject()->GetType() == Constants::TIPO_METEOR)
-//			{
-//				GameObject *g = node->GetGameObject();
-//				Meteor* meteor = static_cast<Meteor*>(g);
-//				if (meteor->Rendered()) {
-//					meteor->Mover(deltaTime);
-//				}
-//			}
-//			else if (node->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
-//				GameObject *g = node->GetGameObject();
-//				Enemy* enemyShip = static_cast<Enemy*>(g);
-//				if (enemyShip->Rendered()) {
-//					enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
-//				}
-//			}
-//			else if (node->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
-//				GameObject *g = node->GetGameObject();
-//				Missile* missile = static_cast<Missile*>(g);
-//				if (missile->Rendered()) {
-//					missile->Mover(GameObject::Movement::Backward, deltaTime);
-//				}
-//			}
-//		}
-//	}
-//}
-
 uint32_t createVertexDataQuad(const float* vertices, const uint32_t n_verts, const uint32_t* indices, const uint32_t n_indices, const uint32_t numberOfElementsPerLine) {
 	unsigned int VAO, VBO, EBO;
 
@@ -574,16 +531,23 @@ int main(int argc, char* argv[]) {
 
 	cout << "Creacion Player " << endl;
 	Player player(posPlayer);
+	Node playerNode(&player);
 
 
 	cout << "Creacion Enemigo " << endl;
 	vec3 posEnemigo = vec3(2.0f, 0.0f, 15.0f);
-	Enemy enemyGameObject(posEnemigo);
+
 	Enemy enemyGameObject1(posEnemigo);
 	Enemy enemyGameObject2(posEnemigo);
 	Enemy enemyGameObject3(posEnemigo);
 	Enemy enemyGameObject4(posEnemigo);
 	Enemy enemyGameObject5(posEnemigo);
+
+
+	Node enemies1(&enemyGameObject1);
+	Node enemies2(&enemyGameObject2);
+	Node enemies3(&enemyGameObject3);
+	Node enemies4(&enemyGameObject4);
 
 	cout << "Creacion Meteorito " << endl;
 	Shader shaderMeteorito = Utils::GetFullShader("Shaders/MetorVS.vs", "Shaders/MetorFS.fs");
@@ -602,62 +566,115 @@ int main(int argc, char* argv[]) {
 	Missile missilePlayer3 = Missile(shaderMissile, vec3(0.0f));
 	Missile missilePlayer4 = Missile(shaderMissile, vec3(0.0f));
 	Missile missilePlayer5 = Missile(shaderMissile, vec3(0.0f));
-	Missile missilePlayer6 = Missile(shaderMissile, vec3(0.0f));
-	Missile missilePlayer7 = Missile(shaderMissile, vec3(0.0f));
-	Missile missilePlayer8 = Missile(shaderMissile, vec3(0.0f));
-	Missile missilePlayer9 = Missile(shaderMissile, vec3(0.0f));
-	Missile missilePlayer10 = Missile(shaderMissile, vec3(0.0f));
-	Missile missilePlayer11 = Missile(shaderMissile, vec3(0.0f));
-	Missile missilePlayer12 = Missile(shaderMissile, vec3(0.0f));
-	Missile missilePlayer13 = Missile(shaderMissile, vec3(0.0f));
-	Missile missilePlayer14 = Missile(shaderMissile, vec3(0.0f));
 
-	Node missilePool(NULL);
+	cout << "Creacion Pool Misiles Player" << endl;
+
+	Node missilePoolPlayer(&playerNode);
 	Node missile1(&missilePlayer);
 	Node missile2(&missilePlayer1);
 	Node missile3(&missilePlayer2);
 	Node missile4(&missilePlayer3);
 	Node missile5(&missilePlayer4);
 	Node missile6(&missilePlayer5);
-	Node missile7(&missilePlayer6);
-	Node missile8(&missilePlayer7);
-	Node missile9(&missilePlayer8);
-	Node missile10(&missilePlayer9);
-	Node missile11(&missilePlayer10);
 
-	missilePool.AddChildren(&missile1);
-	missilePool.AddChildren(&missile2);
-	missilePool.AddChildren(&missile3);
-	missilePool.AddChildren(&missile4);
-	missilePool.AddChildren(&missile5);
-	missilePool.AddChildren(&missile6);
-	missilePool.AddChildren(&missile7);
-	missilePool.AddChildren(&missile8);
-	missilePool.AddChildren(&missile9);
-	missilePool.AddChildren(&missile10);
+	missilePoolPlayer.AddChildren(&missile1);
+	missilePoolPlayer.AddChildren(&missile2);
+	missilePoolPlayer.AddChildren(&missile3);
+	missilePoolPlayer.AddChildren(&missile4);
+	missilePoolPlayer.AddChildren(&missile5);
+	missilePoolPlayer.AddChildren(&missile6);
+
+
+	cout << "Creacion Misiles Enemigos" << endl;
+
+	cout << "Creacion Pool Misiles Enemigos" << endl;
+	////////////////////////////////////////////////////////////////////////
+	cout << "Creacion Pool Misiles Enemigo 1" << endl;
+	Node missilePoolEnemy1(&enemies1);
+	Missile missile1Enemy1 = Missile(shaderMissile, vec3(0.0f));
+	Missile missile2Enemy1 = Missile(shaderMissile, vec3(0.0f));
+	Missile missile3Enemy1 = Missile(shaderMissile, vec3(0.0f));
+
+	Node missile1Enemy1Node(&missile1Enemy1, &missilePoolEnemy1);
+	Node missile2Enemy1Node(&missile2Enemy1, &missilePoolEnemy1);
+	Node missile3Enemy1Node(&missile3Enemy1, &missilePoolEnemy1);
+
+
+	missilePoolEnemy1.AddChildren(&missile1Enemy1Node);
+	missilePoolEnemy1.AddChildren(&missile2Enemy1Node);
+	missilePoolEnemy1.AddChildren(&missile3Enemy1Node);
+	/////////////////////////////////////////////////////////////////////////////////////
+	cout << "Creacion Pool Misiles Enemigo 1" << endl;
+
+	Node missilePoolEnemy2(&enemies2);
+
+	Missile missile1Enemy2 = Missile(shaderMissile, vec3(0.0f));
+	Missile missile2Enemy2 = Missile(shaderMissile, vec3(0.0f));
+	Missile missile3Enemy2 = Missile(shaderMissile, vec3(0.0f));
+
+	Node missile1Enemy2Node(&missile1Enemy2, &missilePoolEnemy2);
+	Node missile2Enemy2Node(&missile2Enemy2, &missilePoolEnemy2);
+	Node missile3Enemy2Node(&missile3Enemy2, &missilePoolEnemy2);
+
+	missilePoolEnemy2.AddChildren(&missile1Enemy2Node);
+	missilePoolEnemy2.AddChildren(&missile2Enemy2Node);
+	missilePoolEnemy2.AddChildren(&missile3Enemy2Node);
+	////////////////////////////////////////////////////////////////////////////////////
+	cout << "Creacion Pool Misiles Enemigo 3" << endl;
+
+	Node missilePoolEnemy3(&enemies3);
+
+	Missile missile1Enemy3 = Missile(shaderMissile, vec3(0.0f));
+	Missile missile2Enemy3 = Missile(shaderMissile, vec3(0.0f));
+	Missile missile3Enemy3 = Missile(shaderMissile, vec3(0.0f));
+
+	Node missile1Enemy3Node(&missile1Enemy3, &missilePoolEnemy3);
+	Node missile2Enemy3Node(&missile2Enemy3, &missilePoolEnemy3);
+	Node missile3Enemy3Node(&missile3Enemy3, &missilePoolEnemy3);
+
+	missilePoolEnemy3.AddChildren(&missile1Enemy3Node);
+	missilePoolEnemy3.AddChildren(&missile2Enemy3Node);
+	missilePoolEnemy3.AddChildren(&missile3Enemy3Node);
+	////////////////////////////////////////////////////////////////////////////////////
+	cout << "Creacion Pool Misiles Enemigo 4" << endl;
+
+	Node missilePoolEnemy4(&enemies4);
+
+	Missile missile1Enemy4 = Missile(shaderMissile, vec3(0.0f));
+	Missile missile2Enemy4 = Missile(shaderMissile, vec3(0.0f));
+	Missile missile3Enemy4 = Missile(shaderMissile, vec3(0.0f));
+
+	Node missile1Enemy4Node(&missile1Enemy4, &missilePoolEnemy4);
+	Node missile2Enemy4Node(&missile2Enemy4, &missilePoolEnemy4);
+	Node missile3Enemy4Node(&missile3Enemy4, &missilePoolEnemy4);
+
+	missilePoolEnemy4.AddChildren(&missile1Enemy4Node);
+	missilePoolEnemy4.AddChildren(&missile2Enemy4Node);
+	missilePoolEnemy4.AddChildren(&missile3Enemy4Node);
+	//////////////////////////////////////////////////////////////////////////////////
+
+
 
 	//1 level
 	Node root(&camera);
 	//2 level
-	Node playerNode(&player);
-	playerNode.AddChildren(&missilePool);
+	playerNode.AddChildren(&missilePoolPlayer);
 	//Enemies
-	Node enemiesParentNode(NULL);
-	Node enemies(&enemyGameObject);
-	Node enemies1(&enemyGameObject1);
-	Node enemies2(&enemyGameObject2);
-	Node enemies3(&enemyGameObject3);
-	Node enemies4(&enemyGameObject4);
-	Node enemies5(&enemyGameObject5);
+	Node enemiesParentNode(&root);
+	enemies1.AddChildren(&missilePoolEnemy1);
+	enemies2.AddChildren(&missilePoolEnemy2);
+	enemies3.AddChildren(&missilePoolEnemy3);
+	enemies4.AddChildren(&missilePoolEnemy4);
 
-	enemiesParentNode.AddChildren(&enemies);
-	enemiesParentNode.AddChildren(&enemies2);
-	enemiesParentNode.AddChildren(&enemies3);
-	enemiesParentNode.AddChildren(&enemies4);
-	enemiesParentNode.AddChildren(&enemies5);
+
+	enemiesParentNode.AddChildren(&enemies1);
+	//enemiesParentNode.AddChildren(&enemies2);
+	//enemiesParentNode.AddChildren(&enemies3);
+	//enemiesParentNode.AddChildren(&enemies4);
+
 
 	//Meteors
-	Node MeteorsParentNode(NULL);
+	Node MeteorsParentNode(&root);
 	Node meteor(&meteorGameObject1);
 	Node meteor1(&meteorGameObject2);
 	Node meteor2(&meteorGameObject3);
@@ -710,6 +727,7 @@ int main(int argc, char* argv[]) {
 		control.MoveObjects(deltaTime);
 		control.ActivacionGameObjects(currentFrame, deltaTime);
 		control.RenderGameObjects(&root);
+
 		//MoveObjects(deltaTime, &root);
 
 

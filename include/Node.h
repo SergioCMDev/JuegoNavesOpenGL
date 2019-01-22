@@ -12,6 +12,8 @@ class Node {
 public:
 	Node();
 	Node(GameObject* gameObject);
+	Node(GameObject* gameObject, Node* parent);
+	Node(Node* parent);
 	GameObject* GetGameObject();
 	~Node();
 	void DeleteChilds();
@@ -20,7 +22,7 @@ public:
 	Node* GetChildren(uint32_t idChildren);
 	uint32_t GetNumberChildren();
 	uint32_t GetNumberChildrenActives();
-
+	Node* GetParent();
 	bool Seen();
 private:
 	Node* _childrens[10];
@@ -28,5 +30,6 @@ private:
 	bool _hasChildren = false;
 	GameObject* _gameObject;
 	bool _seen = false;
+	Node* _parent;
 };
 #endif

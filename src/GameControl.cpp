@@ -67,13 +67,16 @@ void GameControl::CheckCollisions()
 		Node* enemyShipNode = _enemyShips->GetChildren(enemyShip);
 		//for (size_t enemyMissile = 0; enemyMissile < _enemyShips->GetChildren(enemyShip)->GetNumberChildren(); enemyMissile++)
 		if (enemyShipNode->HasChildren()) {
-			for (size_t enemyMissile = 0; enemyMissile < enemyShipNode->GetNumberChildren(); enemyMissile++)
-			{
-				if (enemyShipNode->GetChildren(enemyMissile)->GetGameObject()->Rendered()) {
+			Node* enemyShipMissilePoolNode = enemyShipNode->GetChildren(0);
+			if (enemyShipMissilePoolNode->HasChildren()) {
+				for (size_t enemyMissile = 0; enemyMissile < enemyShipMissilePoolNode->GetNumberChildren(); enemyMissile++)
+				{
+					if (enemyShipMissilePoolNode->GetChildren(enemyMissile)->GetGameObject()->Rendered()) {
 
-					if (CheckCollisionsGameObjects(_player->GetGameObject(), enemyShipNode->GetChildren(enemyMissile)->GetGameObject())) {
+						if (CheckCollisionsGameObjects(_player->GetGameObject(), enemyShipMissilePoolNode->GetChildren(enemyMissile)->GetGameObject())) {
 
-						PlayerKilled();
+							PlayerKilled();
+						}
 					}
 				}
 			}
@@ -184,12 +187,15 @@ void GameControl::MoveMissiles(const double deltaTime)
 	{
 		if (_enemyShips->GetChildren(ship)->HasChildren()) {
 
-			for (size_t missil = 0; missil < _enemyShips->GetChildren(ship)->GetNumberChildren(); missil++)
-			{
-				GameObject *g = _enemyShips->GetChildren(ship)->GetChildren(missil)->GetGameObject();
-				Missile* missile = static_cast<Missile*>(g);
-				if (missile->Rendered()) {
-					missile->Mover(GameObject::Movement::Backward, deltaTime);
+			Node* poolEnemyMissiles = _enemyShips->GetChildren(ship)->GetChildren(0);
+			if (poolEnemyMissiles->HasChildren()) {
+				for (size_t missil = 0; missil < poolEnemyMissiles->GetNumberChildren(); missil++)
+				{
+					GameObject *g = poolEnemyMissiles->GetChildren(missil)->GetGameObject();
+					Missile* missile = static_cast<Missile*>(g);
+					if (missile->Rendered()) {
+						missile->Mover(GameObject::Movement::Backward, deltaTime);
+					}
 				}
 			}
 		}
@@ -269,9 +275,18 @@ void GameControl::RenderGameObjects(Node * _root) {
 		}
 	}
 	if (_root->GetGameObject() != NULL) {
+
 		if (_root->GetGameObject()->OutsideBoundaries()) {
 			_root->GetGameObject()->Deactivate();
+			if (_root->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
+				if (_root->GetGameObject()->GetActualNode()->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
+
+					Enemy* enemyShip = static_cast<Enemy*>(_root->GetGameObject()->GetActualNode()->GetParent()->GetGameObject());
+					enemyShip->NoShooting();
+				}
+			}
 		}
+
 		else {
 			if (_root->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
 				Player* player = GetPlayerReference(_root->GetGameObject());
@@ -296,6 +311,8 @@ void GameControl::RenderGameObjects(Node * _root) {
 				Enemy* enemyShip = static_cast<Enemy*>(g);
 				if (enemyShip->Rendered()) {
 					enemyShip->Render(projection, view);
+
+					enemyShip->Disparar();
 				}
 			}
 			else if (_root->GetGameObject()->GetType() == Constants::TIPO_MISIL) {

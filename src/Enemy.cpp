@@ -21,6 +21,24 @@ Enemy::Enemy() {
 
 }
 
+uint32_t Enemy::GetLastMissileUsed()
+{
+	return _lastMissileUsed;
+}
+void Enemy::SumLastMissileUsed()
+{
+	_lastMissileUsed++;
+}
+
+bool Enemy::Shooting()
+{
+	return _disparando;
+}
+
+void Enemy::NoShooting()
+{
+	_disparando = false;
+}
 
 Enemy::Enemy(glm::vec3 position)
 {
@@ -38,11 +56,6 @@ Enemy::Enemy(glm::vec3 position)
 
 Enemy::~Enemy() {
 	//delete this;
-}
-
-void Enemy::Disparar() {
-	//Missile missile(_position, this);
-	cout << "disparo" << endl;
 }
 
 
@@ -64,7 +77,7 @@ void Enemy::Render(glm::mat4 &projection, glm::mat4 &view)
 void Enemy::SetRandomPosition()
 {
 	srand(rand());
-	 uint32_t initialPositionIndex = -1;
+	uint32_t initialPositionIndex = -1;
 	do {
 		initialPositionIndex = rand() % GetNumberPositions();
 	} while (initialPositionIndex <0 || initialPositionIndex >GetNumberPositions());
@@ -93,3 +106,20 @@ void Enemy::Mover(const Movement movement, const float deltaTime)
 	}
 }
 
+void Enemy::Disparar() {
+	if (GetActualNode()->HasChildren()) {
+
+		Node* poolMissilNode = GetActualNode()->GetChildren(0);
+		uint32_t numberOfMissiles = poolMissilNode->GetNumberChildren();
+		if (_lastMissileUsed < numberOfMissiles && !_disparando) {
+			_disparando = true;
+			GameObject* missileGameObject = poolMissilNode->GetChildren(_lastMissileUsed)->GetGameObject();
+			Missile* missile = static_cast<Missile*>(missileGameObject);
+			missile->SetPosition(this->GetPosition());
+			missile->Rotate();
+			missile->Activate();
+			this->SumLastMissileUsed();
+		}
+	}
+	//cout << "disparo erroneo" << endl;
+}

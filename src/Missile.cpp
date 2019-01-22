@@ -11,7 +11,7 @@ Missile::Missile(Shader& shaderMissile, glm::vec3 position)
 	SetModel(Model(pathToModel));
 	_shader = shaderMissile;
 	SetPosition(position);
-	SetVelocity(0.6f);
+	SetVelocity(1.0f);
 	SetType(Constants::TIPO_MISIL);
 	SetScale(vec3(0.4f));
 	Deactivate();
@@ -42,6 +42,11 @@ void Missile::Render(glm::mat4 &projection, glm::mat4 &view)
 
 
 void Missile::Rotate(glm::mat4 &_modelMatrix) {
+	_modelMatrix = glm::rotate(_modelMatrix, glm::radians(180.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+
+}
+
+void Missile::Rotate() {
 	_modelMatrix = glm::rotate(_modelMatrix, glm::radians(180.0f), glm::vec3(1.0f, 1.0f, 0.0f));
 
 }
