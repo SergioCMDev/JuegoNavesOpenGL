@@ -269,39 +269,44 @@ void GameControl::RenderGameObjects(Node * _root) {
 		}
 	}
 	if (_root->GetGameObject() != NULL) {
-		if (_root->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
-			Player* player = GetPlayerReference(_root->GetGameObject());
-			if (player->Rendered()) {
-				player->Render(projection, view);
-			}
-			//cout << "Player " << endl;
+		if (_root->GetGameObject()->OutsideBoundaries()) {
+			_root->GetGameObject()->Deactivate();
 		}
-		else if (_root->GetGameObject()->GetType() == Constants::TIPO_METEOR)
-		{
-			GameObject *g = _root->GetGameObject();
-			//cout << "Meteor " << endl;
-			Meteor* meteor = static_cast<Meteor*>(g);
-			if (meteor->Rendered()) {
-				meteor->Render(projection, view);
+		else {
+			if (_root->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
+				Player* player = GetPlayerReference(_root->GetGameObject());
+				if (player->Rendered()) {
+					player->Render(projection, view);
+				}
+				//cout << "Player " << endl;
 			}
-		}
-		else if (_root->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
-			GameObject *g = _root->GetGameObject();
-			//cout << "Enemigo " << endl;
+			else if (_root->GetGameObject()->GetType() == Constants::TIPO_METEOR)
+			{
+				GameObject *g = _root->GetGameObject();
+				//cout << "Meteor " << endl;
+				Meteor* meteor = static_cast<Meteor*>(g);
+				if (meteor->Rendered()) {
+					meteor->Render(projection, view);
+				}
+			}
+			else if (_root->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
+				GameObject *g = _root->GetGameObject();
+				//cout << "Enemigo " << endl;
 
-			Enemy* enemyShip = static_cast<Enemy*>(g);
-			if (enemyShip->Rendered()) {
-				enemyShip->Render(projection, view);
+				Enemy* enemyShip = static_cast<Enemy*>(g);
+				if (enemyShip->Rendered()) {
+					enemyShip->Render(projection, view);
+				}
 			}
-		}
-		else if (_root->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
-			GameObject *g = _root->GetGameObject();
-			Missile* missile = static_cast<Missile*>(g);
-			//cout << "Missil " << endl;
-			if (missile->Rendered()) {
-				missile->Render(projection, view);
-			}
+			else if (_root->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
+				GameObject *g = _root->GetGameObject();
+				Missile* missile = static_cast<Missile*>(g);
+				//cout << "Missil " << endl;
+				if (missile->Rendered()) {
+					missile->Render(projection, view);
+				}
 
+			}
 		}
 	}
 }
