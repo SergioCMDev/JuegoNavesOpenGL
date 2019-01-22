@@ -591,21 +591,21 @@ int main(int argc, char* argv[]) {
 
 	cout << "Creacion Misiles " << endl;
 	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
-	Missile missilePlayer = Missile(shaderMissile, vec3(0.0f), &player);
-	Missile missilePlayer1 = Missile(shaderMissile, vec3(0.0f), &player);
-	Missile missilePlayer2 = Missile(shaderMissile, vec3(0.0f), &player);
-	Missile missilePlayer3 = Missile(shaderMissile, vec3(0.0f), &player);
-	Missile missilePlayer4 = Missile(shaderMissile, vec3(0.0f), &player);
-	Missile missilePlayer5 = Missile(shaderMissile, vec3(0.0f), &player);
-	Missile missilePlayer6 = Missile(shaderMissile, vec3(0.0f), &player);
-	Missile missilePlayer7 = Missile(shaderMissile, vec3(0.0f), &player);
-	Missile missilePlayer8 = Missile(shaderMissile, vec3(0.0f), &player);
-	Missile missilePlayer9 = Missile(shaderMissile, vec3(0.0f), &player);
-	Missile missilePlayer10 = Missile(shaderMissile, vec3(0.0f), &player);
-	Missile missilePlayer11 = Missile(shaderMissile, vec3(0.0f), &player);
-	Missile missilePlayer12 = Missile(shaderMissile, vec3(0.0f), &player);
-	Missile missilePlayer13 = Missile(shaderMissile, vec3(0.0f), &player);
-	Missile missilePlayer14 = Missile(shaderMissile, vec3(0.0f), &player);
+	Missile missilePlayer = Missile(shaderMissile, vec3(0.0f));
+	Missile missilePlayer1 = Missile(shaderMissile, vec3(0.0f));
+	Missile missilePlayer2 = Missile(shaderMissile, vec3(0.0f));
+	Missile missilePlayer3 = Missile(shaderMissile, vec3(0.0f));
+	Missile missilePlayer4 = Missile(shaderMissile, vec3(0.0f));
+	Missile missilePlayer5 = Missile(shaderMissile, vec3(0.0f));
+	Missile missilePlayer6 = Missile(shaderMissile, vec3(0.0f));
+	Missile missilePlayer7 = Missile(shaderMissile, vec3(0.0f));
+	Missile missilePlayer8 = Missile(shaderMissile, vec3(0.0f));
+	Missile missilePlayer9 = Missile(shaderMissile, vec3(0.0f));
+	Missile missilePlayer10 = Missile(shaderMissile, vec3(0.0f));
+	Missile missilePlayer11 = Missile(shaderMissile, vec3(0.0f));
+	Missile missilePlayer12 = Missile(shaderMissile, vec3(0.0f));
+	Missile missilePlayer13 = Missile(shaderMissile, vec3(0.0f));
+	Missile missilePlayer14 = Missile(shaderMissile, vec3(0.0f));
 
 	Node missilePool(NULL);
 	Node missile1(&missilePlayer);

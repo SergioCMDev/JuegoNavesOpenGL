@@ -24,33 +24,6 @@ Meteor::Meteor() {
 
 }
 
-Meteor::Meteor(Shader & shader, glm::vec3 position) {
-	SetModel(Model(pathToModel));
-	_shader = shader;
-	//const uint32_t initialPositionIndex = rand() % 2;
-	//vec3 positionInitial = positions[initialPositionIndex];
-	SetPosition(position);
-	SetVelocity(1.0f);
-	SetType(Constants::TIPO_METEOR);
-	Deactivate();
-}
-
-
-Meteor::Meteor(glm::vec3 position)
-{
-	Shader shaderMeteorito = Utils::GetFullShader("Shaders/MetorVS.vs", "Shaders/MetorFS.fs");
-
-	SetModel(Model(pathToModel));
-	_shader = shaderMeteorito;
-	//const uint32_t initialPositionIndex = rand() % 2;
-	//vec3 positionInitial = positions[initialPositionIndex];
-	SetPosition(position);
-	SetVelocity(1.0f);
-	SetType(Constants::TIPO_METEOR);
-	Deactivate();
-
-}
-
 
 Meteor::Meteor(Shader & shader)
 {
@@ -59,9 +32,7 @@ Meteor::Meteor(Shader & shader)
 	_shader = shader;
 	srand(rand());
 	const uint32_t initialPositionIndex = rand() % 5;
-	vec3 positionInitial = positions[initialPositionIndex];
-	cout << "Posicion Meteorito " << positionInitial.x << endl;
-	SetPosition(positionInitial);
+	SetPosition(vec3(0.0f));
 	SetVelocity(1.0f);
 	SetType(Constants::TIPO_METEOR);
 	Deactivate();
@@ -97,7 +68,6 @@ void Meteor::Render(glm::mat4 &projection, glm::mat4 &view)
 	_shader.Set("projection", projection);
 	_shader.Set("view", view);
 	_shader.Set("model", model);
-	//SetVelocity(GetVelocity() + 0.2f);
 	GetModel().Draw(_shader);
 }
 

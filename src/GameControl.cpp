@@ -93,6 +93,7 @@ void GameControl::CheckCollisions()
 
 					GameObjectDestroyed(_enemyShips->GetChildren(enemyShip)->GetGameObject());
 					GameObjectDestroyed(poolMisilesPlayer->GetChildren(i)->GetGameObject());
+					GetPlayerReference(_player->GetGameObject())->NoShooting();
 				}
 			}
 		}
@@ -110,7 +111,7 @@ void GameControl::CheckCollisions()
 
 					GameObjectDestroyed(_meteors->GetChildren(meteor)->GetGameObject());
 					GameObjectDestroyed(poolMisilesPlayer->GetChildren(i)->GetGameObject());
-
+					GetPlayerReference(_player->GetGameObject())->NoShooting();
 				}
 			}
 		}

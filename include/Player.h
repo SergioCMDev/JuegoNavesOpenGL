@@ -27,6 +27,7 @@ public:
 	void SumLastMissileUsed();
 	bool Shooting();
 	void Render(glm::mat4 &projection, glm::mat4 &view);
+	void NoShooting();
 private:
 	bool _disparando = false;
 	uint32_t _lastMissileUsed = 0;

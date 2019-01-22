@@ -52,9 +52,17 @@ bool Player::Shooting()
 	return _disparando;
 }
 
+void Player::NoShooting()
+{
+	_disparando = false;
+}
+
+
+
 void Player::Disparar() {
 
-	if (_lastMissileUsed < 5) {
+	uint32_t numberOfMissiles = this->GetActualNode()->GetChildren(0)->GetNumberChildren();
+	if (_lastMissileUsed < numberOfMissiles && !_disparando) {
 		_disparando = true;
 
 		Node* poolMissilNode = GetActualNode()->GetChildren(0);

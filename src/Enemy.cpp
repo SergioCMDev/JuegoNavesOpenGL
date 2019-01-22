@@ -20,17 +20,7 @@ vec3 Enemy::GetEnemyPosition(uint32_t index)
 Enemy::Enemy() {
 
 }
-//Enemy::Enemy(Shader & shader, glm::vec3 position)
-//{
-//	shader.Use();
-//	position = vec3(0.0f, 0.0f, 5.0f);
-//	_model = Model(pathToModel);
-//	_shader = shader;
-//	SetPosition(position);
-//	_velocity = 2.5f;
-//	_type = Constants::TIPO_ENEMIGO;
-//	_scale = glm::vec3(0.3f);
-//}
+
 
 Enemy::Enemy(glm::vec3 position)
 {
@@ -74,7 +64,7 @@ void Enemy::Render(glm::mat4 &projection, glm::mat4 &view)
 void Enemy::SetRandomPosition()
 {
 	srand(rand());
-	uint32_t initialPositionIndex = -1;
+	 uint32_t initialPositionIndex = -1;
 	do {
 		initialPositionIndex = rand() % GetNumberPositions();
 	} while (initialPositionIndex <0 || initialPositionIndex >GetNumberPositions());
