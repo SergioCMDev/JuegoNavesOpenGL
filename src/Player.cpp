@@ -71,9 +71,9 @@ void Player::Disparar() {
 		missile->SetPosition(this->GetPosition());
 		missile->Activate();
 		this->SumLastMissileUsed();
-		cout << "disparo" << endl;
+		//cout << "disparo" << endl;
 	}
-	cout << "disparo erroneo" << endl;
+	//cout << "disparo erroneo" << endl;
 }
 
 void Player::Render(glm::mat4 &projection, glm::mat4 &view)

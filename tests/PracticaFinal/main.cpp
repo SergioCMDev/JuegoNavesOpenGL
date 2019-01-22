@@ -445,43 +445,48 @@ void RenderScene(Quad quad, Sphere sphere, Cube cube) {
 }
 
 
-void MoveObjects(const double deltaTime, Node* node) {
-	if (node->HasChildren()) {
-		for (size_t i = 0; i < node->GetNumberChildren(); i++)
-		{
-			MoveObjects(deltaTime, node->GetChildren(i));
-		}
-	}
-	if (node->GetGameObject() != NULL) {
-		if (node->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
-
-			Player* player = GetPlayerReference(node->GetGameObject());
-			MovimientoJugador(deltaTime, player);
-		}
-		else if (node->GetGameObject()->GetType() == Constants::TIPO_METEOR)
-		{
-			GameObject *g = node->GetGameObject();
-			Meteor* meteor = static_cast<Meteor*>(g);
-			if (meteor->Rendered()) {
-				meteor->Mover(deltaTime);
-			}
-		}
-		else if (node->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
-			GameObject *g = node->GetGameObject();
-			Enemy* enemyShip = static_cast<Enemy*>(g);
-			if (enemyShip->Rendered()) {
-				enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
-			}
-		}
-		else if (node->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
-			GameObject *g = node->GetGameObject();
-			Missile* missile = static_cast<Missile*>(g);
-			if (missile->Rendered()) {
-				missile->Mover(GameObject::Movement::Backward, deltaTime);
-			}
-		}
-	}
-}
+//void MovweObjects(const double deltaTime, Node* node) {
+//	if (node->HasChildren()) {
+//		for (size_t i = 0; i < node->GetNumberChildren(); i++)
+//		{
+//			MoveObjects(deltaTime, node->GetChildren(i));
+//		}
+//	}
+//	if (node->GetGameObject() != NULL) {
+//		if (node->GetGameObject()->OutsideBoundaries()) {
+//			node->GetGameObject()->Deactivate();
+//		}
+//		else {
+//			if (node->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
+//
+//				Player* player = GetPlayerReference(node->GetGameObject());
+//					MovimientoJugador(deltaTime, player);
+//			}
+//			else if (node->GetGameObject()->GetType() == Constants::TIPO_METEOR)
+//			{
+//				GameObject *g = node->GetGameObject();
+//				Meteor* meteor = static_cast<Meteor*>(g);
+//				if (meteor->Rendered()) {
+//					meteor->Mover(deltaTime);
+//				}
+//			}
+//			else if (node->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
+//				GameObject *g = node->GetGameObject();
+//				Enemy* enemyShip = static_cast<Enemy*>(g);
+//				if (enemyShip->Rendered()) {
+//					enemyShip->Mover(GameObject::Movement::Backward, deltaTime);
+//				}
+//			}
+//			else if (node->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
+//				GameObject *g = node->GetGameObject();
+//				Missile* missile = static_cast<Missile*>(g);
+//				if (missile->Rendered()) {
+//					missile->Mover(GameObject::Movement::Backward, deltaTime);
+//				}
+//			}
+//		}
+//	}
+//}
 
 uint32_t createVertexDataQuad(const float* vertices, const uint32_t n_verts, const uint32_t* indices, const uint32_t n_indices, const uint32_t numberOfElementsPerLine) {
 	unsigned int VAO, VBO, EBO;
@@ -690,7 +695,6 @@ int main(int argc, char* argv[]) {
 	sphere.VAO = &SphereVAO;
 	cout << "Inicio GameLoop" << endl;
 
-	//GameControl control(&playerNode, &enemiesParentNode, &MeteorsParentNode);
 	GameControl control(&playerNode, &enemiesParentNode, &MeteorsParentNode, &camera, &root);
 
 

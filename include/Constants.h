@@ -14,6 +14,9 @@ public:
 	static const uint32_t TIPO_METEOR = 2;
 	static const uint32_t TIPO_ENEMIGO = 3;
 	static const uint32_t TIPO_MISIL = 4;
-
+	static const uint32_t MAX_POSITION_Y = 20;
+	static const uint32_t MIN_POSITION_Y = -20;
+	static const uint32_t MAX_POSITION_X = 15;
+	static const uint32_t MIN_POSITION_X = -15;
 };
 #endif

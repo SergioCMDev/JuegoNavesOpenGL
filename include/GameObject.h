@@ -47,6 +47,7 @@ public:
 	void Activate();
 	void Deactivate();
 	Cube *_collider;
+	bool OutsideBoundaries();
 private:
 	Model _model;
 	uint32_t _type;

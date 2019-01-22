@@ -161,7 +161,6 @@ void GameControl::MoveMeteors(const double deltaTime)
 		if (meteor->Rendered()) {
 			meteor->Mover(deltaTime);
 		}
-
 	}
 }
 
@@ -174,7 +173,6 @@ void GameControl::MoveEnemyShips(const double deltaTime)
 		if (enemyship->Rendered()) {
 			enemyship->Mover(GameObject::Movement::Backward, deltaTime);
 		}
-
 	}
 }
 
@@ -193,7 +191,6 @@ void GameControl::MoveMissiles(const double deltaTime)
 				if (missile->Rendered()) {
 					missile->Mover(GameObject::Movement::Backward, deltaTime);
 				}
-
 			}
 		}
 	}
@@ -215,10 +212,10 @@ bool GeneracionGameObjects(const float deltaTime, const float frame) {
 	srand(rand());
 	uint32_t valueGeneration = (rand() * deltaTime) / frame;
 	if (valueGeneration % 2 == 0) {
-		cout << "Generamos";
+		//cout << "Generamos";
 		return true;
 	}
-	cout << "No Generamos";
+	//cout << "No Generamos";
 	return false;
 }
 
@@ -246,7 +243,6 @@ void GameControl::ActivacionGameObjects(const float deltaTime, const float frame
 			Meteor* meteorObject = static_cast<Meteor*>(g);
 			meteorObject->SetRandomPosition();
 			meteorObject->Activate();
-
 		}
 	}
 }

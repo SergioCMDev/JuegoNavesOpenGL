@@ -105,3 +105,12 @@ void GameObject::Deactivate()
 {
 	_active = false;
 }
+
+bool GameObject::OutsideBoundaries()
+{
+	return this->GetPosition().z > Constants::MAX_POSITION_Y ||
+		this->GetPosition().z < Constants::MIN_POSITION_Y ||
+		this->GetPosition().x > Constants::MAX_POSITION_X ||
+		this->GetPosition().x < Constants::MIN_POSITION_X;
+
+}
