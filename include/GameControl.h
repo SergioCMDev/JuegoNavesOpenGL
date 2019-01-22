@@ -15,7 +15,7 @@ public:
 	bool _playerAlive;
 	void MoveObjects(const double deltaTime);
 	void ActivateGameObject(GameObject* ship);
-	void ActivacionGameObjects();
+	void ActivacionGameObjects(const float deltaTime, const float frame);
 	void RenderGameObjects(Node * _root);
 private:
 	void GameObjectDestroyed(GameObject* ship);

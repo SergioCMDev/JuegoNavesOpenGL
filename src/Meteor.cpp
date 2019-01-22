@@ -72,6 +72,17 @@ Meteor::~Meteor() {
 	//delete this;
 }
 
+void Meteor::SetRandomPosition()
+{
+	srand(rand());
+	uint32_t initialPositionIndex = -1;
+	do {
+		initialPositionIndex = rand() % GetNumberPositions();
+	} while (initialPositionIndex <0 || initialPositionIndex >GetNumberPositions());
+
+	vec3 positionInitial = positions[initialPositionIndex];
+	SetPosition(positionInitial);
+}
 
 
 
@@ -86,7 +97,7 @@ void Meteor::Render(glm::mat4 &projection, glm::mat4 &view)
 	_shader.Set("projection", projection);
 	_shader.Set("view", view);
 	_shader.Set("model", model);
-	SetVelocity(GetVelocity() + 0.2f);
+	//SetVelocity(GetVelocity() + 0.2f);
 	GetModel().Draw(_shader);
 }
 

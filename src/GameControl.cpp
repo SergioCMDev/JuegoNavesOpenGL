@@ -19,6 +19,7 @@ GameControl::GameControl(Node* player, Node* enemyships, Node* meteors, Camera* 
 void GameControl::PlayerKilled() {
 	_player->GetGameObject()->Deactivate();
 	_playerAlive = false;
+	cout << "DEAD" << endl;
 }
 
 void GameControl::ActivateGameObject(GameObject * object)
@@ -105,7 +106,7 @@ void GameControl::CheckCollisions()
 		{
 			if (poolMisilesPlayer->GetChildren(i)->GetGameObject()->Rendered() && _meteors->GetChildren(meteor)->GetGameObject()->Rendered()) {
 
-				if (CheckCollisionsGameObjects(_player->GetChildren(i)->GetGameObject(), _meteors->GetChildren(meteor)->GetGameObject())) {
+				if (CheckCollisionsGameObjects(poolMisilesPlayer->GetChildren(i)->GetGameObject(), _meteors->GetChildren(meteor)->GetGameObject())) {
 
 					GameObjectDestroyed(_meteors->GetChildren(meteor)->GetGameObject());
 					GameObjectDestroyed(poolMisilesPlayer->GetChildren(i)->GetGameObject());
@@ -209,20 +210,45 @@ void GameControl::MoveMissiles(const double deltaTime)
 	}
 }
 
-void GameControl::ActivacionGameObjects() {
-	for (size_t ship = 0; ship < _enemyShips->GetNumberChildren(); ship++)
-	{
-		if (!_enemyShips->GetChildren(ship)->GetGameObject()->Rendered()) {
+bool GeneracionGameObjects(const float deltaTime, const float frame) {
+	srand(rand());
+	uint32_t valueGeneration = (rand() * deltaTime) / frame;
+	if (valueGeneration % 2 == 0) {
+		cout << "Generamos";
+		return true;
+	}
+	cout << "No Generamos";
+	return false;
+}
 
-			GameObject *g = _enemyShips->GetChildren(ship)->GetGameObject();
-			Enemy* EnemyShip = static_cast<Enemy*>(g);
-			EnemyShip->SetRandomPosition();
-			EnemyShip->Activate();
+void GameControl::ActivacionGameObjects(const float deltaTime, const float frame) {
+	if (GeneracionGameObjects(deltaTime, frame)) {
+
+		for (size_t ship = 0; ship < _enemyShips->GetNumberChildren(); ship++)
+		{
+			if (!_enemyShips->GetChildren(ship)->GetGameObject()->Rendered()) {
+
+				GameObject *g = _enemyShips->GetChildren(ship)->GetGameObject();
+				Enemy* EnemyShip = static_cast<Enemy*>(g);
+				EnemyShip->SetRandomPosition();
+				EnemyShip->Activate();
+
+			}
+		}
+	}
+
+	for (size_t meteor = 0; meteor < _meteors->GetNumberChildren(); meteor++)
+	{
+		if (!_meteors->GetChildren(meteor)->GetGameObject()->Rendered()) {
+
+			GameObject *g = _meteors->GetChildren(meteor)->GetGameObject();
+			Meteor* meteorObject = static_cast<Meteor*>(g);
+			meteorObject->SetRandomPosition();
+			meteorObject->Activate();
 
 		}
 	}
 }
-
 
 
 

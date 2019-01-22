@@ -704,7 +704,7 @@ int main(int argc, char* argv[]) {
 		HandlerInput(deltaTime, &root);
 		control.CheckCollisions();
 		control.MoveObjects(deltaTime);
-		control.ActivacionGameObjects();
+		control.ActivacionGameObjects(currentFrame, deltaTime);
 		control.RenderGameObjects(&root);
 		//MoveObjects(deltaTime, &root);
 
