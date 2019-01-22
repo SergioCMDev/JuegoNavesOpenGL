@@ -22,6 +22,7 @@ public:
 	Node* GetChildren(uint32_t idChildren);
 	uint32_t GetNumberChildren();
 	uint32_t GetNumberChildrenActives();
+	void ResetChildren();
 	Node* GetParent();
 	bool Seen();
 private:

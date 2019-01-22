@@ -570,12 +570,12 @@ int main(int argc, char* argv[]) {
 	cout << "Creacion Pool Misiles Player" << endl;
 
 	Node missilePoolPlayer(&playerNode);
-	Node missile1(&missilePlayer);
-	Node missile2(&missilePlayer1);
-	Node missile3(&missilePlayer2);
-	Node missile4(&missilePlayer3);
-	Node missile5(&missilePlayer4);
-	Node missile6(&missilePlayer5);
+	Node missile1(&missilePlayer, &missilePoolPlayer);
+	Node missile2(&missilePlayer1,&missilePoolPlayer);
+	Node missile3(&missilePlayer2,&missilePoolPlayer);
+	Node missile4(&missilePlayer3,&missilePoolPlayer);
+	Node missile5(&missilePlayer4,&missilePoolPlayer);
+	Node missile6(&missilePlayer5,&missilePoolPlayer);
 
 	missilePoolPlayer.AddChildren(&missile1);
 	missilePoolPlayer.AddChildren(&missile2);

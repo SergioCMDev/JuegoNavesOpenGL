@@ -91,6 +91,14 @@ uint32_t Node::GetNumberChildrenActives()
 	return activeChildrens;
 }
 
+void Node::ResetChildren()
+{
+	for (size_t idChildren = 0; idChildren < GetNumberChildren(); idChildren++)
+	{
+		GetChildren(idChildren)->GetGameObject()->Deactivate();
+	}
+}
+
 Node* Node::GetChildren(uint32_t idChildren) {
 	return _childrens[idChildren];
 }

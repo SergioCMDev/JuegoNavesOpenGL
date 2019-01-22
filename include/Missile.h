@@ -5,6 +5,7 @@
 #include "string.h"
 #include "Shader.h"
 #include "Utils.h"
+#include "Node.h"
 
 #include "GameObject.h"
 #include "Constants.h"

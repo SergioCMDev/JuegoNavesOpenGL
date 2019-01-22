@@ -31,9 +31,9 @@ void Missile::Render(glm::mat4 &projection, glm::mat4 &view)
 	_modelMatrix = glm::translate(_modelMatrix, GetPosition());
 
 	_modelMatrix = glm::scale(_modelMatrix, GetScale());
-	//if (_parent->_type == Constants::TIPO_ENEMIGO) {
-	//	Rotate(_modelMatrix);
-	//}
+	if (GetActualNode()->GetParent()->GetParent()->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
+		Rotate(_modelMatrix);
+	}
 	_shader.Set("projection", projection);
 	_shader.Set("view", view);
 	_shader.Set("model", _modelMatrix);

@@ -93,7 +93,12 @@ void GameControl::CheckCollisions()
 			if (poolMisilesPlayer->GetChildren(i)->GetGameObject()->Rendered() && _enemyShips->GetChildren(enemyShip)->GetGameObject()->Rendered()) {
 
 				if (CheckCollisionsGameObjects(poolMisilesPlayer->GetChildren(i)->GetGameObject(), _enemyShips->GetChildren(enemyShip)->GetGameObject())) {
-
+					//En caso de tener un pool de misiles y misiles los reseteamos
+					if(_enemyShips->HasChildren() && _enemyShips->GetChildren(0)->HasChildren())
+					{
+						_enemyShips->GetChildren(0)->ResetChildren();
+					}
+					
 					GameObjectDestroyed(_enemyShips->GetChildren(enemyShip)->GetGameObject());
 					GameObjectDestroyed(poolMisilesPlayer->GetChildren(i)->GetGameObject());
 					GetPlayerReference(_player->GetGameObject())->NoShooting();
@@ -194,7 +199,7 @@ void GameControl::MoveMissiles(const double deltaTime)
 					GameObject *g = poolEnemyMissiles->GetChildren(missil)->GetGameObject();
 					Missile* missile = static_cast<Missile*>(g);
 					if (missile->Rendered()) {
-						missile->Mover(GameObject::Movement::Backward, deltaTime);
+						missile->Mover(GameObject::Movement::Forward, deltaTime);
 					}
 				}
 			}
@@ -277,6 +282,9 @@ void GameControl::RenderGameObjects(Node * _root) {
 	if (_root->GetGameObject() != NULL) {
 
 		if (_root->GetGameObject()->OutsideBoundaries()) {
+			if (_root->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
+				PlayerKilled();
+			}
 			_root->GetGameObject()->Deactivate();
 			if (_root->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
 				if (_root->GetGameObject()->GetActualNode()->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {

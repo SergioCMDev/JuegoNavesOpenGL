@@ -116,7 +116,7 @@ void Enemy::Disparar() {
 			GameObject* missileGameObject = poolMissilNode->GetChildren(_lastMissileUsed)->GetGameObject();
 			Missile* missile = static_cast<Missile*>(missileGameObject);
 			missile->SetPosition(this->GetPosition());
-			missile->Rotate();
+			//missile->Rotate();
 			missile->Activate();
 			this->SumLastMissileUsed();
 		}
