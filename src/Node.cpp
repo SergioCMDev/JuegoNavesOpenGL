@@ -94,10 +94,10 @@ uint32_t Node::GetNumberChildrenActives()
 void Node::ResetChildren()
 {
 	if (this->HasChildren()) {
-
-		for (size_t idChildren = 0; idChildren < GetNumberChildren(); idChildren++)
+		Node* poolMisiles = GetChildren(0);
+		for (size_t idChildren = 0; idChildren < poolMisiles->GetNumberChildren(); idChildren++)
 		{
-			GetChildren(idChildren)->GetGameObject()->Deactivate();
+			poolMisiles->GetChildren(idChildren)->GetGameObject()->Deactivate();
 		}
 	}
 }

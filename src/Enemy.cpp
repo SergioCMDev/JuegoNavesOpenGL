@@ -47,7 +47,7 @@ Enemy::Enemy(Shader& shader)
 {
 	_shader = shader;
 	SetModel(Model(pathToModel));
-	SetVelocity(0.2f);
+	SetVelocity(1.2f);
 	SetType(Constants::TIPO_ENEMIGO);
 	SetScale(glm::vec3(0.3f));
 	Deactivate();

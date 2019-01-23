@@ -404,7 +404,7 @@ void RenderSphere(Sphere &sphere, glm::mat4 &projection, glm::mat4 &view)
 	//vec3 lightPos = vec3(l_pos[0], l_pos[1], l_pos[0]);
 
 	////model = glm::translate(model, sphere.position + lightPos);
-	model = glm::translate(model, posCamera);
+	model = glm::translate(model, sphere.position);
 	model = glm::scale(model, sphere.scale);
 
 	RenderFigureMain(*sphere.shader, projection, view, model, *sphere.VAO, sphere.numeroIndices);
@@ -413,7 +413,7 @@ void RenderSphere(Sphere &sphere, glm::mat4 &projection, glm::mat4 &view)
 #pragma endregion
 
 
-void RenderScene(Quad quad, Sphere sphere, Cube cube) {
+void RenderScene(Quad quad, Sphere sphere, Cube cube, Node* node) {
 
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -424,7 +424,7 @@ void RenderScene(Quad quad, Sphere sphere, Cube cube) {
 	//Dibujamos Suelo
 	RenderQuadSuelo(quad, projection, view);
 	if (debug) {
-
+		sphere.position = node->GetGameObject()->GetPosition();
 		//Dibujamos sphera luz
 		RenderSphere(sphere, projection, view);
 
@@ -523,15 +523,15 @@ void RenderColliders(Node * node, Cube *cube) {
 void RenderLights(Shader& shader, Node* node) {
 	if (node->HasChildren()) {
 		shader.Use();
-		shader.Set("spotlight.position", node->GetChildren(0)->GetGameObject()->GetPosition() + vec3(0.0, 10.0f, 0.0f));
-		shader.Set("spotlight.direction", node->GetChildren(0)->GetGameObject()->GetPosition()); // y > altura 
-		shader.Set("spotlight.cutOff", cos(radians(40.0f)));
-		shader.Set("spotlight.outerCutOff", cos(radians(45.0f)));
-		shader.Set("spotlight.ambient", 0.6f, 0.6f, 0.6f);
-		shader.Set("spotlight.diffuse", 0.5f, 0.5f, 0.5f);
-		shader.Set("spotlight.constant", 1.0f);
-		shader.Set("spotlight.linear", 0.09f);
-		shader.Set("spotlight.cuadratic", 0.032f);
+		shader.Set("light.position", node->GetGameObject()->GetPosition());
+		shader.Set("light.ambient", 0.4f, 0.4f, 0.4f);
+		shader.Set("light.diffuse", 0.5f, 0.5f, 0.5f);
+		shader.Set("light.constant", 1.0f);
+		shader.Set("light.linear", 0.09f);
+		shader.Set("light.cuadratic", 0.032f);
+
+
+		shader.Set("material.shininess", 45.6f);
 	}
 }
 
@@ -578,7 +578,6 @@ int main(int argc, char* argv[]) {
 	Node enemies4(&enemyGameObject4);
 
 	cout << "Creacion Meteorito " << endl;
-	//Shader shaderMeteorito = Utils::GetFullShader("Shaders/MetorVS.vs", "Shaders/MetorFS.fs");
 	Meteor meteorGameObject1 = Meteor(shaderModels);
 	Meteor meteorGameObject2 = Meteor(shaderModels);
 	Meteor meteorGameObject3 = Meteor(shaderModels);
@@ -587,7 +586,6 @@ int main(int argc, char* argv[]) {
 	Meteor meteorGameObject6 = Meteor(shaderModels);
 
 	cout << "Creacion Misiles " << endl;
-	//Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
 	Missile missilePlayer = Missile(shaderModels, vec3(0.0f));
 	Missile missilePlayer1 = Missile(shaderModels, vec3(0.0f));
 	Missile missilePlayer2 = Missile(shaderModels, vec3(0.0f));
@@ -749,7 +747,7 @@ int main(int argc, char* argv[]) {
 		float currentFrame = glfwGetTime();
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-		RenderScene(quad, sphere, cubeClasss);
+		RenderScene(quad, sphere, cubeClasss, &root);
 		RenderLights(shaderModels, &root);
 		//RenderColliders(&root, &cubeClasss);
 		HandlerInput(deltaTime, &root);
@@ -758,7 +756,6 @@ int main(int argc, char* argv[]) {
 		control.ActivacionGameObjects(currentFrame, deltaTime);
 		control.RenderGameObjects(&root);
 
-		//MoveObjects(deltaTime, &root);
 
 
 		glfwSwapBuffers(window.GetWindow());
