@@ -21,6 +21,8 @@ Enemy::Enemy() {
 
 }
 
+
+
 uint32_t Enemy::GetLastMissileUsed()
 {
 	return _lastMissileUsed;
@@ -40,14 +42,11 @@ void Enemy::NoShooting()
 	_disparando = false;
 }
 
-Enemy::Enemy(glm::vec3 position)
-{
-	Shader shaderNaveEnemiga = Utils::GetFullShader("Shaders/NaveEnemyVS.vs", "Shaders/NaveEnemyFS.fs");
-	shaderNaveEnemiga.Use();
+Enemy::Enemy(Shader& shader)
 	//position = vec3(0.0f, 0.0f, 15.0f);
+{
+	_shader = shader;
 	SetModel(Model(pathToModel));
-	_shader = shaderNaveEnemiga;
-	SetPosition(position);
 	SetVelocity(0.2f);
 	SetType(Constants::TIPO_ENEMIGO);
 	SetScale(glm::vec3(0.3f));

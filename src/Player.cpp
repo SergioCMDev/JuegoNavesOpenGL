@@ -4,27 +4,25 @@ Player::Player() {
 
 }
 
-Player::Player(glm::vec3 position)
-{
-	Shader shaderNavePlayer = Utils::GetFullShader("Shaders/NavePlayerVS.vs", "Shaders/NavePlayerFS.fs");
-	shaderNavePlayer.Use();
-	position = vec3(0.0f, 0.0f, 0.0f);
-	SetModel(Model(pathToModel));
-	_shader = shaderNavePlayer;
-	SetPosition(position);
-	SetVelocity(2.5f);
-	SetType(Constants::TIPO_PLAYER);
-	SetScale(glm::vec3(0.3f));
-	Activate();
-
-}
+//Player::Player(glm::vec3 position)
+//{
+//	Shader shaderNavePlayer = Utils::GetFullShader("Shaders/NavePlayerVS.vs", "Shaders/NavePlayerFS.fs");
+//	shaderNavePlayer.Use();
+//	position = vec3(0.0f, 0.0f, 0.0f);
+//	SetModel(Model(pathToModel));
+//	_shader = shaderNavePlayer;
+//	SetPosition(position);
+//	SetVelocity(2.5f);
+//	SetType(Constants::TIPO_PLAYER);
+//	SetScale(glm::vec3(0.3f));
+//	Activate();
+//
+//}
 
 Player::Player(Shader & shader, glm::vec3 position)
 {
-	shader.Use();
 	_shader = shader;
-
-	position = vec3(0.0f, 0.0f, 0.0f);
+	position = position;
 	SetModel(Model(pathToModel));
 	SetPosition(position);
 	SetVelocity(2.5f);
@@ -79,7 +77,6 @@ void Player::Disparar() {
 void Player::Render(glm::mat4 &projection, glm::mat4 &view)
 {
 	glm::mat4 model = mat4(1.0f);
-	_shader.Use();
 	model = glm::translate(model, GetPosition());
 	//model = glm::rotate(model, (float)glm::radians(0.0f), vec3(0.0f, 1.0f, 0.0f));
 

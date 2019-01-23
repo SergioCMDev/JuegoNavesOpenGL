@@ -14,10 +14,11 @@ class Enemy : public GameObject {
 
 public:
 	Enemy();
+	Enemy(Shader& shader);
 	//float GetVelocity();
 	void Mover(const Movement movement, const float deltaTime);
 	void Disparar();
-	Enemy(glm::vec3 position);
+	//Enemy(glm::vec3 position);
 	~Enemy();
 	void Render(glm::mat4 &projection, glm::mat4 &view);
 	void SetRandomPosition();

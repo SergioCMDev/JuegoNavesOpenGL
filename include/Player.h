@@ -21,7 +21,7 @@ public:
 	void Disparar();
 
 	Player(Shader & shader, glm::vec3 position);
-	Player(glm::vec3 position);
+	//Player(glm::vec3 position);
 	~Player();
 	uint32_t GetLastMissileUsed();
 	void SumLastMissileUsed();

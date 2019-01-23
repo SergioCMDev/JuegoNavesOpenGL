@@ -7,7 +7,6 @@ Missile::Missile() {
 //
 Missile::Missile(Shader& shaderMissile, glm::vec3 position)
 {
-	shaderMissile.Use();
 	SetModel(Model(pathToModel));
 	_shader = shaderMissile;
 	SetPosition(position);

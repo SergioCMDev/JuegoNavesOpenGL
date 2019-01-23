@@ -28,7 +28,7 @@ Camera camera(posCamera);
 #pragma region Variables Globales
 const float M_PI = 3.14f;
 const vec3 posSuelo = vec3(0.0f, -16.0f, 0.0f);
-const vec3 posPlayer = vec3(5.0f, 0.0f, 0.0f);
+const vec3 posPlayer = vec3(0.0f, 0.0f, 0.0f);
 const float screen_width = 800.0f, screen_height = 600.0f;
 float lastY = (float)screen_height / 2.0f;
 float lastX = (float)screen_width / 2.0f;
@@ -75,7 +75,7 @@ struct Sphere {
 	uint32_t numeroIndices = 121 * 8;
 	vec3 scale = glm::vec3(1.4f);
 	vec3 color = vec3(1.0f);
-	vec3 position = posCamera;
+	vec3 position = vec3(0.0f, 4.0f, 0.0f);
 
 };
 
@@ -398,8 +398,13 @@ void RenderSphere(Sphere &sphere, glm::mat4 &projection, glm::mat4 &view)
 	sphere.shader->Use();
 	sphere.shader->Set("color", sphere.color);
 
-	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-	model = glm::translate(model, sphere.position);
+	//model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+
+	//float l_pos[] = { sin((float)glfwGetTime() / 2.0f), 0.0f, abs(cos((float)glfwGetTime() / 2.0f)) };
+	//vec3 lightPos = vec3(l_pos[0], l_pos[1], l_pos[0]);
+
+	////model = glm::translate(model, sphere.position + lightPos);
+	model = glm::translate(model, sphere.position );
 	model = glm::scale(model, sphere.scale);
 
 	RenderFigureMain(*sphere.shader, projection, view, model, *sphere.VAO, sphere.numeroIndices);
@@ -513,6 +518,24 @@ void RenderColliders(Node * node, Cube *cube) {
 
 }
 
+
+
+void RenderLights(Shader& shader, Node* node) {
+	if (node->HasChildren()) {
+		shader.Use();
+		shader.Set("spotlight.position", vec3(0.0f, 5.0f, 0.0f));
+		shader.Set("spotlight.direction", vec3(0.0f, 0.0f, 0.0f)); // y > altura 
+		shader.Set("spotlight.cutOff", cos(radians(20.0f)));
+		shader.Set("spotlight.outerCutOff", cos(radians(25.0f)));
+		shader.Set("spotlight.ambient", 0.2f, 0.2f, 0.2f);
+		shader.Set("spotlight.diffuse", 0.5f, 0.5f, 0.5f);
+		shader.Set("spotlight.constant", 1.0f);
+		shader.Set("spotlight.linear", 0.09f);
+		shader.Set("spotlight.cuadratic", 0.032f);
+	}
+}
+
+
 int main(int argc, char* argv[]) {
 	if (!Inicializacion()) {
 		return -1;
@@ -520,28 +543,33 @@ int main(int argc, char* argv[]) {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 
+
+
 	cout << "Creacion Shaders " << endl;
-	Shader shaderlight = Utils::GetFullShader("Shaders/LightVS.vs", "Shaders/LightFS.fs");
 	Shader shaderCube = Utils::GetFullShader("Shaders/CubeVS.vs", "Shaders/CubeFS.fs");
 	Shader shaderQuad = Utils::GetFullShader("Shaders/QuadVS.vs", "Shaders/QuadFS.fs");
-	Shader shaderSphere = Utils::GetFullShader("Shaders/SphereVS.vs", "Shaders/SphereFS.fs");
+	Shader shaderSphere = Utils::GetFullShader("Shaders/LightVS.vs", "Shaders/LightFS.fs");
+
+	Shader shaderModels = Utils::GetFullShader("Shaders/shaderVS.vs", "Shaders/shaderFS.fs");
 
 	cout << "Creacion Textures " << endl;
 	uint32_t textureSuelo = Model::GetTexture("Textures/texture3.png", true);
 
 	cout << "Creacion Player " << endl;
-	Player player(posPlayer);
+	Player player(shaderModels, posPlayer);
 	Node playerNode(&player);
 
 
 	cout << "Creacion Enemigo " << endl;
-	vec3 posEnemigo = vec3(2.0f, 0.0f, 15.0f);
+	//vec3 posEnemigo = vec3(2.0f, 0.0f, 15.0f);
+#pragma region generacion GameObjects y Nodos
 
-	Enemy enemyGameObject1(posEnemigo);
-	Enemy enemyGameObject2(posEnemigo);
-	Enemy enemyGameObject3(posEnemigo);
-	Enemy enemyGameObject4(posEnemigo);
-	Enemy enemyGameObject5(posEnemigo);
+
+	Enemy enemyGameObject1(shaderModels);
+	Enemy enemyGameObject2(shaderModels);
+	Enemy enemyGameObject3(shaderModels);
+	Enemy enemyGameObject4(shaderModels);
+	Enemy enemyGameObject5(shaderModels);
 
 
 	Node enemies1(&enemyGameObject1);
@@ -550,32 +578,32 @@ int main(int argc, char* argv[]) {
 	Node enemies4(&enemyGameObject4);
 
 	cout << "Creacion Meteorito " << endl;
-	Shader shaderMeteorito = Utils::GetFullShader("Shaders/MetorVS.vs", "Shaders/MetorFS.fs");
-	Meteor meteorGameObject1 = Meteor(shaderMeteorito);
-	Meteor meteorGameObject2 = Meteor(shaderMeteorito);
-	Meteor meteorGameObject3 = Meteor(shaderMeteorito);
-	Meteor meteorGameObject4 = Meteor(shaderMeteorito);
-	Meteor meteorGameObject5 = Meteor(shaderMeteorito);
-	Meteor meteorGameObject6 = Meteor(shaderMeteorito);
+	//Shader shaderMeteorito = Utils::GetFullShader("Shaders/MetorVS.vs", "Shaders/MetorFS.fs");
+	Meteor meteorGameObject1 = Meteor(shaderModels);
+	Meteor meteorGameObject2 = Meteor(shaderModels);
+	Meteor meteorGameObject3 = Meteor(shaderModels);
+	Meteor meteorGameObject4 = Meteor(shaderModels);
+	Meteor meteorGameObject5 = Meteor(shaderModels);
+	Meteor meteorGameObject6 = Meteor(shaderModels);
 
 	cout << "Creacion Misiles " << endl;
-	Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
-	Missile missilePlayer = Missile(shaderMissile, vec3(0.0f));
-	Missile missilePlayer1 = Missile(shaderMissile, vec3(0.0f));
-	Missile missilePlayer2 = Missile(shaderMissile, vec3(0.0f));
-	Missile missilePlayer3 = Missile(shaderMissile, vec3(0.0f));
-	Missile missilePlayer4 = Missile(shaderMissile, vec3(0.0f));
-	Missile missilePlayer5 = Missile(shaderMissile, vec3(0.0f));
+	//Shader shaderMissile = Utils::GetFullShader("Shaders/MissileVS.vs", "Shaders/MissileFS.fs");
+	Missile missilePlayer = Missile(shaderModels, vec3(0.0f));
+	Missile missilePlayer1 = Missile(shaderModels, vec3(0.0f));
+	Missile missilePlayer2 = Missile(shaderModels, vec3(0.0f));
+	Missile missilePlayer3 = Missile(shaderModels, vec3(0.0f));
+	Missile missilePlayer4 = Missile(shaderModels, vec3(0.0f));
+	Missile missilePlayer5 = Missile(shaderModels, vec3(0.0f));
 
 	cout << "Creacion Pool Misiles Player" << endl;
 
 	Node missilePoolPlayer(&playerNode);
 	Node missile1(&missilePlayer, &missilePoolPlayer);
-	Node missile2(&missilePlayer1,&missilePoolPlayer);
-	Node missile3(&missilePlayer2,&missilePoolPlayer);
-	Node missile4(&missilePlayer3,&missilePoolPlayer);
-	Node missile5(&missilePlayer4,&missilePoolPlayer);
-	Node missile6(&missilePlayer5,&missilePoolPlayer);
+	Node missile2(&missilePlayer1, &missilePoolPlayer);
+	Node missile3(&missilePlayer2, &missilePoolPlayer);
+	Node missile4(&missilePlayer3, &missilePoolPlayer);
+	Node missile5(&missilePlayer4, &missilePoolPlayer);
+	Node missile6(&missilePlayer5, &missilePoolPlayer);
 
 	missilePoolPlayer.AddChildren(&missile1);
 	missilePoolPlayer.AddChildren(&missile2);
@@ -591,9 +619,9 @@ int main(int argc, char* argv[]) {
 	////////////////////////////////////////////////////////////////////////
 	cout << "Creacion Pool Misiles Enemigo 1" << endl;
 	Node missilePoolEnemy1(&enemies1);
-	Missile missile1Enemy1 = Missile(shaderMissile, vec3(0.0f));
-	Missile missile2Enemy1 = Missile(shaderMissile, vec3(0.0f));
-	Missile missile3Enemy1 = Missile(shaderMissile, vec3(0.0f));
+	Missile missile1Enemy1 = Missile(shaderModels, vec3(0.0f));
+	Missile missile2Enemy1 = Missile(shaderModels, vec3(0.0f));
+	Missile missile3Enemy1 = Missile(shaderModels, vec3(0.0f));
 
 	Node missile1Enemy1Node(&missile1Enemy1, &missilePoolEnemy1);
 	Node missile2Enemy1Node(&missile2Enemy1, &missilePoolEnemy1);
@@ -608,9 +636,9 @@ int main(int argc, char* argv[]) {
 
 	Node missilePoolEnemy2(&enemies2);
 
-	Missile missile1Enemy2 = Missile(shaderMissile, vec3(0.0f));
-	Missile missile2Enemy2 = Missile(shaderMissile, vec3(0.0f));
-	Missile missile3Enemy2 = Missile(shaderMissile, vec3(0.0f));
+	Missile missile1Enemy2 = Missile(shaderModels, vec3(0.0f));
+	Missile missile2Enemy2 = Missile(shaderModels, vec3(0.0f));
+	Missile missile3Enemy2 = Missile(shaderModels, vec3(0.0f));
 
 	Node missile1Enemy2Node(&missile1Enemy2, &missilePoolEnemy2);
 	Node missile2Enemy2Node(&missile2Enemy2, &missilePoolEnemy2);
@@ -624,9 +652,9 @@ int main(int argc, char* argv[]) {
 
 	Node missilePoolEnemy3(&enemies3);
 
-	Missile missile1Enemy3 = Missile(shaderMissile, vec3(0.0f));
-	Missile missile2Enemy3 = Missile(shaderMissile, vec3(0.0f));
-	Missile missile3Enemy3 = Missile(shaderMissile, vec3(0.0f));
+	Missile missile1Enemy3 = Missile(shaderModels, vec3(0.0f));
+	Missile missile2Enemy3 = Missile(shaderModels, vec3(0.0f));
+	Missile missile3Enemy3 = Missile(shaderModels, vec3(0.0f));
 
 	Node missile1Enemy3Node(&missile1Enemy3, &missilePoolEnemy3);
 	Node missile2Enemy3Node(&missile2Enemy3, &missilePoolEnemy3);
@@ -640,9 +668,9 @@ int main(int argc, char* argv[]) {
 
 	Node missilePoolEnemy4(&enemies4);
 
-	Missile missile1Enemy4 = Missile(shaderMissile, vec3(0.0f));
-	Missile missile2Enemy4 = Missile(shaderMissile, vec3(0.0f));
-	Missile missile3Enemy4 = Missile(shaderMissile, vec3(0.0f));
+	Missile missile1Enemy4 = Missile(shaderModels, vec3(0.0f));
+	Missile missile2Enemy4 = Missile(shaderModels, vec3(0.0f));
+	Missile missile3Enemy4 = Missile(shaderModels, vec3(0.0f));
 
 	Node missile1Enemy4Node(&missile1Enemy4, &missilePoolEnemy4);
 	Node missile2Enemy4Node(&missile2Enemy4, &missilePoolEnemy4);
@@ -668,9 +696,9 @@ int main(int argc, char* argv[]) {
 
 
 	enemiesParentNode.AddChildren(&enemies1);
-	//enemiesParentNode.AddChildren(&enemies2);
-	//enemiesParentNode.AddChildren(&enemies3);
-	//enemiesParentNode.AddChildren(&enemies4);
+	enemiesParentNode.AddChildren(&enemies2);
+	enemiesParentNode.AddChildren(&enemies3);
+	enemiesParentNode.AddChildren(&enemies4);
 
 
 	//Meteors
@@ -693,6 +721,7 @@ int main(int argc, char* argv[]) {
 	root.AddChildren(&playerNode);
 	root.AddChildren(&enemiesParentNode);
 	root.AddChildren(&MeteorsParentNode);
+#pragma endregion
 
 	Cube cubeClasss = Cube(shaderCube);
 	Quad quad = Quad();
@@ -721,11 +750,12 @@ int main(int argc, char* argv[]) {
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		RenderScene(quad, sphere, cubeClasss);
+		RenderLights(shaderModels, &root);
 		//RenderColliders(&root, &cubeClasss);
 		HandlerInput(deltaTime, &root);
 		control.CheckCollisions();
 		control.MoveObjects(deltaTime);
-		control.ActivacionGameObjects(currentFrame, deltaTime);
+		//control.ActivacionGameObjects(currentFrame, deltaTime);
 		control.RenderGameObjects(&root);
 
 		//MoveObjects(deltaTime, &root);
