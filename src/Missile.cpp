@@ -33,9 +33,6 @@ void Missile::Render(glm::mat4 &projection, glm::mat4 &view)
 	if (GetActualNode()->GetParent()->GetParent()->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
 		Rotate(_modelMatrix);
 	}
-	_modelMatrix = glm::scale(_modelMatrix, GetScale());
-	glm::mat3 normalMat = glm::inverse(glm::transpose(glm::mat3(_modelMatrix)));
-	_shader.Set("normalMat", normalMat);
 	_shader.Set("projection", projection);
 	_shader.Set("view", view);
 	_shader.Set("model", _modelMatrix);

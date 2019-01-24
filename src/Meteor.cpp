@@ -65,10 +65,6 @@ void Meteor::Render(glm::mat4 &projection, glm::mat4 &view)
 	model = glm::scale(model, _scale);
 	float angle = glm::radians((40 + glm::cos(45.0f) + glm::sin(90.0f)));
 	model = glm::rotate(model, (float)glfwGetTime() *  angle, vec3(1.0f, 1.0f, 0.0f));
-	model = glm::scale(model, GetScale());
-	glm::mat3 normalMat = glm::inverse(glm::transpose(glm::mat3(model)));
-	_shader.Set("normalMat", normalMat);
-
 	_shader.Set("projection", projection);
 	_shader.Set("view", view);
 	_shader.Set("model", model);

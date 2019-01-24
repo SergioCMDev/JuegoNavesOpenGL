@@ -81,9 +81,7 @@ void Player::Render(glm::mat4 &projection, glm::mat4 &view)
 	//model = glm::rotate(model, (float)glm::radians(0.0f), vec3(0.0f, 1.0f, 0.0f));
 
 	model = glm::scale(model, GetScale());
-	glm::mat3 normalMat = glm::inverse(glm::transpose(glm::mat3(model)));
-	_shader.Set("normalMat", normalMat);
-	//_shader.Set("normalMat", normalMat);
+
 	_shader.Set("projection", projection);
 	_shader.Set("view", view);
 	_shader.Set("model", model);

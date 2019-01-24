@@ -66,8 +66,7 @@ void Enemy::Render(glm::mat4 &projection, glm::mat4 &view)
 	model = glm::translate(model, GetPosition());
 
 	model = glm::scale(model, GetScale());
-	glm::mat3 normalMat = glm::inverse(glm::transpose(glm::mat3(model)));
-	_shader.Set("normalMat", normalMat);
+
 	_shader.Set("projection", projection);
 	_shader.Set("view", view);
 	_shader.Set("model", model);
