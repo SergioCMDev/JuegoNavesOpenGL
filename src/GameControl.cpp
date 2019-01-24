@@ -94,9 +94,9 @@ void GameControl::CheckCollisions()
 
 				if (CheckCollisionsGameObjects(poolMisilesPlayer->GetChildren(i)->GetGameObject(), _enemyShips->GetChildren(enemyShip)->GetGameObject())) {
 					//En caso de tener un pool de misiles y misiles los reseteamos
-					if(_enemyShips->HasChildren() && _enemyShips->GetChildren(enemyShip)->HasChildren())
+					if(_enemyShips->HasChildren() && _enemyShips->GetChildren(0)->HasChildren())
 					{
-						_enemyShips->GetChildren(enemyShip)->ResetChildren();
+						_enemyShips->GetChildren(0)->ResetChildren();
 					}
 					
 					GameObjectDestroyed(_enemyShips->GetChildren(enemyShip)->GetGameObject());

@@ -75,7 +75,7 @@ struct Sphere {
 	uint32_t numeroIndices = 121 * 8;
 	vec3 scale = glm::vec3(1.4f);
 	vec3 color = vec3(1.0f);
-	vec3 position = posCamera;
+	vec3 position = vec3(0.0f, 4.0f, 0.0f);
 
 };
 
@@ -361,7 +361,7 @@ int Inicializacion() {
 
 	//cuando la ventana cambie de tamaño
 	//glfwSetCursorPosCallback(window.GetWindow(), &Window::OnMouse);
-	//glfwSetCursorPosCallback(window.GetWindow(), OnMouse);
+	glfwSetCursorPosCallback(window.GetWindow(), OnMouse);
 	glfwSetFramebufferSizeCallback(window.GetWindow(), OnChangeFrameBufferSize);
 	glfwSetScrollCallback(window.GetWindow(), OnScroll);
 	glfwSetInputMode(window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -404,7 +404,7 @@ void RenderSphere(Sphere &sphere, glm::mat4 &projection, glm::mat4 &view)
 	//vec3 lightPos = vec3(l_pos[0], l_pos[1], l_pos[0]);
 
 	////model = glm::translate(model, sphere.position + lightPos);
-	model = glm::translate(model, posCamera);
+	model = glm::translate(model, sphere.position );
 	model = glm::scale(model, sphere.scale);
 
 	RenderFigureMain(*sphere.shader, projection, view, model, *sphere.VAO, sphere.numeroIndices);
@@ -523,11 +523,11 @@ void RenderColliders(Node * node, Cube *cube) {
 void RenderLights(Shader& shader, Node* node) {
 	if (node->HasChildren()) {
 		shader.Use();
-		shader.Set("spotlight.position", node->GetChildren(0)->GetGameObject()->GetPosition() + vec3(0.0, 10.0f, 0.0f));
-		shader.Set("spotlight.direction", node->GetChildren(0)->GetGameObject()->GetPosition()); // y > altura 
-		shader.Set("spotlight.cutOff", cos(radians(40.0f)));
-		shader.Set("spotlight.outerCutOff", cos(radians(45.0f)));
-		shader.Set("spotlight.ambient", 0.6f, 0.6f, 0.6f);
+		shader.Set("spotlight.position", vec3(0.0f, 5.0f, 0.0f));
+		shader.Set("spotlight.direction", vec3(0.0f, 0.0f, 0.0f)); // y > altura 
+		shader.Set("spotlight.cutOff", cos(radians(20.0f)));
+		shader.Set("spotlight.outerCutOff", cos(radians(25.0f)));
+		shader.Set("spotlight.ambient", 0.2f, 0.2f, 0.2f);
 		shader.Set("spotlight.diffuse", 0.5f, 0.5f, 0.5f);
 		shader.Set("spotlight.constant", 1.0f);
 		shader.Set("spotlight.linear", 0.09f);
@@ -755,7 +755,7 @@ int main(int argc, char* argv[]) {
 		HandlerInput(deltaTime, &root);
 		control.CheckCollisions();
 		control.MoveObjects(deltaTime);
-		control.ActivacionGameObjects(currentFrame, deltaTime);
+		//control.ActivacionGameObjects(currentFrame, deltaTime);
 		control.RenderGameObjects(&root);
 
 		//MoveObjects(deltaTime, &root);
