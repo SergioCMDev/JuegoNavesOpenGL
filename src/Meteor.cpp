@@ -31,6 +31,7 @@ Meteor::Meteor(Shader & shader)
 	SetModel(Model(pathToModel));
 	_shader = shader;
 	srand(rand());
+	const uint32_t initialPositionIndex = rand() % 5;
 	SetPosition(vec3(0.0f));
 	SetVelocity(1.0f);
 	SetType(Constants::TIPO_METEOR);

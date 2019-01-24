@@ -10,7 +10,7 @@ Missile::Missile(Shader& shaderMissile, glm::vec3 position)
 	SetModel(Model(pathToModel));
 	_shader = shaderMissile;
 	SetPosition(position);
-	SetVelocity(1.5f);
+	SetVelocity(1.0f);
 	SetType(Constants::TIPO_MISIL);
 	SetScale(vec3(0.4f));
 	Deactivate();
