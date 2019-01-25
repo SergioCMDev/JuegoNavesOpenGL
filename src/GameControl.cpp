@@ -296,8 +296,15 @@ void GameControl::RenderGameObjects(Node * _root) {
 				}
 				else if (parent->GetType() == Constants::TIPO_PLAYER) {
 					Player* player = GetPlayerReference(parent);
+
 					player->NoShooting();
 				}
+				_root->GetGameObject()->Deactivate();
+			}
+
+			else if (_root->GetGameObject()->GetType() == Constants::TIPO_METEOR)
+			{
+				_root->GetGameObject()->Deactivate();
 			}
 		}
 
