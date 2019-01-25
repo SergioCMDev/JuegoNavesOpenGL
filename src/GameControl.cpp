@@ -94,11 +94,12 @@ void GameControl::CheckCollisions()
 
 				if (CheckCollisionsGameObjects(poolMisilesPlayer->GetChildren(i)->GetGameObject(), _enemyShips->GetChildren(enemyShip)->GetGameObject())) {
 					//En caso de tener un pool de misiles y misiles los reseteamos
-					if(_enemyShips->HasChildren() && _enemyShips->GetChildren(0)->HasChildren())
+					Node * enemyShipPool = _enemyShips->GetChildren(enemyShip);
+					if (enemyShipPool->HasChildren() && enemyShipPool->GetChildren(0)->HasChildren())
 					{
-						_enemyShips->GetChildren(0)->ResetChildren();
+						enemyShipPool->ResetChildren();
 					}
-					
+
 					GameObjectDestroyed(_enemyShips->GetChildren(enemyShip)->GetGameObject());
 					GameObjectDestroyed(poolMisilesPlayer->GetChildren(i)->GetGameObject());
 					GetPlayerReference(_player->GetGameObject())->NoShooting();
@@ -109,21 +110,21 @@ void GameControl::CheckCollisions()
 
 	//Check Missiles  player vs Meteors
 
-	for (size_t i = 0; i < poolMisilesPlayer->GetNumberChildren(); i++)
-	{
-		for (size_t meteor = 0; meteor < _meteors->GetNumberChildren(); meteor++)
-		{
-			if (poolMisilesPlayer->GetChildren(i)->GetGameObject()->Rendered() && _meteors->GetChildren(meteor)->GetGameObject()->Rendered()) {
+	//for (size_t i = 0; i < poolMisilesPlayer->GetNumberChildren(); i++)
+	//{
+	//	for (size_t meteor = 0; meteor < _meteors->GetNumberChildren(); meteor++)
+	//	{
+	//		if (poolMisilesPlayer->GetChildren(i)->GetGameObject()->Rendered() && _meteors->GetChildren(meteor)->GetGameObject()->Rendered()) {
 
-				if (CheckCollisionsGameObjects(poolMisilesPlayer->GetChildren(i)->GetGameObject(), _meteors->GetChildren(meteor)->GetGameObject())) {
+	//			if (CheckCollisionsGameObjects(poolMisilesPlayer->GetChildren(i)->GetGameObject(), _meteors->GetChildren(meteor)->GetGameObject())) {
 
-					GameObjectDestroyed(_meteors->GetChildren(meteor)->GetGameObject());
-					GameObjectDestroyed(poolMisilesPlayer->GetChildren(i)->GetGameObject());
-					GetPlayerReference(_player->GetGameObject())->NoShooting();
-				}
-			}
-		}
-	}
+	//				GameObjectDestroyed(_meteors->GetChildren(meteor)->GetGameObject());
+	//				GameObjectDestroyed(poolMisilesPlayer->GetChildren(i)->GetGameObject());
+	//				GetPlayerReference(_player->GetGameObject())->NoShooting();
+	//			}
+	//		}
+	//	}
+	//}
 }
 
 bool GameControl::CheckCollisionsGameObjects(GameObject* x, GameObject* y) {
@@ -287,10 +288,15 @@ void GameControl::RenderGameObjects(Node * _root) {
 			}
 			_root->GetGameObject()->Deactivate();
 			if (_root->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
-				if (_root->GetGameObject()->GetActualNode()->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
+				GameObject* parent = _root->GetParent()->GetParent()->GetGameObject();
+				if (parent->GetType() == Constants::TIPO_ENEMIGO) {
 
-					Enemy* enemyShip = static_cast<Enemy*>(_root->GetGameObject()->GetActualNode()->GetParent()->GetGameObject());
+					Enemy* enemyShip = static_cast<Enemy*>(parent);
 					enemyShip->NoShooting();
+				}
+				else if (parent->GetType() == Constants::TIPO_PLAYER) {
+					Player* player = GetPlayerReference(parent);
+					player->NoShooting();
 				}
 			}
 		}

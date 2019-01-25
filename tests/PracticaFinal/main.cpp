@@ -756,7 +756,6 @@ int main(int argc, char* argv[]) {
 		control.ActivacionGameObjects(currentFrame, deltaTime);
 		control.RenderGameObjects(&root);
 
-		//MoveObjects(deltaTime, &root);
 
 
 		glfwSwapBuffers(window.GetWindow());
