@@ -73,9 +73,9 @@ struct Sphere {
 	uint32_t* VAO;
 	Shader *shader;
 	uint32_t numeroIndices = 121 * 8;
-	vec3 scale = glm::vec3(1.4f);
+	vec3 scale = glm::vec3(0.4f);
 	vec3 color = vec3(1.0f);
-	vec3 position = vec3(0.0f, 4.0f, 0.0f);
+	vec3 position = vec3(0.0f, 1.0f, 0.0f);
 
 };
 
@@ -523,15 +523,13 @@ void RenderColliders(Node * node, Cube *cube) {
 void RenderLights(Shader& shader, Node* node) {
 	if (node->HasChildren()) {
 		shader.Use();
-		shader.Set("spotlight.position", vec3(0.0f, 5.0f, 0.0f));
-		shader.Set("spotlight.direction", vec3(0.0f, 0.0f, 0.0f)); // y > altura 
-		shader.Set("spotlight.cutOff", cos(radians(20.0f)));
-		shader.Set("spotlight.outerCutOff", cos(radians(25.0f)));
-		shader.Set("spotlight.ambient", 0.2f, 0.2f, 0.2f);
-		shader.Set("spotlight.diffuse", 0.5f, 0.5f, 0.5f);
-		shader.Set("spotlight.constant", 1.0f);
-		shader.Set("spotlight.linear", 0.09f);
-		shader.Set("spotlight.cuadratic", 0.032f);
+		//Point Light
+		shader.Set("light.position", vec3(0.0f, 4.0f, 0.0f));
+		shader.Set("light.ambient", 0.2f, 0.2f, 0.2f);
+		shader.Set("light.diffuse", 0.5f, 0.5f, 0.5f);
+		shader.Set("light.constant", 1.0f);
+		shader.Set("light.linear", 0.07f);
+		shader.Set("light.cuadratic", 0.017f);
 	}
 }
 
