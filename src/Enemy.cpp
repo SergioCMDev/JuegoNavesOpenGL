@@ -42,15 +42,35 @@ void Enemy::NoShooting()
 	_disparando = false;
 }
 
-Enemy::Enemy(Shader& shader)
-	//position = vec3(0.0f, 0.0f, 15.0f);
+uint32_t Enemy::GetTypeShip()
 {
+	return _typeShip;
+}
+
+Enemy::Enemy(Shader& shader)
+//position = vec3(0.0f, 0.0f, 15.0f);
+{
+	srand(rand());
+	uint32_t _typeShip = -1;
+
+	do {
+		_typeShip = rand() % GetNumberPositions();
+	} while (_typeShip < 0 || _typeShip >2);
+
+	if (_typeShip == 1) {
+		SetModel(Model(pathToModel));
+
+	}
+	else {
+		SetModel(Model(pathToModel2));
+
+	}
 	_shader = shader;
-	SetModel(Model(pathToModel));
-	SetVelocity(0.2f);
+	SetVelocity(1.2f);
 	SetType(Constants::TIPO_ENEMIGO);
 	SetScale(glm::vec3(0.3f));
 	Deactivate();
+
 }
 
 Enemy::~Enemy() {
@@ -84,24 +104,17 @@ void Enemy::SetRandomPosition()
 	vec3 positionInitial = EnemyShipOriginPositions[initialPositionIndex];
 	SetPosition(positionInitial);
 }
-
-void Enemy::Mover(const Movement movement, const float deltaTime)
+///TODO
+void Enemy::Mover(const float deltaTime)
 {
 	float actualVelocity = GetVelocity() * deltaTime;
-	switch (movement) {
-	case Movement::Forward:
-		SetPosition(GetPosition() + GetUpVector() * actualVelocity); break;
-	case Movement::Backward:
-		SetPosition(GetPosition() - GetUpVector() * actualVelocity); break;
+	switch (_typeShip) {
+	case 1:
+		SetPosition(GetPosition() + (-GetRightVector() - GetUpVector()) * actualVelocity); break;
+	case 2:
+		SetPosition(GetPosition() + (GetRightVector() - GetUpVector()) * actualVelocity); break;
 
-		//_position -= GetUpVector() * actualVelocity; break;
-	case Movement::Left:
-		SetPosition(GetPosition() + GetRightVector() * actualVelocity); break;
 
-		//_position += GetRightVector() * actualVelocity; break;
-	case Movement::Right:
-		SetPosition(GetPosition() - GetRightVector() * actualVelocity); break;
-		//_position -= GetRightVector() * actualVelocity; break;
 	}
 }
 

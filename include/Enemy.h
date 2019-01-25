@@ -16,7 +16,7 @@ public:
 	Enemy();
 	Enemy(Shader& shader);
 	//float GetVelocity();
-	void Mover(const Movement movement, const float deltaTime);
+	void Mover(const float deltaTime);
 	void Disparar();
 	//Enemy(glm::vec3 position);
 	~Enemy();
@@ -28,9 +28,12 @@ public:
 	void SumLastMissileUsed();
 	bool Shooting();
 	void NoShooting();
+	uint32_t GetTypeShip();
 private:
+	uint32_t _typeShip = 0;
 	bool _disparando = false;
 	uint32_t _lastMissileUsed = 0;
 	const char* pathToModel = "../assets/obj/E-45-Aircraft/E 45 Aircraft_obj.obj";
+	const char* pathToModel2 = "../assets/obj/E-45-Aircraft/E 45 Aircraft_obj.obj";
 };
 #endif

@@ -180,7 +180,8 @@ void GameControl::MoveEnemyShips(const double deltaTime)
 		GameObject *g = _enemyShips->GetChildren(i)->GetGameObject();
 		Enemy* enemyship = static_cast<Enemy*>(g);
 		if (enemyship->Rendered()) {
-			enemyship->Mover(GameObject::Movement::Backward, deltaTime);
+
+			enemyship->Mover(deltaTime);
 		}
 	}
 }
@@ -343,7 +344,6 @@ void GameControl::RenderGameObjects(Node * _root) {
 				if (missile->Rendered()) {
 					missile->Render(projection, view);
 				}
-
 			}
 		}
 	}
