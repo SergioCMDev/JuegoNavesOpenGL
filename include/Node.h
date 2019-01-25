@@ -21,7 +21,6 @@ public:
 	bool HasChildren();
 	Node* GetChildren(uint32_t idChildren);
 	uint32_t GetNumberChildren();
-	uint32_t GetNumberChildrenActives();
 	void ResetChildren();
 	Node* GetParent();
 	bool Seen();
@@ -30,7 +29,6 @@ private:
 	uint32_t _lastChildren = 0;
 	bool _hasChildren = false;
 	GameObject* _gameObject;
-	bool _seen = false;
 	Node* _parent;
 };
 #endif

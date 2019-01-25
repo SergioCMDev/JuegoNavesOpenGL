@@ -33,9 +33,7 @@ Node::~Node()
 	//DeleteChilds();
 	//delete this;
 }
-bool Node::Seen() {
-	return _seen;
-}
+
 
 void Node::DeleteChilds()
 {
@@ -75,21 +73,6 @@ uint32_t Node::GetNumberChildren() {
 	return _lastChildren + 1;
 }
 
-uint32_t Node::GetNumberChildrenActives()
-{
-	uint32_t activeChildrens = 0;
-	for (size_t i = 0; i < GetNumberChildren() - 1; i++)
-	{
-		if (GetChildren(i)->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
-			GameObject *g = GetChildren(i)->GetGameObject();
-			Missile* missile = static_cast<Missile*>(g);
-			if (missile->Rendered()) {
-				activeChildrens++;
-			}
-		}
-	}
-	return activeChildrens;
-}
 
 void Node::ResetChildren()
 {

@@ -404,7 +404,7 @@ void RenderSphere(Sphere &sphere, glm::mat4 &projection, glm::mat4 &view)
 	//vec3 lightPos = vec3(l_pos[0], l_pos[1], l_pos[0]);
 
 	////model = glm::translate(model, sphere.position + lightPos);
-	model = glm::translate(model, sphere.position );
+	model = glm::translate(model, sphere.position);
 	model = glm::scale(model, sphere.scale);
 
 	RenderFigureMain(*sphere.shader, projection, view, model, *sphere.VAO, sphere.numeroIndices);
@@ -526,7 +526,7 @@ void RenderLights(Shader& shader, Node* node) {
 		//Point Light
 		shader.Set("light.position", vec3(0.0f, 4.0f, 0.0f));
 		shader.Set("light.ambient", 0.2f, 0.2f, 0.2f);
-		shader.Set("light.diffuse", 0.5f, 0.5f, 0.5f);
+		shader.Set("light.diffuse", 0.2f, 0.2f, 0.2f);
 		shader.Set("light.constant", 1.0f);
 		shader.Set("light.linear", 0.07f);
 		shader.Set("light.cuadratic", 0.017f);
@@ -753,7 +753,7 @@ int main(int argc, char* argv[]) {
 		HandlerInput(deltaTime, &root);
 		control.CheckCollisions();
 		control.MoveObjects(deltaTime);
-		//control.ActivacionGameObjects(currentFrame, deltaTime);
+		control.ActivacionGameObjects(currentFrame, deltaTime);
 		control.RenderGameObjects(&root);
 
 		//MoveObjects(deltaTime, &root);
