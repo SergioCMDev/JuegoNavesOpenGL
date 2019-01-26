@@ -91,7 +91,7 @@ void GameObject::SetModel(Model model) {
 	_model = model;
 }
 
-bool GameObject::Rendered()
+bool GameObject::Active()
 {
 	return _active;
 }

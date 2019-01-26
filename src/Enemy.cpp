@@ -1,5 +1,5 @@
 #include "Enemy.h"
-float lastTimeShooted = 0.0f;
+float lastTimeShootedEnemy = 0.0f;
 
 glm::vec3 EnemyShipOriginPositions[] = {
  glm::vec3(0.0f,  0.0f, 15.0f), //z == arriba/abajo, X derecha/izq invertida
@@ -25,24 +25,12 @@ Enemy::Enemy() {
 
 
 
-uint32_t Enemy::GetLastMissileUsed()
-{
-	return _lastMissileUsed;
-}
-void Enemy::SumLastMissileUsed()
-{
-	_lastMissileUsed++;
-}
 
 bool Enemy::Shooting()
 {
 	return _disparando;
 }
 
-void Enemy::NoShooting()
-{
-	_disparando = false;
-}
 
 uint32_t Enemy::GetTypeShip()
 {
@@ -50,7 +38,6 @@ uint32_t Enemy::GetTypeShip()
 }
 
 Enemy::Enemy(Shader& shader)
-//position = vec3(0.0f, 0.0f, 15.0f);
 {
 	srand(rand());
 	uint32_t _typeShip = -1;
@@ -107,27 +94,20 @@ void Enemy::SetRandomPosition()
 	vec3 positionInitial = EnemyShipOriginPositions[initialPositionIndex];
 	SetPosition(positionInitial);
 }
-///TODO
+
 void Enemy::Mover(const float deltaTime)
 {
 	float actualVelocity = GetVelocity() * deltaTime;
-	//switch (_typeShip) {
-	//case 1:
-	//	SetPosition(GetPosition() + (-GetRightVector() - GetUpVector()) * actualVelocity); break;
-	//case 2:
-	//	SetPosition(GetPosition() + (GetRightVector() - GetUpVector()) * actualVelocity); break;
-
-
-	//}
-		SetPosition(GetPosition() - GetUpVector() * actualVelocity);
+	SetPosition(GetPosition() - GetUpVector() * actualVelocity);
 }
+
 GameObject* Enemy::GetUsableMissile() {
 	GameObject* missileGameObject = nullptr;
 	Node* poolMissilNode = GetActualNode()->GetChildren(0);
 	bool found = false;
 	for (size_t missile = 0; missile < poolMissilNode->GetNumberChildren(); missile++)
 	{
-		if (!poolMissilNode->GetChildren(missile)->GetGameObject()->Rendered()) {
+		if (!poolMissilNode->GetChildren(missile)->GetGameObject()->Active()) {
 			missileGameObject = poolMissilNode->GetChildren(missile)->GetGameObject();
 			break;
 		}
@@ -139,15 +119,15 @@ GameObject* Enemy::GetUsableMissile() {
 void Enemy::Disparar() {
 
 	float currentFrame = glfwGetTime();
-	if (currentFrame > (lastTimeShooted + 3.0f)) {
+	if (currentFrame > (lastTimeShootedEnemy + 3.0f)) {
 		_disparando = true;
-		lastTimeShooted = currentFrame;
+		lastTimeShootedEnemy = currentFrame;
 		GameObject* missileGameObject = GetUsableMissile();
 		if (missileGameObject != nullptr) {
 			Missile* missile = static_cast<Missile*>(missileGameObject);
 			missile->SetPosition(this->GetPosition());
 			missile->Activate();
-			SumLastMissileUsed();
+			//SumLastMissileUsed();
 		}
 	}
 }

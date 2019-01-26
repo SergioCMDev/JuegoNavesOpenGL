@@ -21,15 +21,6 @@ Player::~Player() {
 	//delete this;
 }
 
-uint32_t Player::GetLastMissileUsed()
-{
-	return _lastMissileUsed;
-}
-
-void Player::SumLastMissileUsed()
-{
-	_lastMissileUsed++;
-}
 
 bool Player::Shooting()
 {
@@ -41,10 +32,6 @@ void Player::NoShooting()
 	_disparando = false;
 }
 
-void Player::RemoveMissileUsed()
-{
-	_lastMissileUsed--;
-}
 
 GameObject* Player::GetUsableMissile() {
 	GameObject* missileGameObject = nullptr;
@@ -52,7 +39,7 @@ GameObject* Player::GetUsableMissile() {
 	bool found = false;
 	for (size_t missile = 0; missile < poolMissilNode->GetNumberChildren(); missile++)
 	{
-		if (!poolMissilNode->GetChildren(missile)->GetGameObject()->Rendered()) {
+		if (!poolMissilNode->GetChildren(missile)->GetGameObject()->Active()) {
 			missileGameObject = poolMissilNode->GetChildren(missile)->GetGameObject();
 			break;
 		}
@@ -73,7 +60,7 @@ void Player::Disparar() {
 			Missile* missile = static_cast<Missile*>(missileGameObject);
 			missile->SetPosition(this->GetPosition());
 			missile->Activate();
-			SumLastMissileUsed();
+			//SumLastMissileUsed();
 		}
 	}
 }

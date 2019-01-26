@@ -43,7 +43,7 @@ public:
 	GameObject(const char* pathToModel, Shader& shader, glm::vec3 position);
 	Model GetModel();
 	void SetModel(Model model);
-	bool Rendered();
+	bool Active();
 	void Activate();
 	void Deactivate();
 	Cube *_collider;

@@ -39,7 +39,7 @@ void GameControl::CheckCollisions()
 	//Check Player vs EnemyShips
 	for (size_t i = 0; i < _enemyShips->GetNumberChildren(); i++)
 	{
-		if (_enemyShips->GetChildren(i)->GetGameObject()->Rendered()) {
+		if (_enemyShips->GetChildren(i)->GetGameObject()->Active()) {
 
 			if (CheckCollisionsGameObjects(_player->GetGameObject(), _enemyShips->GetChildren(i)->GetGameObject())) {
 
@@ -51,7 +51,7 @@ void GameControl::CheckCollisions()
 
 	for (size_t i = 0; i < _meteors->GetNumberChildren(); i++)
 	{
-		if (_meteors->GetChildren(i)->GetGameObject()->Rendered()) {
+		if (_meteors->GetChildren(i)->GetGameObject()->Active()) {
 
 			if (CheckCollisionsGameObjects(_player->GetGameObject(), _meteors->GetChildren(i)->GetGameObject())) {
 
@@ -70,7 +70,7 @@ void GameControl::CheckCollisions()
 			if (enemyShipMissilePoolNode->HasChildren()) {
 				for (size_t enemyMissile = 0; enemyMissile < enemyShipMissilePoolNode->GetNumberChildren(); enemyMissile++)
 				{
-					if (enemyShipMissilePoolNode->GetChildren(enemyMissile)->GetGameObject()->Rendered()) {
+					if (enemyShipMissilePoolNode->GetChildren(enemyMissile)->GetGameObject()->Active()) {
 
 						if (CheckCollisionsGameObjects(_player->GetGameObject(), enemyShipMissilePoolNode->GetChildren(enemyMissile)->GetGameObject())) {
 							PlayerKilled();
@@ -88,7 +88,7 @@ void GameControl::CheckCollisions()
 	{
 		for (size_t enemyShip = 0; enemyShip < _enemyShips->GetNumberChildren(); enemyShip++)
 		{
-			if (poolMisilesPlayer->GetChildren(i)->GetGameObject()->Rendered() && _enemyShips->GetChildren(enemyShip)->GetGameObject()->Rendered()) {
+			if (poolMisilesPlayer->GetChildren(i)->GetGameObject()->Active() && _enemyShips->GetChildren(enemyShip)->GetGameObject()->Active()) {
 
 				if (CheckCollisionsGameObjects(poolMisilesPlayer->GetChildren(i)->GetGameObject(), _enemyShips->GetChildren(enemyShip)->GetGameObject())) {
 					//En caso de tener un pool de misiles y misiles los reseteamos
@@ -100,7 +100,7 @@ void GameControl::CheckCollisions()
 
 					GameObjectDestroyed(_enemyShips->GetChildren(enemyShip)->GetGameObject());
 					GameObjectDestroyed(poolMisilesPlayer->GetChildren(i)->GetGameObject());
-					GetPlayerReference(_player->GetGameObject())->NoShooting();
+					//GetPlayerReference(_player->GetGameObject())->NoShooting();
 				}
 			}
 		}
@@ -165,7 +165,7 @@ void GameControl::MoveMeteors(const double deltaTime)
 	{
 		GameObject *g = _meteors->GetChildren(i)->GetGameObject();
 		Meteor* meteor = static_cast<Meteor*>(g);
-		if (meteor->Rendered()) {
+		if (meteor->Active()) {
 			meteor->Mover(deltaTime);
 		}
 	}
@@ -177,7 +177,7 @@ void GameControl::MoveEnemyShips(const double deltaTime)
 	{
 		GameObject *g = _enemyShips->GetChildren(i)->GetGameObject();
 		Enemy* enemyship = static_cast<Enemy*>(g);
-		if (enemyship->Rendered()) {
+		if (enemyship->Active()) {
 
 			enemyship->Mover(deltaTime);
 		}
@@ -198,7 +198,7 @@ void GameControl::MoveMissiles(const double deltaTime)
 				{
 					GameObject *g = poolEnemyMissiles->GetChildren(missil)->GetGameObject();
 					Missile* missile = static_cast<Missile*>(g);
-					if (missile->Rendered()) {
+					if (missile->Active()) {
 						missile->Mover(GameObject::Movement::Forward, deltaTime);
 					}
 				}
@@ -212,7 +212,7 @@ void GameControl::MoveMissiles(const double deltaTime)
 		{
 			GameObject *g = poolMisilesPlayer->GetChildren(missil)->GetGameObject();
 			Missile* missile = static_cast<Missile*>(g);
-			if (missile->Rendered()) {
+			if (missile->Active()) {
 				missile->Mover(GameObject::Movement::Backward, deltaTime);
 			}
 		}
@@ -235,7 +235,7 @@ void GameControl::ActivacionGameObjects(const float deltaTime, const float frame
 
 		for (size_t ship = 0; ship < _enemyShips->GetNumberChildren(); ship++)
 		{
-			if (!_enemyShips->GetChildren(ship)->GetGameObject()->Rendered()) {
+			if (!_enemyShips->GetChildren(ship)->GetGameObject()->Active()) {
 
 				GameObject *g = _enemyShips->GetChildren(ship)->GetGameObject();
 				Enemy* EnemyShip = static_cast<Enemy*>(g);
@@ -248,7 +248,7 @@ void GameControl::ActivacionGameObjects(const float deltaTime, const float frame
 
 	for (size_t meteor = 0; meteor < _meteors->GetNumberChildren(); meteor++)
 	{
-		if (!_meteors->GetChildren(meteor)->GetGameObject()->Rendered()) {
+		if (!_meteors->GetChildren(meteor)->GetGameObject()->Active()) {
 
 			GameObject *g = _meteors->GetChildren(meteor)->GetGameObject();
 			Meteor* meteorObject = static_cast<Meteor*>(g);
@@ -287,19 +287,19 @@ void GameControl::RenderGameObjects(Node * _root) {
 			}
 			_root->GetGameObject()->Deactivate();
 			if (_root->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
-				GameObject* parent = _root->GetParent()->GetParent()->GetGameObject();
-				if (parent->GetType() == Constants::TIPO_ENEMIGO) {
+				//GameObject* parent = _root->GetParent()->GetParent()->GetGameObject();
+				//if (parent->GetType() == Constants::TIPO_ENEMIGO) {
 
-					Enemy* enemyShip = static_cast<Enemy*>(parent);
-					//enemyShip->RemoveMissileUsed();
+				//	Enemy* enemyShip = static_cast<Enemy*>(parent);
+				//	//enemyShip->RemoveMissileUsed();
 
-					enemyShip->NoShooting();
-				}
-				else if (parent->GetType() == Constants::TIPO_PLAYER) {
-					Player* player = GetPlayerReference(parent);
-					player->RemoveMissileUsed();
-					player->NoShooting();
-				}
+				//	//enemyShip->NoShooting();
+				//}
+				//else if (parent->GetType() == Constants::TIPO_PLAYER) {
+				//	Player* player = GetPlayerReference(parent);
+				//	//player->RemoveMissileUsed();
+				//	//player->NoShooting();
+				//}
 				_root->GetGameObject()->Deactivate();
 			}
 
@@ -312,7 +312,7 @@ void GameControl::RenderGameObjects(Node * _root) {
 		else {
 			if (_root->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
 				Player* player = GetPlayerReference(_root->GetGameObject());
-				if (player->Rendered()) {
+				if (player->Active()) {
 					player->Render(projection, view);
 				}
 				//cout << "Player " << endl;
@@ -322,7 +322,7 @@ void GameControl::RenderGameObjects(Node * _root) {
 				GameObject *g = _root->GetGameObject();
 				//cout << "Meteor " << endl;
 				Meteor* meteor = static_cast<Meteor*>(g);
-				if (meteor->Rendered()) {
+				if (meteor->Active()) {
 					meteor->Render(projection, view);
 				}
 			}
@@ -331,7 +331,7 @@ void GameControl::RenderGameObjects(Node * _root) {
 				//cout << "Enemigo " << endl;
 
 				Enemy* enemyShip = static_cast<Enemy*>(g);
-				if (enemyShip->Rendered()) {
+				if (enemyShip->Active()) {
 					enemyShip->Render(projection, view);
 
 					enemyShip->Disparar();
@@ -341,7 +341,7 @@ void GameControl::RenderGameObjects(Node * _root) {
 				GameObject *g = _root->GetGameObject();
 				Missile* missile = static_cast<Missile*>(g);
 				//cout << "Missil " << endl;
-				if (missile->Rendered()) {
+				if (missile->Active()) {
 					missile->Render(projection, view);
 				}
 			}
