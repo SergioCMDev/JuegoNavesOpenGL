@@ -153,6 +153,7 @@ bool GameControl::CheckCollisionsGameObjects(GameObject* x, GameObject* y) {
 
 	return collision;
 }
+
 Player* GameControl::GetPlayerReference(GameObject* objectPlayer) {
 	GameObject *g = objectPlayer;
 	Player* player = static_cast<Player*>(objectPlayer);
@@ -183,8 +184,6 @@ void GameControl::MoveEnemyShips(const double deltaTime)
 		}
 	}
 }
-
-
 
 void GameControl::MoveMissiles(const double deltaTime)
 {
@@ -273,6 +272,7 @@ void GameControl::MoveObjects(const double deltaTime) {
 void GameControl::RenderGameObjects(Node * _root) {
 	glm::mat4 view = _camera->GetViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(_camera->GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
+	RenderLights(_player->GetGameObject()->_shader);
 	if (_root->HasChildren()) {
 		for (size_t i = 0; i < _root->GetNumberChildren(); i++)
 		{
@@ -282,33 +282,8 @@ void GameControl::RenderGameObjects(Node * _root) {
 	if (_root->GetGameObject() != NULL) {
 
 		if (_root->GetGameObject()->OutsideBoundaries()) {
-			//if (_root->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
-			//	PlayerKilled();
-			//}
-			//_root->GetGameObject()->Deactivate();
-			//if (_root->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
-				//GameObject* parent = _root->GetParent()->GetParent()->GetGameObject();
-				//if (parent->GetType() == Constants::TIPO_ENEMIGO) {
-
-				//	Enemy* enemyShip = static_cast<Enemy*>(parent);
-				//	//enemyShip->RemoveMissileUsed();
-
-				//	//enemyShip->NoShooting();
-				//}
-				//else if (parent->GetType() == Constants::TIPO_PLAYER) {
-				//	Player* player = GetPlayerReference(parent);
-				//	//player->RemoveMissileUsed();
-				//	//player->NoShooting();
-				//}
-			//_root->GetGameObject()->Deactivate();
-			//}
-
-			//else if (_root->GetGameObject()->GetType() == Constants::TIPO_METEOR)
-			//{
 			_root->GetGameObject()->Deactivate();
-			//}
 		}
-
 		else {
 			if (_root->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
 				Player* player = GetPlayerReference(_root->GetGameObject());
@@ -348,3 +323,16 @@ void GameControl::RenderGameObjects(Node * _root) {
 		}
 	}
 }
+void GameControl::RenderLights(Shader& shader) {
+
+	shader.Use();
+	//Point Light
+	shader.Set("light.position", vec3(0.0f, 6.0f, 0.0f));
+	shader.Set("light.ambient", 0.2f, 0.2f, 0.2f);
+	shader.Set("light.diffuse", 0.3f, 0.3f, 0.3f);
+	shader.Set("light.constant", 1.0f);
+	shader.Set("light.linear", 0.07f);
+	shader.Set("light.cuadratic", 0.017f);
+
+}
+

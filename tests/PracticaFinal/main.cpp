@@ -485,9 +485,7 @@ uint32_t createVertexDataQuad(const float* vertices, const uint32_t n_verts, con
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, _numberOfElementsPerLine * sizeof(float), (void*)(stride * sizeof(float)));
 	glEnableVertexAttribArray(1);
 	stride += 2;
-	////Vertices normal
-	//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, _numberOfElementsPerLine * sizeof(float), (void*)(stride * sizeof(float)));
-	//glEnableVertexAttribArray(2);
+
 
 	//desbindeamos buffer objetos
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -521,19 +519,6 @@ void RenderColliders(Node * node, Cube *cube) {
 }
 
 
-
-void RenderLights(Shader& shader, Node* node) {
-	if (node->HasChildren()) {
-		shader.Use();
-		//Point Light
-		shader.Set("light.position", vec3(0.0f, 6.0f, 0.0f));
-		shader.Set("light.ambient", 0.2f, 0.2f, 0.2f);
-		shader.Set("light.diffuse", 0.3f, 0.3f, 0.3f);
-		shader.Set("light.constant", 1.0f);
-		shader.Set("light.linear", 0.07f);
-		shader.Set("light.cuadratic", 0.017f);
-	}
-}
 
 
 int main(int argc, char* argv[]) {
@@ -721,7 +706,6 @@ int main(int argc, char* argv[]) {
 	root.AddChildren(&playerNode);
 	root.AddChildren(&enemiesParentNode);
 	root.AddChildren(&MeteorsParentNode);
-#pragma endregion
 
 	Cube cubeClasss = Cube(shaderCube);
 	Quad quad = Quad();
@@ -739,6 +723,7 @@ int main(int argc, char* argv[]) {
 	quad.textures[0] = textureSuelo;
 
 	sphere.VAO = &SphereVAO;
+#pragma endregion
 	cout << "Inicio GameLoop" << endl;
 
 	GameControl control(&playerNode, &enemiesParentNode, &MeteorsParentNode, &camera, &root);
@@ -750,7 +735,6 @@ int main(int argc, char* argv[]) {
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		RenderScene(quad, sphere, cubeClasss);
-		RenderLights(shaderModels, &root);
 		//RenderColliders(&root, &cubeClasss);
 		HandlerInput(deltaTime, &root);
 		control.CheckCollisions();

@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "Missile.h"
 #include "Camera.h"
+#include "Shader.h"
 
 static class GameControl {
 
@@ -17,6 +18,7 @@ public:
 	void ActivateGameObject(GameObject* ship);
 	void ActivacionGameObjects(const float deltaTime, const float frame);
 	void RenderGameObjects(Node * _root);
+	void RenderLights(Shader& shaderModels);
 private:
 	void GameObjectDestroyed(GameObject* ship);
 	void PlayerKilled();
@@ -26,6 +28,5 @@ private:
 	Player* GetPlayerReference(GameObject* objectPlayer);
 	void MoveMeteors(const double deltaTime);
 	void MoveEnemyShips(const double deltaTime);
-	//static void MovePlayer(const double deltaTime);
 	void MoveMissiles(const double deltaTime);
 };
