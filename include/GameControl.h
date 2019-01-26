@@ -17,8 +17,10 @@ public:
 	void MoveObjects(const double deltaTime);
 	void ActivateGameObject(GameObject* ship);
 	void ActivacionGameObjects(const float deltaTime, const float frame);
-	void RenderGameObjects(Node * _root);
+	void Render(Node * _root, Shader &shaderModels, Shader& depthShader);
+	void RenderGameObjects(Node * _root, Shader &shader);
 	void RenderLights(Shader& shaderModels);
+	pair<uint32_t, uint32_t> createFBO();
 private:
 	void GameObjectDestroyed(GameObject* ship);
 	void PlayerKilled();

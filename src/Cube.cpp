@@ -6,7 +6,8 @@ Cube::Cube()
 }
 Cube::Cube(Shader& shader)
 {
-	_shader = &shader;
+	Shader shaderCube = Utils::GetFullShader("Shaders/CubeVS.vs", "Shaders/CubeFS.fs");
+	_shader = &shaderCube;
 	_VAO = CreateVAO();
 
 }

@@ -536,6 +536,7 @@ int main(int argc, char* argv[]) {
 	Shader shaderCube = Utils::GetFullShader("Shaders/CubeVS.vs", "Shaders/CubeFS.fs");
 	Shader shaderQuad = Utils::GetFullShader("Shaders/QuadVS.vs", "Shaders/QuadFS.fs");
 	Shader shaderSphere = Utils::GetFullShader("Shaders/LightVS.vs", "Shaders/LightFS.fs");
+	Shader shaderDepth = Utils::GetFullShader("Shaders/depth.vs", "Shaders/depth.fs");
 
 	Shader shaderModels = Utils::GetFullShader("Shaders/shaderVS.vs", "Shaders/shaderFS.fs");
 
@@ -742,7 +743,7 @@ int main(int argc, char* argv[]) {
 		control.CheckCollisions();
 		//control.MoveObjects(deltaTime);
 		control.ActivacionGameObjects(currentFrame, deltaTime);
-		control.RenderGameObjects(&root);
+		control.Render(&root, shaderModels, shaderDepth);
 
 
 
