@@ -4,15 +4,14 @@ Missile::Missile() {
 }
 
 
-//
 Missile::Missile(Shader& shaderMissile, glm::vec3 position)
 {
 	SetModel(Model(pathToModel));
 	_shader = shaderMissile;
 	SetPosition(position);
-	SetVelocity(1.0f);
+	SetVelocity(2.0f);
 	SetType(Constants::TIPO_MISIL);
-	SetScale(vec3(0.4f));
+	SetScale(vec3(0.3f));
 	Deactivate();
 
 }
@@ -49,10 +48,6 @@ void Missile::Rotate() {
 	_modelMatrix = glm::rotate(_modelMatrix, glm::radians(180.0f), glm::vec3(1.0f, 1.0f, 0.0f));
 
 }
-
-//GameObject* Missile::GetParent() {
-//	return _parent;
-//}
 
 void Missile::Mover(const Movement movement, const float deltaTime)
 {

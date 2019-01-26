@@ -27,7 +27,7 @@ Player::Player(Shader & shader, glm::vec3 position)
 	SetPosition(position);
 	SetVelocity(2.5f);
 	SetType(Constants::TIPO_PLAYER);
-	SetScale(glm::vec3(0.3f));
+	SetScale(glm::vec3(0.1f));
 	Activate();
 }
 

@@ -65,7 +65,6 @@ void GameControl::CheckCollisions()
 	for (size_t enemyShip = 0; enemyShip < _enemyShips->GetNumberChildren(); enemyShip++)
 	{
 		Node* enemyShipNode = _enemyShips->GetChildren(enemyShip);
-		//for (size_t enemyMissile = 0; enemyMissile < _enemyShips->GetChildren(enemyShip)->GetNumberChildren(); enemyMissile++)
 		if (enemyShipNode->HasChildren()) {
 			Node* enemyShipMissilePoolNode = enemyShipNode->GetChildren(0);
 			if (enemyShipMissilePoolNode->HasChildren()) {
@@ -74,7 +73,6 @@ void GameControl::CheckCollisions()
 					if (enemyShipMissilePoolNode->GetChildren(enemyMissile)->GetGameObject()->Rendered()) {
 
 						if (CheckCollisionsGameObjects(_player->GetGameObject(), enemyShipMissilePoolNode->GetChildren(enemyMissile)->GetGameObject())) {
-
 							PlayerKilled();
 						}
 					}

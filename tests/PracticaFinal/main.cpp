@@ -33,7 +33,7 @@ const float screen_width = 800.0f, screen_height = 600.0f;
 float lastY = (float)screen_height / 2.0f;
 float lastX = (float)screen_width / 2.0f;
 
-bool debug = true;
+bool debug = false;
 float lastFrame = 0.0f;
 bool firstMouse = true;
 
@@ -42,18 +42,6 @@ Window window;
 
 
 #pragma region Comments
-
-//glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-//
-//
-//glm::vec3 spotLightPositions[] = {
-//	glm::vec3(2.7f, 3.2f, 2.0f),
-//	glm::vec3(-2.7f, 3.2f, -5.0f),
-//
-//};
-
-
-
 
 float verticesQuad[] = {
 	-0.5f,  0.5f,  0.5f,       0.0f, 0.0f,    //top
@@ -361,7 +349,7 @@ int Inicializacion() {
 
 	//cuando la ventana cambie de tamaño
 	//glfwSetCursorPosCallback(window.GetWindow(), &Window::OnMouse);
-	glfwSetCursorPosCallback(window.GetWindow(), OnMouse);
+	//glfwSetCursorPosCallback(window.GetWindow(), OnMouse);
 	glfwSetFramebufferSizeCallback(window.GetWindow(), OnChangeFrameBufferSize);
 	glfwSetScrollCallback(window.GetWindow(), OnScroll);
 	glfwSetInputMode(window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -387,7 +375,7 @@ void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view)
 	quad.shader->Set("quadTexture", 4);
 	glm::mat4 model = mat4(1.0f);
 	model = glm::translate(model, posSuelo);
-	model = glm::scale(model, vec3(20.0f));
+	model = glm::scale(model, vec3(30.0f));
 	RenderFigureMain(*quad.shader, projection, view, model, *quad.VAO, quad.numeroIndicesQuad);
 }
 
