@@ -18,6 +18,8 @@ public:
 	//float GetVelocity();
 	void Mover(const float deltaTime);
 	void Disparar();
+	GameObject * GetUsableMissile();
+
 	//Enemy(glm::vec3 position);
 	~Enemy();
 	void Render(glm::mat4 &projection, glm::mat4 &view);

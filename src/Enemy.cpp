@@ -1,4 +1,6 @@
 #include "Enemy.h"
+float lastTimeShooted = 0.0f;
+
 glm::vec3 EnemyShipOriginPositions[] = {
  glm::vec3(0.0f,  0.0f, 15.0f), //z == arriba/abajo, X derecha/izq invertida
  glm::vec3(7.0f,  0.0f, 15.0f),
@@ -119,21 +121,33 @@ void Enemy::Mover(const float deltaTime)
 	//}
 		SetPosition(GetPosition() - GetUpVector() * actualVelocity);
 }
+GameObject* Enemy::GetUsableMissile() {
+	GameObject* missileGameObject = nullptr;
+	Node* poolMissilNode = GetActualNode()->GetChildren(0);
+	bool found = false;
+	for (size_t missile = 0; missile < poolMissilNode->GetNumberChildren(); missile++)
+	{
+		if (!poolMissilNode->GetChildren(missile)->GetGameObject()->Rendered()) {
+			missileGameObject = poolMissilNode->GetChildren(missile)->GetGameObject();
+			break;
+		}
+
+	}
+	return missileGameObject;
+}
 
 void Enemy::Disparar() {
-	if (GetActualNode()->HasChildren()) {
 
-		Node* poolMissilNode = GetActualNode()->GetChildren(0);
-		uint32_t numberOfMissiles = poolMissilNode->GetNumberChildren();
-		if (_lastMissileUsed < numberOfMissiles && !_disparando) {
-			_disparando = true;
-			GameObject* missileGameObject = poolMissilNode->GetChildren(_lastMissileUsed)->GetGameObject();
+	float currentFrame = glfwGetTime();
+	if (currentFrame > (lastTimeShooted + 3.0f)) {
+		_disparando = true;
+		lastTimeShooted = currentFrame;
+		GameObject* missileGameObject = GetUsableMissile();
+		if (missileGameObject != nullptr) {
 			Missile* missile = static_cast<Missile*>(missileGameObject);
 			missile->SetPosition(this->GetPosition());
-			//missile->Rotate();
 			missile->Activate();
-			this->SumLastMissileUsed();
+			SumLastMissileUsed();
 		}
 	}
-	//cout << "disparo erroneo" << endl;
 }

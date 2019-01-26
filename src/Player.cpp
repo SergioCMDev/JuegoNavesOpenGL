@@ -1,23 +1,9 @@
 #include "Player.h"
-
+float lastTimeShooted = 0.0f;
 Player::Player() {
 
 }
 
-//Player::Player(glm::vec3 position)
-//{
-//	Shader shaderNavePlayer = Utils::GetFullShader("Shaders/NavePlayerVS.vs", "Shaders/NavePlayerFS.fs");
-//	shaderNavePlayer.Use();
-//	position = vec3(0.0f, 0.0f, 0.0f);
-//	SetModel(Model(pathToModel));
-//	_shader = shaderNavePlayer;
-//	SetPosition(position);
-//	SetVelocity(2.5f);
-//	SetType(Constants::TIPO_PLAYER);
-//	SetScale(glm::vec3(0.3f));
-//	Activate();
-//
-//}
 
 Player::Player(Shader & shader, glm::vec3 position)
 {
@@ -55,23 +41,41 @@ void Player::NoShooting()
 	_disparando = false;
 }
 
+void Player::RemoveMissileUsed()
+{
+	_lastMissileUsed--;
+}
 
+GameObject* Player::GetUsableMissile() {
+	GameObject* missileGameObject = nullptr;
+	Node* poolMissilNode = GetActualNode()->GetChildren(0);
+	bool found = false;
+	for (size_t missile = 0; missile < poolMissilNode->GetNumberChildren(); missile++)
+	{
+		if (!poolMissilNode->GetChildren(missile)->GetGameObject()->Rendered()) {
+			missileGameObject = poolMissilNode->GetChildren(missile)->GetGameObject();
+			break;
+		}
+
+	}
+	return missileGameObject;
+}
 
 void Player::Disparar() {
 
-	uint32_t numberOfMissiles = this->GetActualNode()->GetChildren(0)->GetNumberChildren();
-	if (_lastMissileUsed < numberOfMissiles && !_disparando) {
-		_disparando = true;
+	float currentFrame = glfwGetTime();
 
-		Node* poolMissilNode = GetActualNode()->GetChildren(0);
-		GameObject* missileGameObject = poolMissilNode->GetChildren(_lastMissileUsed)->GetGameObject();
-		Missile* missile = static_cast<Missile*>(missileGameObject);
-		missile->SetPosition(this->GetPosition());
-		missile->Activate();
-		this->SumLastMissileUsed();
-		//cout << "disparo" << endl;
+	if (currentFrame > (lastTimeShooted + 3.0f)) {
+		_disparando = true;
+		lastTimeShooted = currentFrame;
+		GameObject* missileGameObject = GetUsableMissile();
+		if (missileGameObject != nullptr) {
+			Missile* missile = static_cast<Missile*>(missileGameObject);
+			missile->SetPosition(this->GetPosition());
+			missile->Activate();
+			SumLastMissileUsed();
+		}
 	}
-	//cout << "disparo erroneo" << endl;
 }
 
 void Player::Render(glm::mat4 &projection, glm::mat4 &view)

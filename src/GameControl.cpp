@@ -291,11 +291,13 @@ void GameControl::RenderGameObjects(Node * _root) {
 				if (parent->GetType() == Constants::TIPO_ENEMIGO) {
 
 					Enemy* enemyShip = static_cast<Enemy*>(parent);
+					//enemyShip->RemoveMissileUsed();
+
 					enemyShip->NoShooting();
 				}
 				else if (parent->GetType() == Constants::TIPO_PLAYER) {
 					Player* player = GetPlayerReference(parent);
-
+					player->RemoveMissileUsed();
 					player->NoShooting();
 				}
 				_root->GetGameObject()->Deactivate();

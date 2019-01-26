@@ -19,7 +19,9 @@ public:
 	//float GetVelocity();
 	void Mover(const Movement movement, const float deltaTime);
 	void Disparar();
+	void RemoveMissileUsed();
 
+	GameObject * GetUsableMissile();
 	Player(Shader & shader, glm::vec3 position);
 	//Player(glm::vec3 position);
 	~Player();

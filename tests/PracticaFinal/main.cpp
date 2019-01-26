@@ -514,7 +514,7 @@ void RenderLights(Shader& shader, Node* node) {
 		//Point Light
 		shader.Set("light.position", vec3(0.0f, 4.0f, 0.0f));
 		shader.Set("light.ambient", 0.2f, 0.2f, 0.2f);
-		shader.Set("light.diffuse", 0.2f, 0.2f, 0.2f);
+		shader.Set("light.diffuse", 0.3f, 0.3f, 0.3f);
 		shader.Set("light.constant", 1.0f);
 		shader.Set("light.linear", 0.07f);
 		shader.Set("light.cuadratic", 0.017f);
