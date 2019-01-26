@@ -327,7 +327,7 @@ void GameControl::RenderLights(Shader& shader) {
 
 	shader.Use();
 	//Point Light
-	shader.Set("light.position", vec3(0.0f, 6.0f, 0.0f));
+	shader.Set("light.position", vec3(0.0f, Constants::ALTURA_LUZ, 0.0f));
 	shader.Set("light.ambient", 0.2f, 0.2f, 0.2f);
 	shader.Set("light.diffuse", 0.3f, 0.3f, 0.3f);
 	shader.Set("light.constant", 1.0f);

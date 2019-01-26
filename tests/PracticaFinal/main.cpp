@@ -29,11 +29,13 @@ Camera camera(posCamera);
 const float M_PI = 3.14f;
 const vec3 posSuelo = vec3(0.0f, -16.0f, 0.0f);
 const vec3 posPlayer = vec3(0.0f, 0.0f, 0.0f);
+const vec3 posLuz = vec3(0.0f, Constants::ALTURA_LUZ, 0.0f);
+
 const float screen_width = 800.0f, screen_height = 600.0f;
 float lastY = (float)screen_height / 2.0f;
 float lastX = (float)screen_width / 2.0f;
 
-bool debug = false;
+bool debug = true;
 float lastFrame = 0.0f;
 bool firstMouse = true;
 
@@ -63,7 +65,7 @@ struct Sphere {
 	uint32_t numeroIndices = 121 * 8;
 	vec3 scale = glm::vec3(0.4f);
 	vec3 color = vec3(1.0f);
-	vec3 position = vec3(0.0f, 1.0f, 0.0f);
+	vec3 position = posLuz;
 
 };
 
@@ -738,7 +740,7 @@ int main(int argc, char* argv[]) {
 		//RenderColliders(&root, &cubeClasss);
 		HandlerInput(deltaTime, &root);
 		control.CheckCollisions();
-		control.MoveObjects(deltaTime);
+		//control.MoveObjects(deltaTime);
 		control.ActivacionGameObjects(currentFrame, deltaTime);
 		control.RenderGameObjects(&root);
 
