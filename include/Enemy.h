@@ -33,7 +33,7 @@ private:
 	uint32_t _typeShip = 0;
 	bool _disparando = false;
 	uint32_t _lastMissileUsed = 0;
-	const char* pathToModel = "../assets/obj/E-45-Aircraft/E 45 Aircraft_obj.obj";
+	const char* pathToModel = "../assets/obj/UFO/Low_poly_UFO.obj";
 	const char* pathToModel2 = "../assets/obj/E-45-Aircraft/E 45 Aircraft_obj.obj";
 };
 #endif

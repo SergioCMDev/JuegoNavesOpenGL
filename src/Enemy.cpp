@@ -1,10 +1,10 @@
 #include "Enemy.h"
 glm::vec3 EnemyShipOriginPositions[] = {
- glm::vec3(12.0f,  0.0f, 10.0f), // X derecha/izq invertida //z == arriba/abajo,
- glm::vec3(-12.0f,  0.0f, 10.0f),
- //glm::vec3(18.0f,  0.0f, 10.0f),
- //glm::vec3(15.0f, 0.0f, 12.0f),
- //glm::vec3(18.0f, 0.0f, 10.0f),
+ glm::vec3(0.0f,  0.0f, 15.0f), //z == arriba/abajo, X derecha/izq invertida
+ glm::vec3(7.0f,  0.0f, 15.0f),
+ glm::vec3(4.0f, 0.0f, 15.0f),
+ glm::vec3(-5.0f,  0.0f, 15.0f),
+ glm::vec3(-6.0f, 0.0f, 15.0f),
 };
 
 
@@ -58,17 +58,18 @@ Enemy::Enemy(Shader& shader)
 	} while (_typeShip < 0 || _typeShip >2);
 
 	if (_typeShip == 1) {
-		SetModel(Model(pathToModel));
+		SetModel(Model(pathToModel2)); //SPACESHIP
+		SetScale(glm::vec3(0.3f));
 
 	}
 	else {
-		SetModel(Model(pathToModel2));
+		SetModel(Model(pathToModel)); //UFO
+		SetScale(glm::vec3(0.03f));
 
 	}
 	_shader = shader;
 	SetVelocity(1.2f);
 	SetType(Constants::TIPO_ENEMIGO);
-	SetScale(glm::vec3(0.3f));
 	Deactivate();
 
 }
@@ -108,14 +109,15 @@ void Enemy::SetRandomPosition()
 void Enemy::Mover(const float deltaTime)
 {
 	float actualVelocity = GetVelocity() * deltaTime;
-	switch (_typeShip) {
-	case 1:
-		SetPosition(GetPosition() + (-GetRightVector() - GetUpVector()) * actualVelocity); break;
-	case 2:
-		SetPosition(GetPosition() + (GetRightVector() - GetUpVector()) * actualVelocity); break;
+	//switch (_typeShip) {
+	//case 1:
+	//	SetPosition(GetPosition() + (-GetRightVector() - GetUpVector()) * actualVelocity); break;
+	//case 2:
+	//	SetPosition(GetPosition() + (GetRightVector() - GetUpVector()) * actualVelocity); break;
 
 
-	}
+	//}
+		SetPosition(GetPosition() - GetUpVector() * actualVelocity);
 }
 
 void Enemy::Disparar() {
