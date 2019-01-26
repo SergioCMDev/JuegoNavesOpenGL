@@ -2,11 +2,11 @@
 float lastTimeShootedEnemy = 0.0f;
 
 glm::vec3 EnemyShipOriginPositions[] = {
- glm::vec3(0.0f,  0.0f, 15.0f), //z == arriba/abajo, X derecha/izq invertida
- glm::vec3(7.0f,  0.0f, 15.0f),
- glm::vec3(4.0f, 0.0f, 15.0f),
- glm::vec3(-5.0f,  0.0f, 15.0f),
- glm::vec3(-6.0f, 0.0f, 15.0f),
+ glm::vec3(0.0f,  0.0f, Constants::MAX_POSITION_Y), //z == arriba/abajo, X derecha/izq invertida
+ glm::vec3(7.0f,  0.0f, Constants::MAX_POSITION_Y),
+ glm::vec3(4.0f,  0.0f, Constants::MAX_POSITION_Y),
+ glm::vec3(-5.0f, 0.0f, Constants::MAX_POSITION_Y),
+ glm::vec3(-6.0f, 0.0f, Constants::MAX_POSITION_Y),
 };
 
 

@@ -349,7 +349,9 @@ int Inicializacion() {
 
 	//cuando la ventana cambie de tamaño
 	//glfwSetCursorPosCallback(window.GetWindow(), &Window::OnMouse);
-	//glfwSetCursorPosCallback(window.GetWindow(), OnMouse);
+	if (debug) {
+		glfwSetCursorPosCallback(window.GetWindow(), OnMouse);
+	}
 	glfwSetFramebufferSizeCallback(window.GetWindow(), OnChangeFrameBufferSize);
 	glfwSetScrollCallback(window.GetWindow(), OnScroll);
 	glfwSetInputMode(window.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -432,6 +434,18 @@ void RenderScene(Quad quad, Sphere sphere, Cube cube) {
 			cube.Render(projection, view, Enemy::GetEnemyPosition(i), 1.0f);
 
 		}
+
+		//dibujamos cubos limites
+		cube._color = vec3(1.0f, 1.0f, 0.0f);
+		cube._shader->Set("color", cube._color);
+		cube.Render(projection, view, vec3(Constants::MAX_POSITION_X, 0.0f, 0.0f), 1.0f);
+
+		cube.Render(projection, view, vec3(Constants::MIN_POSITION_X, 0.0f, 0.0f), 1.0f);
+
+		cube.Render(projection, view, vec3(0.0f, 0.0f, Constants::MIN_POSITION_Y), 1.0f);
+
+		cube.Render(projection, view, vec3(0.0f, 0.0f, Constants::MAX_POSITION_Y), 1.0f);
+
 	}
 
 	glBindVertexArray(0);
@@ -512,7 +526,7 @@ void RenderLights(Shader& shader, Node* node) {
 	if (node->HasChildren()) {
 		shader.Use();
 		//Point Light
-		shader.Set("light.position", vec3(0.0f, 4.0f, 0.0f));
+		shader.Set("light.position", vec3(0.0f, 6.0f, 0.0f));
 		shader.Set("light.ambient", 0.2f, 0.2f, 0.2f);
 		shader.Set("light.diffuse", 0.3f, 0.3f, 0.3f);
 		shader.Set("light.constant", 1.0f);

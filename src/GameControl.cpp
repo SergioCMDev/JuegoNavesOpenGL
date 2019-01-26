@@ -282,11 +282,11 @@ void GameControl::RenderGameObjects(Node * _root) {
 	if (_root->GetGameObject() != NULL) {
 
 		if (_root->GetGameObject()->OutsideBoundaries()) {
-			if (_root->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
-				PlayerKilled();
-			}
-			_root->GetGameObject()->Deactivate();
-			if (_root->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
+			//if (_root->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
+			//	PlayerKilled();
+			//}
+			//_root->GetGameObject()->Deactivate();
+			//if (_root->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
 				//GameObject* parent = _root->GetParent()->GetParent()->GetGameObject();
 				//if (parent->GetType() == Constants::TIPO_ENEMIGO) {
 
@@ -300,13 +300,13 @@ void GameControl::RenderGameObjects(Node * _root) {
 				//	//player->RemoveMissileUsed();
 				//	//player->NoShooting();
 				//}
-				_root->GetGameObject()->Deactivate();
-			}
+			//_root->GetGameObject()->Deactivate();
+			//}
 
-			else if (_root->GetGameObject()->GetType() == Constants::TIPO_METEOR)
-			{
-				_root->GetGameObject()->Deactivate();
-			}
+			//else if (_root->GetGameObject()->GetType() == Constants::TIPO_METEOR)
+			//{
+			_root->GetGameObject()->Deactivate();
+			//}
 		}
 
 		else {

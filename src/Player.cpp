@@ -82,14 +82,29 @@ void Player::Render(glm::mat4 &projection, glm::mat4 &view)
 void Player::Mover(const Movement movement, const float deltaTime)
 {
 	float actualVelocity = GetVelocity() * deltaTime;
+	vec3 newPosition = vec3(0.0f);
 	switch (movement) {
 	case Movement::Forward:
-		SetPosition(GetPosition() + GetUpVector() * actualVelocity); break;
+		newPosition = GetPosition() + GetUpVector() * actualVelocity;
+		if (newPosition.z < Constants::MAX_POSITION_Y - 5.0f) {
+			SetPosition(newPosition); break;
+		}
 	case Movement::Backward:
-		SetPosition(GetPosition() - GetUpVector() * actualVelocity); break;
+		newPosition = GetPosition() - GetUpVector() * actualVelocity;
+		if (newPosition.z > Constants::MIN_POSITION_Y + 3.0f) {
+			SetPosition(newPosition); break;
+		}
 	case Movement::Left:
-		SetPosition(GetPosition() + GetRightVector() * actualVelocity); break;
+		newPosition = GetPosition() + GetRightVector() * actualVelocity;
+		if (newPosition.x < Constants::MAX_POSITION_X) {
+			SetPosition(newPosition); break;
+		}
 	case Movement::Right:
-		SetPosition(GetPosition() - GetRightVector() * actualVelocity); break;
+		newPosition = GetPosition() - GetRightVector() * actualVelocity;
+		if (newPosition.x > Constants::MIN_POSITION_X) {
+			SetPosition(newPosition); break;
+
+		}
 	}
+	cout << "newPosition.x " << newPosition.x << endl;
 }
