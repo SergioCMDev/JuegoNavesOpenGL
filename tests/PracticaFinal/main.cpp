@@ -737,13 +737,13 @@ int main(int argc, char* argv[]) {
 		float currentFrame = glfwGetTime();
 		float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-		RenderScene(quad, sphere, cubeClasss);
 		//RenderColliders(&root, &cubeClasss);
 		HandlerInput(deltaTime, &root);
 		control.CheckCollisions();
 		//control.MoveObjects(deltaTime);
 		control.ActivacionGameObjects(currentFrame, deltaTime);
 		control.Render(&root, shaderModels, shaderDepth);
+		RenderScene(quad, sphere, cubeClasss);
 
 
 
