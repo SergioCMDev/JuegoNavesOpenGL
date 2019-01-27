@@ -4,12 +4,7 @@ const float screen_width = 1280, screen_height = 720;
 const float shadow_width = 1024, shadow_height = 1024;
 const float shadow_near = 1.0f;
 const float shadow_far = 7.5f;
-
-//GameControl::GameControl(Node* player, Node* enemyships, Node* meteors) {
-//	_player = player;
-//	_enemyShips = enemyships;
-//	_meteors = meteors;
-//}
+float lasHitPlayer = 0.0f;
 
 GameControl::GameControl(Node* player, Node* enemyships, Node* meteors, Camera* camera, Node* root) {
 	_player = player;
@@ -24,8 +19,14 @@ uint32_t GameControl::GetPuntuacion() {
 }
 
 void GameControl::PlayerKilled() {
-	vidas--;
-	if (vidas < 0) {
+	float currentFrame = glfwGetTime();
+	if (currentFrame > (lasHitPlayer + 5.0f)) {
+		lasHitPlayer = currentFrame;
+		vidas--;
+		cout << "VIDAS " << vidas << endl;
+	}
+
+	if (vidas <= 0) {
 		_player->GetGameObject()->Deactivate();
 		_playerAlive = false;
 	}

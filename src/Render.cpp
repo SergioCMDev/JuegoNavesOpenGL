@@ -2,7 +2,6 @@
 
 
 
-vec3 posLuz;
 const vec3 posSuelo = vec3(0.0f, -16.0f, 0.0f);
 const float screen_width = 1280, screen_height = 720;
 const float shadow_width = 1024, shadow_height = 1024;
@@ -106,7 +105,7 @@ void Render::RenderGame(Node * _root, Shader &shaderModels, Shader& depthShader,
 	glBindFramebuffer(GL_FRAMEBUFFER, fboRes.first);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glViewport(0, 0, shadow_width, shadow_height); //Cambiamos tamaño de pantalla a pantalla de sombra
-	RenderLights(shaderModels);
+	//RenderLights(shaderModels);
 
 	RenderGameObjects(_root, depthShader);
 
@@ -127,7 +126,6 @@ void Render::RenderGame(Node * _root, Shader &shaderModels, Shader& depthShader,
 	shaderModels.Set("depthMap", 8);
 
 	RenderGameObjects(_root, shaderModels);
-
 }
 
 void Render::RenderGameObjects(Node * _root, Shader &shader) {

@@ -28,7 +28,6 @@ const vec3 posCamera = glm::vec3(0.0f, 20.0f, 0.0f);
 
 Camera camera(posCamera);
 #pragma region Variables Globales
-const vec3 posSuelo = vec3(0.0f, -16.0f, 0.0f);
 const vec3 posPlayer = vec3(0.0f, 0.0f, 0.0f);
 const vec3 posLuz = vec3(0.0f, Constants::ALTURA_LUZ, 0.0f);
 
@@ -42,8 +41,6 @@ bool firstMouse = true;
 
 Window window;
 #pragma endregion
-
-
 
 
 using namespace std;
