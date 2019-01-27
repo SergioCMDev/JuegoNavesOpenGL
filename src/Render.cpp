@@ -59,14 +59,10 @@ void Render::RenderScene(Quad quadSuelo, Sphere sphere, Cube cube) {
 	glBindVertexArray(0);
 }
 
-
-
-Render::Render(Node * node, bool debug) {
+Render::Render(Node * node, bool debug, Camera* camera) {
 
 	_node = node;
 	_debug = debug;
-	GameObject *g = node->GetGameObject();;
-	Camera* camera = static_cast<Camera*>(g);
 	_camera = camera;
 }
 
@@ -99,9 +95,7 @@ pair<uint32_t, uint32_t> Render::createFBO() {
 	return make_pair(fbo, depthMap);
 }
 
-
-void Render::RenderGame(Node * _root, Shader &shaderModels, Shader& depthShader) {
-	auto fboRes = createFBO();
+void Render::RenderGame(Node * _root, Shader &shaderModels, Shader& depthShader, pair<uint32_t, uint32_t> fboRes) {
 	vec3 lightPos = vec3(0.0f, Constants::ALTURA_LUZ, 0.0f);
 	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, shadow_near, shadow_far);
 	mat4 lightView = lookAt(lightPos, vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
@@ -112,6 +106,8 @@ void Render::RenderGame(Node * _root, Shader &shaderModels, Shader& depthShader)
 	glBindFramebuffer(GL_FRAMEBUFFER, fboRes.first);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glViewport(0, 0, shadow_width, shadow_height); //Cambiamos tamaño de pantalla a pantalla de sombra
+	RenderLights(shaderModels);
+
 	RenderGameObjects(_root, depthShader);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -126,9 +122,9 @@ void Render::RenderGame(Node * _root, Shader &shaderModels, Shader& depthShader)
 	shaderModels.Set("viewPos", camera->GetPosition());
 	shaderModels.Set("lightPos", lightPos);
 	shaderModels.Set("lightSpaceMatrix", lightSpaceMatrix);
-	glActiveTexture(GL_TEXTURE1);
+	glActiveTexture(GL_TEXTURE8);
 	glBindTexture(GL_TEXTURE_2D, fboRes.second);
-	shaderModels.Set("depthMap", 1);
+	shaderModels.Set("depthMap", 8);
 
 	RenderGameObjects(_root, shaderModels);
 
@@ -137,7 +133,6 @@ void Render::RenderGame(Node * _root, Shader &shaderModels, Shader& depthShader)
 void Render::RenderGameObjects(Node * _root, Shader &shader) {
 	glm::mat4 view = _camera->GetViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(_camera->GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
-	//RenderLights(_player->GetGameObject()->_shader);
 	if (_root->HasChildren()) {
 		for (size_t i = 0; i < _root->GetNumberChildren(); i++)
 		{
@@ -153,7 +148,6 @@ void Render::RenderGameObjects(Node * _root, Shader &shader) {
 			if (_root->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
 				GameObject *g = _root->GetGameObject();
 				Player* player = static_cast<Player*>(g);
-
 				if (player->Active()) {
 					player->Render(projection, view);
 				}
@@ -189,5 +183,18 @@ void Render::RenderGameObjects(Node * _root, Shader &shader) {
 			}
 		}
 	}
+}
+
+void Render::RenderLights(Shader& shader) {
+
+	shader.Use();
+	//Point Light
+	shader.Set("light.position", vec3(0.0f, Constants::ALTURA_LUZ, 0.0f));
+	shader.Set("light.ambient", 0.2f, 0.2f, 0.2f);
+	shader.Set("light.diffuse", 0.3f, 0.3f, 0.3f);
+	shader.Set("light.constant", 1.0f);
+	shader.Set("light.linear", 0.07f);
+	shader.Set("light.cuadratic", 0.017f);
+
 }
 

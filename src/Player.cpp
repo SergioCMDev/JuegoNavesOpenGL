@@ -106,5 +106,5 @@ void Player::Mover(const Movement movement, const float deltaTime)
 
 		}
 	}
-	//cout << "newPosition.x " << newPosition.x << endl;
+	cout << "newPosition.x " << newPosition.x << endl;
 }

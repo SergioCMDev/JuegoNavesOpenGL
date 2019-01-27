@@ -36,7 +36,7 @@ const float screen_width = 1280, screen_height = 720;
 float lastY = (float)screen_height / 2.0f;
 float lastX = (float)screen_width / 2.0f;
 
-bool debug = true;
+bool debug = false;
 float lastFrame = 0.0f;
 bool firstMouse = true;
 
@@ -397,7 +397,7 @@ int main(int argc, char* argv[]) {
 	cout << "Inicio GameLoop" << endl;
 
 	GameControl control(&playerNode, &enemiesParentNode, &MeteorsParentNode, &camera, &root);
-	Render render(&root, debug);
+	Render render(&root, debug, &camera);
 	auto fboRes = render.createFBO();
 
 	//Bucle inicial donde se realiza toda la accion del motor
@@ -411,7 +411,7 @@ int main(int argc, char* argv[]) {
 		control.MoveObjects(deltaTime);
 		control.ActivacionGameObjects(currentFrame, deltaTime);
 
-		//render.RenderGame(&root, shaderModels, shaderDepth);//Intento de pasarla a la clase Render pero peta
+		//render.RenderGame(&root, shaderModels, shaderDepth, fboRes);//Intento de pasarla a la clase Render pero nave player se vuelve invisible
 		control.Render(&root, shaderModels, shaderDepth, fboRes);
 		render.RenderScene(quadSuelo, sphere, cubeClasss);
 

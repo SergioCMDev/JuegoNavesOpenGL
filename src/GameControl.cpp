@@ -3,13 +3,13 @@
 const float screen_width = 1280, screen_height = 720;
 const float shadow_width = 1024, shadow_height = 1024;
 const float shadow_near = 1.0f;
-const float shadow_far = 17.5f;
+const float shadow_far = 7.5f;
 
-GameControl::GameControl(Node* player, Node* enemyships, Node* meteors) {
-	_player = player;
-	_enemyShips = enemyships;
-	_meteors = meteors;
-}
+//GameControl::GameControl(Node* player, Node* enemyships, Node* meteors) {
+//	_player = player;
+//	_enemyShips = enemyships;
+//	_meteors = meteors;
+//}
 
 GameControl::GameControl(Node* player, Node* enemyships, Node* meteors, Camera* camera, Node* root) {
 	_player = player;
@@ -19,11 +19,9 @@ GameControl::GameControl(Node* player, Node* enemyships, Node* meteors, Camera* 
 	_root = root;
 }
 
-
 void GameControl::PlayerKilled() {
 	_player->GetGameObject()->Deactivate();
 	_playerAlive = false;
-	cout << "DEAD" << endl;
 }
 
 void GameControl::ActivateGameObject(GameObject * object)
@@ -35,8 +33,6 @@ void GameControl::ActivateGameObject(GameObject * object)
 void GameControl::GameObjectDestroyed(GameObject* object) {
 	object->Deactivate();
 }
-
-
 
 void GameControl::CheckCollisions()
 {
@@ -158,12 +154,6 @@ bool GameControl::CheckCollisionsGameObjects(GameObject* x, GameObject* y) {
 	return collision;
 }
 
-Player* GameControl::GetPlayerReference(GameObject* objectPlayer) {
-	GameObject *g = objectPlayer;
-	Player* player = static_cast<Player*>(objectPlayer);
-	return player;
-}
-
 void GameControl::MoveMeteors(const double deltaTime)
 {
 	for (size_t i = 0; i < _meteors->GetNumberChildren(); i++)
@@ -261,44 +251,12 @@ void GameControl::ActivacionGameObjects(const float deltaTime, const float frame
 	}
 }
 
-
 void GameControl::MoveObjects(const double deltaTime) {
 
 	MoveMeteors(deltaTime);
 	MoveEnemyShips(deltaTime);
 	MoveMissiles(deltaTime);
 }
-
-
-pair<uint32_t, uint32_t> GameControl::createFBO() {
-	uint32_t fbo;
-	glGenFramebuffers(1, &fbo);
-	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
-	uint32_t depthMap;
-	glGenTextures(1, &depthMap);
-	glBindTexture(GL_TEXTURE_2D, depthMap);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadow_width, shadow_height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	float borderColor[] = { 1.0f,1.0f ,1.0f ,1.0f };
-	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		cout << "Error loading GL_FRAMEBUFFER" << endl;
-	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	return make_pair(fbo, depthMap);
-}
-
 
 void GameControl::Render(Node * _root, Shader &shaderModels, Shader& depthShader, pair<uint32_t, uint32_t> fboRes) {
 	vec3 lightPos = vec3(0.0f, Constants::ALTURA_LUZ, 0.0f);

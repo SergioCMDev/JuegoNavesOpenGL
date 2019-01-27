@@ -15,12 +15,12 @@
 static class Render {
 
 public:
-	Render::Render(Node * node, bool debug);
+	Render::Render(Node * node, bool debug, Camera* camera);
 
 	void RenderScene(Quad quadSuelo, Sphere sphere, Cube cube);
-	void RenderGame(Node * _root, Shader &shaderModels, Shader& depthShader);
+	void RenderGame(Node * _root, Shader &shaderModels, Shader& depthShader, pair<uint32_t, uint32_t> fboRes);
 	void RenderGameObjects(Node * _root, Shader &shader);
-	//void RenderLights(Shader& shaderModels);
+	void RenderLights(Shader& shaderModels);
 	pair<uint32_t, uint32_t> createFBO();
 private:
 	bool _debug = false;

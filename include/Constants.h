@@ -16,7 +16,7 @@ public:
 	static const uint32_t TIPO_MISIL = 4;
 	static const int MAX_POSITION_Y = 10;
 	static const int MIN_POSITION_Y = -MAX_POSITION_Y;
-	static const int MAX_POSITION_X = 10;
+	static const int MAX_POSITION_X = 13;
 	static const int MIN_POSITION_X = -MAX_POSITION_X;
 	static const uint32_t ALTURA_LUZ = 6.0f;
 
