@@ -172,71 +172,24 @@ int Inicializacion() {
 };
 
 
-
-void RenderScene(Quad quadSuelo, Cube cube, Sphere sphere2) {
-
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glm::mat4 view = camera.GetViewMatrix();
-	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
-
-	quadSuelo.Render(projection, view, posSuelo);
-	//Dibujamos Suelo
-	if (debug) {
-		sphere2.RenderSphere(projection, view);
-		//Dibujamos sphera luz
-
-		//Dibujamos Cubos Meteoritos
-		cube._color = vec3(1.0f);
-		cube._scale = vec3(1.0f);
-		for (size_t i = 0; i < Meteor::GetNumberPositions(); i++)
-		{
-			cube.Render(projection, view, Meteor::GetMeteorPosition(i), 1.0f);
-		}
-
-		//dibujamos cubos naves
-		cube._color = vec3(1.0f, 0.0f, 0.0f);
-		for (size_t i = 0; i < Enemy::GetNumberPositions(); i++)
-		{
-			cube._shader->Set("color", cube._color);
-			cube.Render(projection, view, Enemy::GetEnemyPosition(i), 1.0f);
-
-		}
-
-		//dibujamos cubos limites
-		cube._color = vec3(1.0f, 1.0f, 0.0f);
-		cube._shader->Set("color", cube._color);
-		cube.Render(projection, view, vec3(Constants::MAX_POSITION_X, 0.0f, 0.0f), 1.0f);
-
-		cube.Render(projection, view, vec3(Constants::MIN_POSITION_X, 0.0f, 0.0f), 1.0f);
-
-		cube.Render(projection, view, vec3(0.0f, 0.0f, Constants::MIN_POSITION_Y), 1.0f);
-
-		cube.Render(projection, view, vec3(0.0f, 0.0f, Constants::MAX_POSITION_Y), 1.0f);
-
-	}
-
-	glBindVertexArray(0);
-}
-
-void ColliderPlayer(Player * player, Cube *cube)
-{
-	vec3 position = player->GetPosition();
-	glm::mat4 view = camera.GetViewMatrix();
-	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
-	cube->_scale = vec3(3.0f, 4.0f, 5.5f);
-	cube->_color = vec3(1.0f);
-	cube->_position = position;
-
-	player->_collider = cube;
-	//cube->Render(projection, view, position, 0.0f);
-}
-
-void RenderColliders(Node * node, Cube *cube) {
-	Player* player = GetPlayerReference(node->GetChildren(0)->GetGameObject());
-	ColliderPlayer(player, cube);
-
-}
+//void ColliderPlayer(Player * player, Cube *cube)
+//{
+//	vec3 position = player->GetPosition();
+//	glm::mat4 view = camera.GetViewMatrix();
+//	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
+//	cube->_scale = vec3(3.0f, 4.0f, 5.5f);
+//	cube->_color = vec3(1.0f);
+//	cube->_position = position;
+//
+//	player->_collider = cube;
+//	//cube->Render(projection, view, position, 0.0f);
+//}
+//
+//void RenderColliders(Node * node, Cube *cube) {
+//	Player* player = GetPlayerReference(node->GetChildren(0)->GetGameObject());
+//	ColliderPlayer(player, cube);
+//
+//}
 
 
 int main(int argc, char* argv[]) {
@@ -436,13 +389,12 @@ int main(int argc, char* argv[]) {
 
 	cout << "Creacion Geometrias " << endl;
 
-	//sphere._shader = &shaderSphere;
 
 	quadSuelo.textures[0] = textureSuelo;
 	cout << "Inicio GameLoop" << endl;
 
 	GameControl control(&playerNode, &enemiesParentNode, &MeteorsParentNode, &camera, &root);
-	//Render render(&root, debug);
+	Render render(&root, debug);
 
 	//Bucle inicial donde se realiza toda la accion del motor
 	while (!glfwWindowShouldClose(window.GetWindow()) && control._playerAlive) {
@@ -455,8 +407,8 @@ int main(int argc, char* argv[]) {
 		//control.MoveObjects(deltaTime);
 		//control.ActivacionGameObjects(currentFrame, deltaTime);
 		//control.Render(&root, shaderModels, shaderDepth);
-		RenderScene(quadSuelo, cubeClasss, sphere);
-		//render.RenderScene(quadSuelo, sphere, cubeClasss);
+		//RenderScene(quadSuelo, cubeClasss, sphere);
+		render.RenderScene(quadSuelo, sphere, cubeClasss);
 
 
 
