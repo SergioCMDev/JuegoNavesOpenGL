@@ -1,7 +1,7 @@
 #include "GameControl.h"
 //const float screen_width = 800.0f, screen_height = 600.0f;
-const float screen_width = 1280, screen_height = 720;
-const float shadow_width = 1024, shadow_height = 1024;
+const float screen_width = 1280, screen_height = 1024;
+const float shadow_width = 1280, shadow_height = 1024;
 const float shadow_near = 1.0f;
 const float shadow_far = 7.5f;
 
@@ -301,34 +301,34 @@ pair<uint32_t, uint32_t> GameControl::createFBO() {
 
 
 void GameControl::Render(Node * _root, Shader &shaderModels, Shader& depthShader) {
-	auto fboRes = createFBO();
+	//auto fboRes = createFBO();
 	vec3 lightPos = vec3(0.0f, Constants::ALTURA_LUZ, 0.0f);
 	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, shadow_near, shadow_far);
 	mat4 lightView = lookAt(lightPos, vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
 	mat4 lightSpaceMatrix = lightProjection * lightView;
 
-	depthShader.Use();
-	depthShader.Set("lightSpaceMatrix", lightSpaceMatrix);
-	glBindFramebuffer(GL_FRAMEBUFFER, fboRes.first);
-	glClear(GL_DEPTH_BUFFER_BIT);
-	glViewport(0, 0, shadow_width, shadow_height); //Cambiamos tamaño de pantalla a pantalla de sombra
-	RenderGameObjects(_root, depthShader);
+	//depthShader.Use();
+	//depthShader.Set("lightSpaceMatrix", lightSpaceMatrix);
+	//glBindFramebuffer(GL_FRAMEBUFFER, fboRes.first);
+	//glClear(GL_DEPTH_BUFFER_BIT);
+	//glViewport(0, 0, shadow_width, shadow_height); //Cambiamos tamaño de pantalla a pantalla de sombra
+	//RenderGameObjects(_root, depthShader);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	glViewport(0, 0, screen_width, screen_height);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	Camera* camera = static_cast<Camera*>(_root->GetGameObject());
-	lightProjection = glm::perspective(radians(camera->GetFOV()), (float)screen_width / screen_height, 0.1f, 100.0f);
+	//lightProjection = glm::perspective(radians(camera->GetFOV()), (float)screen_width / screen_height, 0.1f, 100.0f);
 	mat4 view = camera->GetViewMatrix();
 	shaderModels.Set("projection", lightProjection);
 	shaderModels.Set("view", view);
 	shaderModels.Set("viewPos", camera->GetPosition());
 	shaderModels.Set("lightPos", lightPos);
-	shaderModels.Set("lightSpaceMatrix", lightSpaceMatrix);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, fboRes.second);
-	shaderModels.Set("depthMap", 1);
+	//shaderModels.Set("lightSpaceMatrix", lightSpaceMatrix);
+	//glActiveTexture(GL_TEXTURE1);
+	//glBindTexture(GL_TEXTURE_2D, fboRes.second);
+	//shaderModels.Set("depthMap", 1);
 
 	RenderGameObjects(_root, shaderModels);
 

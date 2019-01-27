@@ -6,12 +6,8 @@ vec3 posLuz;
 const vec3 posSuelo = vec3(0.0f, -16.0f, 0.0f);
 const float screen_width = 1280, screen_height = 720;
 const float shadow_width = 1024, shadow_height = 1024;
-
-//Player* GetPlayerReference(GameObject* objectPlayer) {
-//	GameObject *g = objectPlayer;
-//	Player* player = static_cast<Player*>(objectPlayer);
-//	return player;
-//}
+const float shadow_near = 1.0f;
+const float shadow_far = 7.5f;
 
 
 #pragma endregion
@@ -74,23 +70,69 @@ Render::Render(Node * node, bool debug) {
 	_camera = camera;
 }
 
-//void Render::RenderGame(Shader & shaderModels, Shader & depthShader)
-//{
-//}
-//
-//
-//void ColliderPlayer(Player * player, Cube *cube)
-//{
-//	//vec3 position = player->GetPosition();
-//	//glm::mat4 view = _camera->GetViewMatrix();
-//	//glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
-//	//cube->_scale = vec3(3.0f, 4.0f, 5.5f);
-//	//cube->_color = vec3(1.0f);
-//	//cube->_position = position;
-//
-//	//player->_collider = cube;
-//	//cube->Render(projection, view, position, 0.0f);
-//}
+pair<uint32_t, uint32_t> Render::createFBO() {
+	uint32_t fbo;
+	glGenFramebuffers(1, &fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+	uint32_t depthMap;
+	glGenTextures(1, &depthMap);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadow_width, shadow_height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	float borderColor[] = { 1.0f,1.0f ,1.0f ,1.0f };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		cout << "Error loading GL_FRAMEBUFFER" << endl;
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	return make_pair(fbo, depthMap);
+}
+
+
+void Render::RenderGame(Node * _root, Shader &shaderModels, Shader& depthShader) {
+	auto fboRes = createFBO();
+	vec3 lightPos = vec3(0.0f, Constants::ALTURA_LUZ, 0.0f);
+	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, shadow_near, shadow_far);
+	mat4 lightView = lookAt(lightPos, vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
+	mat4 lightSpaceMatrix = lightProjection * lightView;
+
+	depthShader.Use();
+	depthShader.Set("lightSpaceMatrix", lightSpaceMatrix);
+	glBindFramebuffer(GL_FRAMEBUFFER, fboRes.first);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glViewport(0, 0, shadow_width, shadow_height); //Cambiamos tamaño de pantalla a pantalla de sombra
+	RenderGameObjects(_root, depthShader);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	glViewport(0, 0, screen_width, screen_height);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	Camera* camera = static_cast<Camera*>(_root->GetGameObject());
+	lightProjection = glm::perspective(radians(camera->GetFOV()), (float)screen_width / screen_height, 0.1f, 100.0f);
+	mat4 view = camera->GetViewMatrix();
+	shaderModels.Set("projection", lightProjection);
+	shaderModels.Set("view", view);
+	shaderModels.Set("viewPos", camera->GetPosition());
+	shaderModels.Set("lightPos", lightPos);
+	shaderModels.Set("lightSpaceMatrix", lightSpaceMatrix);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, fboRes.second);
+	shaderModels.Set("depthMap", 1);
+
+	RenderGameObjects(_root, shaderModels);
+
+}
 
 void Render::RenderGameObjects(Node * _root, Shader &shader) {
 	glm::mat4 view = _camera->GetViewMatrix();
@@ -149,8 +191,3 @@ void Render::RenderGameObjects(Node * _root, Shader &shader) {
 	}
 }
 
-//void RenderColliders(Node * node, Cube *cube) {
-//	Player* player = GetPlayerReference(node->GetChildren(0)->GetGameObject());
-//	ColliderPlayer(player, cube);
-//
-//}

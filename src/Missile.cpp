@@ -11,7 +11,7 @@ Missile::Missile(Shader& shaderMissile, glm::vec3 position)
 	SetPosition(position);
 	SetVelocity(2.0f);
 	SetType(Constants::TIPO_MISIL);
-	SetScale(vec3(0.3f));
+	SetScale(vec3(0.2f));
 	Deactivate();
 
 }

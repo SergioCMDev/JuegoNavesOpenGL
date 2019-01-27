@@ -32,7 +32,7 @@ const vec3 posSuelo = vec3(0.0f, -16.0f, 0.0f);
 const vec3 posPlayer = vec3(0.0f, 0.0f, 0.0f);
 const vec3 posLuz = vec3(0.0f, Constants::ALTURA_LUZ, 0.0f);
 
-const float screen_width = 800.0f, screen_height = 600.0f;
+const float screen_width = 1280, screen_height = 720;
 float lastY = (float)screen_height / 2.0f;
 float lastX = (float)screen_width / 2.0f;
 
@@ -82,17 +82,20 @@ void OnScroll(GLFWwindow* window, double xoffset, double yoffset) {
 
 void MovimientoCamara(const double &deltaTime)
 {
-	if (glfwGetKey(window.GetWindow(), GLFW_KEY_W) == GLFW_PRESS) {
-		camera.HandleKeyboard(Camera::Movement::Forward, deltaTime);
-	}
-	if (glfwGetKey(window.GetWindow(), GLFW_KEY_S) == GLFW_PRESS) {
-		camera.HandleKeyboard(Camera::Movement::Backward, deltaTime);
-	}
-	if (glfwGetKey(window.GetWindow(), GLFW_KEY_A) == GLFW_PRESS) {
-		camera.HandleKeyboard(Camera::Movement::Left, deltaTime);
-	}
-	if (glfwGetKey(window.GetWindow(), GLFW_KEY_D) == GLFW_PRESS) {
-		camera.HandleKeyboard(Camera::Movement::Right, deltaTime);
+	if (debug) {
+
+		if (glfwGetKey(window.GetWindow(), GLFW_KEY_W) == GLFW_PRESS) {
+			camera.HandleKeyboard(Camera::Movement::Forward, deltaTime);
+		}
+		if (glfwGetKey(window.GetWindow(), GLFW_KEY_S) == GLFW_PRESS) {
+			camera.HandleKeyboard(Camera::Movement::Backward, deltaTime);
+		}
+		if (glfwGetKey(window.GetWindow(), GLFW_KEY_A) == GLFW_PRESS) {
+			camera.HandleKeyboard(Camera::Movement::Left, deltaTime);
+		}
+		if (glfwGetKey(window.GetWindow(), GLFW_KEY_D) == GLFW_PRESS) {
+			camera.HandleKeyboard(Camera::Movement::Right, deltaTime);
+		}
 	}
 }
 
@@ -406,10 +409,10 @@ int main(int argc, char* argv[]) {
 		control.CheckCollisions();
 		control.MoveObjects(deltaTime);
 		control.ActivacionGameObjects(currentFrame, deltaTime);
+
+		//render.RenderGame(&root, shaderModels, shaderDepth);//Intento de pasarla a la clase Render pero peta
 		control.Render(&root, shaderModels, shaderDepth);
-		//RenderScene(quadSuelo, cubeClasss, sphere);
 		render.RenderScene(quadSuelo, sphere, cubeClasss);
-		//render.RenderGameObjects(&root, shaderModels);
 
 
 
