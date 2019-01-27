@@ -1,5 +1,5 @@
 //#include "Render.h"
-//#include "Cube.h"
+//
 //
 //
 //vec3 posLuz;
@@ -14,11 +14,7 @@
 //	return player;
 //}
 //
-//float verticesQuad[] = {
-//	-0.5f,  0.5f,  0.5f,       0.0f, 0.0f,    //top
-//	  0.5f,  0.5f,  0.5f,       1.0f, 0.0f,
-//	  0.5f,  0.5f,  -0.5f,       1.0f, 1.0f,
-//	  -0.5f,  0.5f,  -0.5f,       0.0f, 1.0f };
+//
 //#pragma endregion
 //struct Sphere {
 //	float* vertices;
@@ -38,19 +34,7 @@
 //
 //};
 //
-//struct Quad {
 //
-//	uint32_t numeroElementosVerticesQuad = 20;
-//	uint32_t numeroIndicesQuad = 6;
-//
-//	uint32_t textures[3];
-//	Shader *shader;
-//	uint32_t* VAO;
-//
-//	uint32_t indicesQuad[6]{
-//	0, 1, 2, 0, 2, 3 //Front
-//	};
-//};
 //
 //#pragma region Generacion esfera
 //
@@ -217,17 +201,6 @@
 //	glDrawElements(GL_TRIANGLES, numeroElementos, GL_UNSIGNED_INT, 0);
 //}
 //
-//void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view)
-//{
-//	glActiveTexture(GL_TEXTURE4);//	glBindTexture(GL_TEXTURE_2D, quad.textures[0]);
-//
-//	quad.shader->Use();
-//	quad.shader->Set("quadTexture", 4);
-//	glm::mat4 model = mat4(1.0f);
-//	model = glm::translate(model, posSuelo);
-//	model = glm::scale(model, vec3(20.0f));
-//	RenderFigureMain(*quad.shader, projection, view, model, *quad.VAO, quad.numeroIndicesQuad);
-//}
 //
 //
 //void RenderSphere(Sphere &sphere, glm::mat4 &projection, glm::mat4 &view)
@@ -250,17 +223,16 @@
 //}
 //#pragma endregion
 //
-//void Render::RenderScene(Quad quad, Sphere sphere, Cube cube) {
+//void Render::RenderScene(Quad quadSuelo, Sphere sphere, Cube cube) {
 //
 //
 //	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//
 //	glm::mat4 view = _camera->GetViewMatrix();
 //	glm::mat4 projection = glm::perspective(glm::radians(_camera->GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
 //
-//
+//	quadSuelo.Render(projection, view, posSuelo);
 //	//Dibujamos Suelo
-//	RenderQuadSuelo(quad, projection, view);
-//	if (debug) {
+//	if (_debug) {
 //
 //		//Dibujamos sphera luz
 //		RenderSphere(sphere, projection, view);
@@ -298,73 +270,28 @@
 //	glBindVertexArray(0);
 //}
 //
-//uint32_t createVertexDataQuad(const float* vertices, const uint32_t n_verts, const uint32_t* indices, const uint32_t n_indices, const uint32_t numberOfElementsPerLine) {
-//	unsigned int VAO, VBO, EBO;
-//
-//	glGenVertexArrays(1, &VAO);
-//	//Generamos 2 buffer, elementos y objetos
-//	glGenBuffers(1, &VBO);
-//	glGenBuffers(1, &EBO);
-//
-//	//Bindeamos el VAO
-//	glBindVertexArray(VAO);
-//
-//	uint32_t _numberOfElementsPerLine = numberOfElementsPerLine;
-//	uint32_t stride = 3;
-//
-//	//Bindeamos buffer vertices
-//	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-//	//Subida de vertices al buffer
-//	glBufferData(GL_ARRAY_BUFFER, n_verts * sizeof(float) * _numberOfElementsPerLine, vertices, GL_STATIC_DRAW);
-//
-//	//Bindeo buffer indices
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, n_indices * sizeof(float), indices, GL_STATIC_DRAW);
-//
-//	//vertices del triangulo 6 por que hay 6 elementos hasta el proximo inicio de linea
-//	uint32_t atributteNumber = 0;
-//
-//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, _numberOfElementsPerLine * sizeof(float), (void*)0);
-//	glEnableVertexAttribArray(0);
-//
-//	//Vertices de textura
-//	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, _numberOfElementsPerLine * sizeof(float), (void*)(stride * sizeof(float)));
-//	glEnableVertexAttribArray(1);
-//	stride += 2;
 //
 //
-//	//desbindeamos buffer objetos
-//	glBindBuffer(GL_ARRAY_BUFFER, 0);
+//Render::Render(Node * node, bool debug) {
 //
-//	//Desbindeo
-//	glBindVertexArray(0);
+//	_node = node;
+//	_debug = debug;
+//	GameObject *g = node->GetGameObject();;
+//	Camera* camera = static_cast<Camera*>(g);
+//	_camera = camera;
+//	//Shader shaderQuad = Utils::GetFullShader("Shaders/QuadVS.vs", "Shaders/QuadFS.fs");
+//	//Shader shaderSphere = Utils::GetFullShader("Shaders/LightVS.vs", "Shaders/LightFS.fs");
+//	//cout << "Creacion Geometrias " << endl;
+//	//Quad quadSuelo = Quad(shaderQuad);
+//	//_sphere = Sphere();
+//	//uint32_t textureSuelo = Model::GetTexture("Textures/texture3.png", true);
+//	//uint32_t SphereVAO = createSphere(1);
 //
-//	//desbindeamos buffer elements
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+//	//_sphere.shader = &shaderSphere;
 //
-//	return VAO;
-//}
+//	//quadSuelo.textures[0] = textureSuelo;
 //
-//Render::Render(Node * node) {
-//
-//	Shader shaderQuad = Utils::GetFullShader("Shaders/QuadVS.vs", "Shaders/QuadFS.fs");
-//	Shader shaderSphere = Utils::GetFullShader("Shaders/LightVS.vs", "Shaders/LightFS.fs");
-//	Cube cubeClasss = Cube();
-//	Quad quad = Quad();
-//	Sphere sphere = Sphere();
-//	uint32_t textureSuelo = Model::GetTexture("Textures/texture3.png", true);
-//
-//	uint32_t SphereVAO = createSphere(1);
-//	uint32_t QuadVAO = createVertexDataQuad(verticesQuad, quad.numeroElementosVerticesQuad, quad.indicesQuad, quad.numeroIndicesQuad, 5);
-//	cout << "Creacion Geometrias " << endl;
-//
-//	quad.shader = &shaderQuad;
-//	sphere.shader = &shaderSphere;
-//
-//	quad.VAO = &QuadVAO;
-//	quad.textures[0] = textureSuelo;
-//
-//	sphere.VAO = &SphereVAO;
+//	//_sphere.VAO = &SphereVAO;
 //}
 //
 //void Render::RenderGame(Shader & shaderModels, Shader & depthShader)
@@ -374,15 +301,15 @@
 //
 //void ColliderPlayer(Player * player, Cube *cube)
 //{
-//	vec3 position = player->GetPosition();
-//	glm::mat4 view = _camera->GetViewMatrix();
-//	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
-//	cube->_scale = vec3(3.0f, 4.0f, 5.5f);
-//	cube->_color = vec3(1.0f);
-//	cube->_position = position;
+//	//vec3 position = player->GetPosition();
+//	//glm::mat4 view = _camera->GetViewMatrix();
+//	//glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
+//	//cube->_scale = vec3(3.0f, 4.0f, 5.5f);
+//	//cube->_color = vec3(1.0f);
+//	//cube->_position = position;
 //
-//	player->_collider = cube;
-//	cube->Render(projection, view, position, 0.0f);
+//	//player->_collider = cube;
+//	//cube->Render(projection, view, position, 0.0f);
 //}
 //
 //void RenderColliders(Node * node, Cube *cube) {

@@ -21,6 +21,7 @@
 #include "Cube.h"
 #include "Quad.h"
 #include "GameControl.h"
+#include "Render.h"
 
 const vec3 posCamera = glm::vec3(0.0f, 20.0f, 0.0f);
 
@@ -378,7 +379,7 @@ void RenderSphere(Sphere &sphere, glm::mat4 &projection, glm::mat4 &view)
 #pragma endregion
 
 
-void RenderScene(QuadClasss quadSuelo, Sphere sphere, Cube cube) {
+void RenderScene(Quad quadSuelo, Sphere sphere, Cube cube) {
 
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -444,8 +445,6 @@ void RenderColliders(Node * node, Cube *cube) {
 	ColliderPlayer(player, cube);
 
 }
-
-
 
 
 int main(int argc, char* argv[]) {
@@ -635,8 +634,10 @@ int main(int argc, char* argv[]) {
 	root.AddChildren(&enemiesParentNode);
 	root.AddChildren(&MeteorsParentNode);
 
+#pragma endregion
 	Cube cubeClasss = Cube(shaderCube);
 	Sphere sphere = Sphere();
+	Quad quadSuelo = Quad(shaderQuad);
 
 	uint32_t SphereVAO = createSphere(1);
 
@@ -645,14 +646,12 @@ int main(int argc, char* argv[]) {
 	sphere.shader = &shaderSphere;
 
 
-	QuadClasss quadSuelo = QuadClasss(shaderQuad);
 	quadSuelo.textures[0] = textureSuelo;
 	sphere.VAO = &SphereVAO;
-#pragma endregion
 	cout << "Inicio GameLoop" << endl;
 
 	GameControl control(&playerNode, &enemiesParentNode, &MeteorsParentNode, &camera, &root);
-
+	//Render render(&root, debug);
 
 	//Bucle inicial donde se realiza toda la accion del motor
 	while (!glfwWindowShouldClose(window.GetWindow()) && control._playerAlive) {
@@ -666,6 +665,7 @@ int main(int argc, char* argv[]) {
 		control.ActivacionGameObjects(currentFrame, deltaTime);
 		control.Render(&root, shaderModels, shaderDepth);
 		RenderScene(quadSuelo, sphere, cubeClasss);
+		//render.RenderScene(quadSuelo, sphere, cubeClasss);
 
 
 

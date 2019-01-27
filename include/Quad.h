@@ -2,10 +2,10 @@
 #ifndef QUAD_H     
 #define  QUAD_H
 #include "Shader.h"
-class QuadClasss {
+class Quad {
 public:
-	QuadClasss();
-	QuadClasss(Shader& shader);
+	Quad();
+	Quad(Shader& shader);
 	Shader *_shader;
 	glm::vec3 _position;
 	void Render(glm::mat4 projection, glm::mat4 view, vec3 posSuelo);
@@ -16,7 +16,7 @@ public:
 	glm::uint32_t _VAO;
 	vec3 _scale = vec3(30.0f);
 	void SetTexture(uint32_t texture);
-	~QuadClasss();
+	~Quad();
 
 
 private:

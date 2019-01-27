@@ -1,10 +1,10 @@
 #include "Quad.h"
 #include "Utils.h"
 
-QuadClasss::QuadClasss()
+Quad::Quad()
 {
 }
-QuadClasss::QuadClasss(Shader& shader)
+Quad::Quad(Shader& shader)
 {
 	_shader = &shader;
 	_VAO = CreateVAO();
@@ -12,7 +12,7 @@ QuadClasss::QuadClasss(Shader& shader)
 }
 
 
-void QuadClasss::Render(glm::mat4 projection, glm::mat4 view, vec3 position)
+void Quad::Render(glm::mat4 projection, glm::mat4 view, vec3 position)
 {
 
 	glm::mat4 model = mat4(1.0f);
@@ -28,7 +28,7 @@ void QuadClasss::Render(glm::mat4 projection, glm::mat4 view, vec3 position)
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
-glm::uint32_t QuadClasss::CreateVAO() {
+glm::uint32_t Quad::CreateVAO() {
 	unsigned int VAO, VBO, EBO;
 	float verticesQuad[] = {
 		-0.5f,  0.5f,  0.5f,       0.0f, 0.0f,    //top
@@ -84,7 +84,7 @@ glm::uint32_t QuadClasss::CreateVAO() {
 	return VAO;
 }
 
-QuadClasss::~QuadClasss() {
+Quad::~Quad() {
 	//glDeleteVertexArrays(1, &_VAO);
 
 }
