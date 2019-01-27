@@ -142,6 +142,7 @@ void Render::RenderGameObjects(Node * _root, Shader &shader) {
 	if (_root->GetGameObject() != NULL) {
 		_root->GetGameObject()->_shader = shader;
 		if (_root->GetGameObject()->OutsideBoundaries()) {
+			if(_root->GetGameObject()->GetType() != Constants::TIPO_PLAYER)
 			_root->GetGameObject()->Deactivate();
 		}
 		else {

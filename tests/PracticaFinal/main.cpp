@@ -394,7 +394,7 @@ int main(int argc, char* argv[]) {
 
 
 	quadSuelo.textures[0] = textureSuelo;
-	cout << "Inicio GameLoop" << endl;
+	//cout << "Inicio GameLoop" << endl;
 
 	GameControl control(&playerNode, &enemiesParentNode, &MeteorsParentNode, &camera, &root);
 	Render render(&root, debug, &camera);
@@ -420,7 +420,8 @@ int main(int argc, char* argv[]) {
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
 	}
-	cout << "Fin GameLoop" << endl;
+	//cout << "Fin GameLoop" << endl;
+	cout << "Has conseguido " << control.GetPuntuacion() << " puntos" << endl;
 
 	//Si se han linkado bien los shaders, los borramos ya que estan linkados
 	glDeleteVertexArrays(1, &quadSuelo._VAO);

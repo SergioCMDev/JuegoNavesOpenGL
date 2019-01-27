@@ -19,9 +19,16 @@ GameControl::GameControl(Node* player, Node* enemyships, Node* meteors, Camera* 
 	_root = root;
 }
 
+uint32_t GameControl::GetPuntuacion() {
+	return _puntuacion;
+}
+
 void GameControl::PlayerKilled() {
-	_player->GetGameObject()->Deactivate();
-	_playerAlive = false;
+	vidas--;
+	if (vidas < 0) {
+		_player->GetGameObject()->Deactivate();
+		_playerAlive = false;
+	}
 }
 
 void GameControl::ActivateGameObject(GameObject * object)
@@ -97,10 +104,9 @@ void GameControl::CheckCollisions()
 					{
 						enemyShipPool->ResetChildren();
 					}
-
+					_puntuacion++;
 					GameObjectDestroyed(_enemyShips->GetChildren(enemyShip)->GetGameObject());
 					GameObjectDestroyed(poolMisilesPlayer->GetChildren(i)->GetGameObject());
-					//GetPlayerReference(_player->GetGameObject())->NoShooting();
 				}
 			}
 		}
@@ -108,21 +114,18 @@ void GameControl::CheckCollisions()
 
 	//Check Missiles  player vs Meteors
 
-	//for (size_t i = 0; i < poolMisilesPlayer->GetNumberChildren(); i++)
-	//{
-	//	for (size_t meteor = 0; meteor < _meteors->GetNumberChildren(); meteor++)
-	//	{
-	//		if (poolMisilesPlayer->GetChildren(i)->GetGameObject()->Rendered() && _meteors->GetChildren(meteor)->GetGameObject()->Rendered()) {
+	for (size_t i = 0; i < poolMisilesPlayer->GetNumberChildren(); i++)
+	{
+		for (size_t meteor = 0; meteor < _meteors->GetNumberChildren(); meteor++)
+		{
+			if (poolMisilesPlayer->GetChildren(i)->GetGameObject()->Active() && _meteors->GetChildren(meteor)->GetGameObject()->Active()) {
 
-	//			if (CheckCollisionsGameObjects(poolMisilesPlayer->GetChildren(i)->GetGameObject(), _meteors->GetChildren(meteor)->GetGameObject())) {
-
-	//				GameObjectDestroyed(_meteors->GetChildren(meteor)->GetGameObject());
-	//				GameObjectDestroyed(poolMisilesPlayer->GetChildren(i)->GetGameObject());
-	//				GetPlayerReference(_player->GetGameObject())->NoShooting();
-	//			}
-	//		}
-	//	}
-	//}
+				if (CheckCollisionsGameObjects(poolMisilesPlayer->GetChildren(i)->GetGameObject(), _meteors->GetChildren(meteor)->GetGameObject())) {
+					GameObjectDestroyed(poolMisilesPlayer->GetChildren(i)->GetGameObject());
+				}
+			}
+		}
+	}
 }
 
 bool GameControl::CheckCollisionsGameObjects(GameObject* x, GameObject* y) {
@@ -304,6 +307,7 @@ void GameControl::RenderGameObjects(Node * _root, Shader &shader) {
 	if (_root->GetGameObject() != NULL) {
 		_root->GetGameObject()->_shader = shader;
 		if (_root->GetGameObject()->OutsideBoundaries()) {
+
 			_root->GetGameObject()->Deactivate();
 		}
 		else {

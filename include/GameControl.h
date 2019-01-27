@@ -9,7 +9,6 @@
 static class GameControl {
 
 public:
-	//GameControl(Node* player, Node* enemyShips, Node* Meteors);
 	GameControl(Node* player, Node* enemyships, Node* meteors, Camera* camera, Node* root);
 
 	void CheckCollisions();
@@ -20,6 +19,7 @@ public:
 	void Render(Node * _root, Shader &shaderModels, Shader& depthShader, pair<uint32_t, uint32_t> fboRes);
 	void RenderGameObjects(Node * _root, Shader &shader);
 	void RenderLights(Shader& shaderModels);
+	uint32_t GetPuntuacion();
 private:
 	void GameObjectDestroyed(GameObject* ship);
 	void PlayerKilled();
@@ -29,4 +29,6 @@ private:
 	void MoveMeteors(const double deltaTime);
 	void MoveEnemyShips(const double deltaTime);
 	void MoveMissiles(const double deltaTime);
+	uint32_t vidas = Constants::VIDAS;
+	uint32_t _puntuacion = 0;
 };
