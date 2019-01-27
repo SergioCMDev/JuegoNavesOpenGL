@@ -19,8 +19,8 @@
 #include "Enemy.h"
 #include "Missile.h"
 #include "Cube.h"
+#include "Quad.h"
 #include "GameControl.h"
-
 
 const vec3 posCamera = glm::vec3(0.0f, 20.0f, 0.0f);
 
@@ -68,21 +68,6 @@ struct Sphere {
 	vec3 position = posLuz;
 
 };
-
-struct Quad {
-
-	uint32_t numeroElementosVerticesQuad = 20;
-	uint32_t numeroIndicesQuad = 6;
-
-	uint32_t textures[3];
-	Shader *shader;
-	uint32_t* VAO;
-
-	uint32_t indicesQuad[6]{
-	0, 1, 2, 0, 2, 3 //Front
-	};
-};
-
 
 using namespace std;
 
@@ -371,18 +356,6 @@ void RenderFigureMain(const Shader & shader, glm::mat4 &projection, glm::mat4 &v
 	glDrawElements(GL_TRIANGLES, numeroElementos, GL_UNSIGNED_INT, 0);
 }
 
-void RenderQuadSuelo(Quad &quad, glm::mat4 &projection, glm::mat4 &view)
-{
-	glActiveTexture(GL_TEXTURE4);	glBindTexture(GL_TEXTURE_2D, quad.textures[0]);
-
-	quad.shader->Use();
-	quad.shader->Set("quadTexture", 4);
-	glm::mat4 model = mat4(1.0f);
-	model = glm::translate(model, posSuelo);
-	model = glm::scale(model, vec3(30.0f));
-	RenderFigureMain(*quad.shader, projection, view, model, *quad.VAO, quad.numeroIndicesQuad);
-}
-
 
 void RenderSphere(Sphere &sphere, glm::mat4 &projection, glm::mat4 &view)
 {
@@ -405,16 +378,15 @@ void RenderSphere(Sphere &sphere, glm::mat4 &projection, glm::mat4 &view)
 #pragma endregion
 
 
-void RenderScene(Quad quad, Sphere sphere, Cube cube) {
+void RenderScene(QuadClasss quadSuelo, Sphere sphere, Cube cube) {
 
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
 
-
+	quadSuelo.Render(projection, view, posSuelo);
 	//Dibujamos Suelo
-	RenderQuadSuelo(quad, projection, view);
 	if (debug) {
 
 		//Dibujamos sphera luz
@@ -453,53 +425,6 @@ void RenderScene(Quad quad, Sphere sphere, Cube cube) {
 	glBindVertexArray(0);
 }
 
-
-uint32_t createVertexDataQuad(const float* vertices, const uint32_t n_verts, const uint32_t* indices, const uint32_t n_indices, const uint32_t numberOfElementsPerLine) {
-	unsigned int VAO, VBO, EBO;
-
-	glGenVertexArrays(1, &VAO);
-	//Generamos 2 buffer, elementos y objetos
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-
-	//Bindeamos el VAO
-	glBindVertexArray(VAO);
-
-	uint32_t _numberOfElementsPerLine = numberOfElementsPerLine;
-	uint32_t stride = 3;
-
-	//Bindeamos buffer vertices
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//Subida de vertices al buffer
-	glBufferData(GL_ARRAY_BUFFER, n_verts * sizeof(float) * _numberOfElementsPerLine, vertices, GL_STATIC_DRAW);
-
-	//Bindeo buffer indices
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, n_indices * sizeof(float), indices, GL_STATIC_DRAW);
-
-	//vertices del triangulo 6 por que hay 6 elementos hasta el proximo inicio de linea
-	uint32_t atributteNumber = 0;
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, _numberOfElementsPerLine * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	//Vertices de textura
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, _numberOfElementsPerLine * sizeof(float), (void*)(stride * sizeof(float)));
-	glEnableVertexAttribArray(1);
-	stride += 2;
-
-
-	//desbindeamos buffer objetos
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	//Desbindeo
-	glBindVertexArray(0);
-
-	//desbindeamos buffer elements
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	return VAO;
-}
 
 void ColliderPlayer(Player * player, Cube *cube)
 {
@@ -711,20 +636,17 @@ int main(int argc, char* argv[]) {
 	root.AddChildren(&MeteorsParentNode);
 
 	Cube cubeClasss = Cube(shaderCube);
-	Quad quad = Quad();
 	Sphere sphere = Sphere();
 
 	uint32_t SphereVAO = createSphere(1);
-	uint32_t QuadVAO = createVertexDataQuad(verticesQuad, quad.numeroElementosVerticesQuad, quad.indicesQuad, quad.numeroIndicesQuad, 5);
 
 	cout << "Creacion Geometrias " << endl;
 
-	quad.shader = &shaderQuad;
 	sphere.shader = &shaderSphere;
 
-	quad.VAO = &QuadVAO;
-	quad.textures[0] = textureSuelo;
 
+	QuadClasss quadSuelo = QuadClasss(shaderQuad);
+	quadSuelo.textures[0] = textureSuelo;
 	sphere.VAO = &SphereVAO;
 #pragma endregion
 	cout << "Inicio GameLoop" << endl;
@@ -740,10 +662,10 @@ int main(int argc, char* argv[]) {
 		//RenderColliders(&root, &cubeClasss);
 		HandlerInput(deltaTime, &root);
 		control.CheckCollisions();
-		//control.MoveObjects(deltaTime);
+		control.MoveObjects(deltaTime);
 		control.ActivacionGameObjects(currentFrame, deltaTime);
 		control.Render(&root, shaderModels, shaderDepth);
-		RenderScene(quad, sphere, cubeClasss);
+		RenderScene(quadSuelo, sphere, cubeClasss);
 
 
 
@@ -753,7 +675,7 @@ int main(int argc, char* argv[]) {
 	cout << "Fin GameLoop" << endl;
 
 	//Si se han linkado bien los shaders, los borramos ya que estan linkados
-	glDeleteVertexArrays(1, &QuadVAO);
+	glDeleteVertexArrays(1, &quadSuelo._VAO);
 	glDeleteVertexArrays(1, &SphereVAO);
 	glDeleteVertexArrays(1, &cubeClasss._VAO);
 

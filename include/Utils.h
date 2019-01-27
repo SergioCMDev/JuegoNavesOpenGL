@@ -12,5 +12,6 @@ class Utils {
 public:
 	static std::string GetFinalPath(const std::string pathInicial, const std::string pathFinal);
 	static Shader GetFullShader(const std::string pathVertex, const std::string pathFragment);
+	static Shader& GetFullShader2(const std::string pathVertex, const std::string pathFragment);
 };
 #endif
