@@ -3,7 +3,7 @@
 const float screen_width = 1280, screen_height = 720;
 const float shadow_width = 1024, shadow_height = 1024;
 const float shadow_near = 1.0f;
-const float shadow_far = 7.5f;
+const float shadow_far = 17.5f;
 
 GameControl::GameControl(Node* player, Node* enemyships, Node* meteors) {
 	_player = player;
@@ -300,8 +300,7 @@ pair<uint32_t, uint32_t> GameControl::createFBO() {
 }
 
 
-void GameControl::Render(Node * _root, Shader &shaderModels, Shader& depthShader) {
-	auto fboRes = createFBO();
+void GameControl::Render(Node * _root, Shader &shaderModels, Shader& depthShader, pair<uint32_t, uint32_t> fboRes) {
 	vec3 lightPos = vec3(0.0f, Constants::ALTURA_LUZ, 0.0f);
 	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, shadow_near, shadow_far);
 	mat4 lightView = lookAt(lightPos, vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
@@ -326,9 +325,9 @@ void GameControl::Render(Node * _root, Shader &shaderModels, Shader& depthShader
 	shaderModels.Set("viewPos", camera->GetPosition());
 	shaderModels.Set("lightPos", lightPos);
 	shaderModels.Set("lightSpaceMatrix", lightSpaceMatrix);
-	glActiveTexture(GL_TEXTURE1);
+	glActiveTexture(GL_TEXTURE8);
 	glBindTexture(GL_TEXTURE_2D, fboRes.second);
-	shaderModels.Set("depthMap", 1);
+	shaderModels.Set("depthMap", 8);
 
 	RenderGameObjects(_root, shaderModels);
 

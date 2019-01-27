@@ -18,7 +18,7 @@ void Render::RenderScene(Quad quadSuelo, Sphere sphere, Cube cube) {
 
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glm::mat4 view = _camera->GetViewMatrix();
-	glm::mat4 projection = glm::perspective(glm::radians(_camera->GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(_camera->GetFOV()), screen_width / screen_height, 0.1f, 40.0f);
 
 	quadSuelo.Render(projection, view, posSuelo);
 	//Dibujamos Suelo
