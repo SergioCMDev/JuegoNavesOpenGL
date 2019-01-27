@@ -36,7 +36,7 @@ const float screen_width = 800.0f, screen_height = 600.0f;
 float lastY = (float)screen_height / 2.0f;
 float lastX = (float)screen_width / 2.0f;
 
-bool debug = true;
+bool debug = false;
 float lastFrame = 0.0f;
 bool firstMouse = true;
 
@@ -403,12 +403,13 @@ int main(int argc, char* argv[]) {
 		lastFrame = currentFrame;
 		//RenderColliders(&root, &cubeClasss);
 		HandlerInput(deltaTime, &root);
-		//control.CheckCollisions();
-		//control.MoveObjects(deltaTime);
-		//control.ActivacionGameObjects(currentFrame, deltaTime);
-		//control.Render(&root, shaderModels, shaderDepth);
+		control.CheckCollisions();
+		control.MoveObjects(deltaTime);
+		control.ActivacionGameObjects(currentFrame, deltaTime);
+		control.Render(&root, shaderModels, shaderDepth);
 		//RenderScene(quadSuelo, cubeClasss, sphere);
 		render.RenderScene(quadSuelo, sphere, cubeClasss);
+		//render.RenderGameObjects(&root, shaderModels);
 
 
 

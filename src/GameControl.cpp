@@ -351,7 +351,8 @@ void GameControl::RenderGameObjects(Node * _root, Shader &shader) {
 		}
 		else {
 			if (_root->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
-				Player* player = GetPlayerReference(_root->GetGameObject());
+				GameObject *g = _root->GetGameObject();
+				Player* player = static_cast<Player*>(g);
 				if (player->Active()) {
 					player->Render(projection, view);
 				}

@@ -20,7 +20,7 @@ const float shadow_width = 1024, shadow_height = 1024;
 void Render::RenderScene(Quad quadSuelo, Sphere sphere, Cube cube) {
 
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glm::mat4 view = _camera->GetViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(_camera->GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
 
@@ -72,19 +72,6 @@ Render::Render(Node * node, bool debug) {
 	GameObject *g = node->GetGameObject();;
 	Camera* camera = static_cast<Camera*>(g);
 	_camera = camera;
-	//Shader shaderQuad = Utils::GetFullShader("Shaders/QuadVS.vs", "Shaders/QuadFS.fs");
-	//Shader shaderSphere = Utils::GetFullShader("Shaders/LightVS.vs", "Shaders/LightFS.fs");
-	//cout << "Creacion Geometrias " << endl;
-	//Quad quadSuelo = Quad(shaderQuad);
-	//_sphere = Sphere();
-	//uint32_t textureSuelo = Model::GetTexture("Textures/texture3.png", true);
-	//uint32_t SphereVAO = createSphere(1);
-
-	//_sphere.shader = &shaderSphere;
-
-	//quadSuelo.textures[0] = textureSuelo;
-
-	//_sphere.VAO = &SphereVAO;
 }
 
 //void Render::RenderGame(Shader & shaderModels, Shader & depthShader)
@@ -104,6 +91,63 @@ Render::Render(Node * node, bool debug) {
 //	//player->_collider = cube;
 //	//cube->Render(projection, view, position, 0.0f);
 //}
+
+void Render::RenderGameObjects(Node * _root, Shader &shader) {
+	glm::mat4 view = _camera->GetViewMatrix();
+	glm::mat4 projection = glm::perspective(glm::radians(_camera->GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
+	//RenderLights(_player->GetGameObject()->_shader);
+	if (_root->HasChildren()) {
+		for (size_t i = 0; i < _root->GetNumberChildren(); i++)
+		{
+			RenderGameObjects(_root->GetChildren(i), shader);
+		}
+	}
+	if (_root->GetGameObject() != NULL) {
+		_root->GetGameObject()->_shader = shader;
+		if (_root->GetGameObject()->OutsideBoundaries()) {
+			_root->GetGameObject()->Deactivate();
+		}
+		else {
+			if (_root->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
+				GameObject *g = _root->GetGameObject();
+				Player* player = static_cast<Player*>(g);
+
+				if (player->Active()) {
+					player->Render(projection, view);
+				}
+				//cout << "Player " << endl;
+			}
+			else if (_root->GetGameObject()->GetType() == Constants::TIPO_METEOR)
+			{
+				GameObject *g = _root->GetGameObject();
+				//cout << "Meteor " << endl;
+				Meteor* meteor = static_cast<Meteor*>(g);
+				if (meteor->Active()) {
+					meteor->Render(projection, view);
+				}
+			}
+			else if (_root->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
+				GameObject *g = _root->GetGameObject();
+				//cout << "Enemigo " << endl;
+
+				Enemy* enemyShip = static_cast<Enemy*>(g);
+				if (enemyShip->Active()) {
+					enemyShip->Render(projection, view);
+
+					enemyShip->Disparar();
+				}
+			}
+			else if (_root->GetGameObject()->GetType() == Constants::TIPO_MISIL) {
+				GameObject *g = _root->GetGameObject();
+				Missile* missile = static_cast<Missile*>(g);
+				//cout << "Missil " << endl;
+				if (missile->Active()) {
+					missile->Render(projection, view);
+				}
+			}
+		}
+	}
+}
 
 //void RenderColliders(Node * node, Cube *cube) {
 //	Player* player = GetPlayerReference(node->GetChildren(0)->GetGameObject());

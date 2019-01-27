@@ -19,7 +19,7 @@ public:
 
 	void RenderScene(Quad quadSuelo, Sphere sphere, Cube cube);
 	//void RenderGame(Shader &shaderModels, Shader& depthShader);
-	//void RenderGameObjects(Node * _root, Shader &shader);
+	void RenderGameObjects(Node * _root, Shader &shader);
 	//void RenderLights(Shader& shaderModels);
 	//pair<uint32_t, uint32_t> createFBO();
 private:
