@@ -261,7 +261,7 @@ void GameControl::MoveObjects(const double deltaTime) {
 	MoveMissiles(deltaTime);
 }
 
-void GameControl::Render(Node * _root, Shader &shaderModels, Shader& depthShader, pair<uint32_t, uint32_t> fboRes) {
+void GameControl::RenderGame(Node * _root, Shader &shaderModels, Shader& depthShader, pair<uint32_t, uint32_t> fboRes) {
 	vec3 lightPos = vec3(0.0f, Constants::ALTURA_LUZ, 0.0f);
 	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, shadow_near, shadow_far);
 	mat4 lightView = lookAt(lightPos, vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));

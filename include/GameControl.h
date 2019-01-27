@@ -16,7 +16,7 @@ public:
 	void MoveObjects(const double deltaTime);
 	void ActivateGameObject(GameObject* ship);
 	void ActivacionGameObjects(const float deltaTime, const float frame);
-	void Render(Node * _root, Shader &shaderModels, Shader& depthShader, pair<uint32_t, uint32_t> fboRes);
+	void RenderGame(Node * _root, Shader &shaderModels, Shader& depthShader, pair<uint32_t, uint32_t> fboRes);
 	void RenderGameObjects(Node * _root, Shader &shader);
 	void RenderLights(Shader& shaderModels);
 	uint32_t GetPuntuacion();
