@@ -4,17 +4,17 @@
 #include "Shader.h"
 const float M_PI = 3.14f;
 
-class Sphere2 {
+class Sphere {
 public:
-	Sphere2();
-	Sphere2(Shader& shader, vec3 position, float radius);
-	void Sphere2::RenderSphere(glm::mat4 &projection, glm::mat4 &view);
+	Sphere();
+	Sphere(Shader& shader, vec3 position, float radius);
+	void Sphere::RenderSphere(glm::mat4 &projection, glm::mat4 &view);
 	Shader *_shader;
 	glm::vec3 _position;
 	glm::vec3 _color = vec3(1.0f);
 	glm::uint32_t _VAO;
-	vec3 _scale = vec3(2.4f);
-	~Sphere2();
+	vec3 _scale = vec3(0.4f);
+	~Sphere();
 	float* _vertices;
 	float* _normals;
 	float* _textCoords;

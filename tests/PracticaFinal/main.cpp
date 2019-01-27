@@ -173,7 +173,7 @@ int Inicializacion() {
 
 
 
-void RenderScene(Quad quadSuelo, Cube cube, Sphere2 sphere2) {
+void RenderScene(Quad quadSuelo, Cube cube, Sphere sphere2) {
 
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -429,14 +429,14 @@ int main(int argc, char* argv[]) {
 #pragma endregion
 	Cube cubeClasss = Cube(shaderCube);
 
-	Sphere2 sphere2 = Sphere2(shaderSphere, posLuz, 1);
+	Sphere sphere = Sphere(shaderSphere, posLuz, 1);
 
 	Quad quadSuelo = Quad(shaderQuad);
 
 
 	cout << "Creacion Geometrias " << endl;
 
-	sphere2._shader = &shaderSphere;
+	//sphere._shader = &shaderSphere;
 
 	quadSuelo.textures[0] = textureSuelo;
 	cout << "Inicio GameLoop" << endl;
@@ -455,7 +455,7 @@ int main(int argc, char* argv[]) {
 		//control.MoveObjects(deltaTime);
 		//control.ActivacionGameObjects(currentFrame, deltaTime);
 		//control.Render(&root, shaderModels, shaderDepth);
-		RenderScene(quadSuelo, cubeClasss, sphere2);
+		RenderScene(quadSuelo, cubeClasss, sphere);
 		//render.RenderScene(quadSuelo, sphere, cubeClasss);
 
 
@@ -467,7 +467,7 @@ int main(int argc, char* argv[]) {
 
 	//Si se han linkado bien los shaders, los borramos ya que estan linkados
 	glDeleteVertexArrays(1, &quadSuelo._VAO);
-	glDeleteVertexArrays(1, &sphere2._VAO);
+	glDeleteVertexArrays(1, &sphere._VAO);
 	glDeleteVertexArrays(1, &cubeClasss._VAO);
 
 

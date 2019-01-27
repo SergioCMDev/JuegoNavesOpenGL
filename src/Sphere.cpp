@@ -1,10 +1,10 @@
 #include "Sphere.h"
 #include "Utils.h"
 
-Sphere2::Sphere2()
+Sphere::Sphere()
 {
 }
-Sphere2::Sphere2(Shader& shader, vec3 position, float radius)
+Sphere::Sphere(Shader& shader, vec3 position, float radius)
 {
 	//Shader shaderCube = Utils::GetFullShader("Shaders/CubeVS.vs", "Shaders/CubeFS.fs");
 	_shader = &shader;
@@ -12,7 +12,7 @@ Sphere2::Sphere2(Shader& shader, vec3 position, float radius)
 	_position = position;
 }
 
-void Sphere2::RenderSphere(glm::mat4 &projection, glm::mat4 &view)
+void Sphere::RenderSphere(glm::mat4 &projection, glm::mat4 &view)
 {
 	glm::mat4 model = glm::mat4(1.0f);
 	_shader->Use();
@@ -30,7 +30,7 @@ void Sphere2::RenderSphere(glm::mat4 &projection, glm::mat4 &view)
 
 
 
-void Sphere2::generateVerts(float * verts, float * norms, float * tex, unsigned int * el, const uint32_t slices, const uint32_t stacks, const uint32_t radius) {
+void Sphere::generateVerts(float * verts, float * norms, float * tex, unsigned int * el, const uint32_t slices, const uint32_t stacks, const uint32_t radius) {
 	float theta, phi;       // Generate positions and normals
 	float thetaFac = (float)((2.0 * M_PI) / slices);
 	float phiFac = (float)(M_PI / stacks);
@@ -89,7 +89,7 @@ void Sphere2::generateVerts(float * verts, float * norms, float * tex, unsigned 
 	}
 }
 
-uint32_t Sphere2::createSphere(const float radius) {
+uint32_t Sphere::createSphere(const float radius) {
 	constexpr int slices = 10;
 	constexpr int stacks = 10;
 
@@ -178,7 +178,7 @@ uint32_t Sphere2::createSphere(const float radius) {
 
 }
 
-Sphere2::~Sphere2() {
+Sphere::~Sphere() {
 	//glDeleteVertexArrays(1, &_VAO);
 
 }
