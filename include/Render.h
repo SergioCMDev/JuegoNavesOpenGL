@@ -11,6 +11,7 @@
 #include "Cube.h"
 #include "Quad.h"
 #include "Sphere.h"
+#include "GameControl.h"
 
 static class Render {
 
@@ -27,6 +28,7 @@ private:
 	Sphere _sphere; 
 	Quad _quadSuelo;
 	Node* _node;
+	Node* _player;
 	Camera* _camera;
 	//Player* GetPlayerReference(GameObject* objectPlayer);
 

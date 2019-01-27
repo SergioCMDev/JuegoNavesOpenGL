@@ -134,12 +134,6 @@ void HandlerInput(const double deltaTime, Node* node) {
 #pragma endregion
 
 
-
-#pragma region Metodos
-
-
-#pragma endregion
-
 int Inicializacion() {
 	if (!glfwInit()) {
 		cout << "Error initializing GLFW" << endl;
@@ -172,34 +166,11 @@ int Inicializacion() {
 };
 
 
-//void ColliderPlayer(Player * player, Cube *cube)
-//{
-//	vec3 position = player->GetPosition();
-//	glm::mat4 view = camera.GetViewMatrix();
-//	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
-//	cube->_scale = vec3(3.0f, 4.0f, 5.5f);
-//	cube->_color = vec3(1.0f);
-//	cube->_position = position;
-//
-//	player->_collider = cube;
-//	//cube->Render(projection, view, position, 0.0f);
-//}
-//
-//void RenderColliders(Node * node, Cube *cube) {
-//	Player* player = GetPlayerReference(node->GetChildren(0)->GetGameObject());
-//	ColliderPlayer(player, cube);
-//
-//}
-
-
 int main(int argc, char* argv[]) {
 	if (!Inicializacion()) {
 		return -1;
 	}
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-
-
 
 	cout << "Creacion Shaders " << endl;
 	Shader shaderCube = Utils::GetFullShader("Shaders/CubeVS.vs", "Shaders/CubeFS.fs");
@@ -380,6 +351,8 @@ int main(int argc, char* argv[]) {
 	root.AddChildren(&MeteorsParentNode);
 
 #pragma endregion
+
+	cout << "Creacion Geometrias " << endl;
 	Cube cubeClasss = Cube(shaderCube);
 
 	Sphere sphere = Sphere(shaderSphere, posLuz, 1);
@@ -387,7 +360,6 @@ int main(int argc, char* argv[]) {
 	Quad quadSuelo = Quad(shaderQuad);
 
 
-	cout << "Creacion Geometrias " << endl;
 
 
 	quadSuelo.textures[0] = textureSuelo;
@@ -408,8 +380,8 @@ int main(int argc, char* argv[]) {
 		control.MoveObjects(deltaTime);
 		control.ActivacionGameObjects(currentFrame, deltaTime);
 
-		//render.RenderGame(&root, shaderModels, shaderDepth, fboRes);//Intento de pasar el metodo Render a la clase Render Render pero la nave player se vuelve invisible
-		control.RenderGame(&root, shaderModels, shaderDepth, fboRes);
+		render.RenderGame(&root, shaderModels, shaderDepth, fboRes);//Intento de pasar el metodo Render a la clase Render Render pero la nave player se vuelve invisible
+		//control.RenderGame(&root, shaderModels, shaderDepth, fboRes);
 		render.RenderScene(quadSuelo, sphere, cubeClasss);
 
 
@@ -417,7 +389,7 @@ int main(int argc, char* argv[]) {
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
 	}
-	//cout << "Fin GameLoop" << endl;
+
 	cout << "Has conseguido " << control.GetPuntuacion() << " puntos" << endl;
 
 	//Si se han linkado bien los shaders, los borramos ya que estan linkados

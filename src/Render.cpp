@@ -63,6 +63,7 @@ Render::Render(Node * node, bool debug, Camera* camera) {
 	_node = node;
 	_debug = debug;
 	_camera = camera;
+	_player = node->GetChildren(0);
 }
 
 pair<uint32_t, uint32_t> Render::createFBO() {
@@ -105,7 +106,7 @@ void Render::RenderGame(Node * _root, Shader &shaderModels, Shader& depthShader,
 	glBindFramebuffer(GL_FRAMEBUFFER, fboRes.first);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glViewport(0, 0, shadow_width, shadow_height); //Cambiamos tamaño de pantalla a pantalla de sombra
-	//RenderLights(shaderModels);
+	RenderLights(shaderModels);
 
 	RenderGameObjects(_root, depthShader);
 
@@ -131,6 +132,7 @@ void Render::RenderGame(Node * _root, Shader &shaderModels, Shader& depthShader,
 void Render::RenderGameObjects(Node * _root, Shader &shader) {
 	glm::mat4 view = _camera->GetViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(_camera->GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
+	RenderLights(_player->GetGameObject()->_shader);
 	if (_root->HasChildren()) {
 		for (size_t i = 0; i < _root->GetNumberChildren(); i++)
 		{
@@ -140,7 +142,7 @@ void Render::RenderGameObjects(Node * _root, Shader &shader) {
 	if (_root->GetGameObject() != NULL) {
 		_root->GetGameObject()->_shader = shader;
 		if (_root->GetGameObject()->OutsideBoundaries()) {
-			if(_root->GetGameObject()->GetType() != Constants::TIPO_PLAYER)
+
 			_root->GetGameObject()->Deactivate();
 		}
 		else {
@@ -197,3 +199,21 @@ void Render::RenderLights(Shader& shader) {
 
 }
 
+//void ColliderPlayer(Player * player, Cube *cube)
+//{
+//	vec3 position = player->GetPosition();
+//	glm::mat4 view = camera.GetViewMatrix();
+//	glm::mat4 projection = glm::perspective(glm::radians(camera.GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
+//	cube->_scale = vec3(3.0f, 4.0f, 5.5f);
+//	cube->_color = vec3(1.0f);
+//	cube->_position = position;
+//
+//	player->_collider = cube;
+//	//cube->Render(projection, view, position, 0.0f);
+//}
+//
+//void RenderColliders(Node * node, Cube *cube) {
+//	Player* player = GetPlayerReference(node->GetChildren(0)->GetGameObject());
+//	ColliderPlayer(player, cube);
+//
+//}

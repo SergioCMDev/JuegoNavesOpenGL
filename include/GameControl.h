@@ -1,3 +1,7 @@
+#pragma once
+#ifndef GAMECONTROL_H
+#define GAMECONTROL_H
+
 #include"Node.h"
 #include "Player.h"
 #include "Meteor.h"
@@ -16,9 +20,6 @@ public:
 	void MoveObjects(const double deltaTime);
 	void ActivateGameObject(GameObject* ship);
 	void ActivacionGameObjects(const float deltaTime, const float frame);
-	void RenderGame(Node * _root, Shader &shaderModels, Shader& depthShader, pair<uint32_t, uint32_t> fboRes);
-	void RenderGameObjects(Node * _root, Shader &shader);
-	void RenderLights(Shader& shaderModels);
 	uint32_t GetPuntuacion();
 private:
 	void GameObjectDestroyed(GameObject* ship);
@@ -32,3 +33,4 @@ private:
 	uint32_t vidas = Constants::VIDAS;
 	uint32_t _puntuacion = 0;
 };
+#endif
