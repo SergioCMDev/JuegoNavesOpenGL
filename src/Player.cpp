@@ -64,20 +64,6 @@ void Player::Disparar() {
 	}
 }
 
-void Player::Render(glm::mat4 &projection, glm::mat4 &view)
-{
-	glm::mat4 model = mat4(1.0f);
-	model = glm::translate(model, GetPosition());
-	//model = glm::rotate(model, (float)glm::radians(0.0f), vec3(0.0f, 1.0f, 0.0f));
-
-	model = glm::scale(model, GetScale());
-
-	_shader.Set("projection", projection);
-	_shader.Set("view", view);
-	_shader.Set("model", model);
-	GetModel().Draw(_shader);
-}
-
 void Player::Mover(const Movement movement, const float deltaTime)
 {
 	float actualVelocity = GetVelocity() * deltaTime;

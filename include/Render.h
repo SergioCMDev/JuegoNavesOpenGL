@@ -23,6 +23,9 @@ public:
 	void RenderGameObjects(Node * _root, Shader &shader);
 	void RenderLights(Shader& shaderModels);
 	pair<uint32_t, uint32_t> createFBO();
+	void RenderPlayer(glm::mat4 &projection, glm::mat4 &view, Shader &shader, Player* player);
+	void RenderMeteor(glm::mat4 &projection, glm::mat4 &view, Shader &shader, Meteor* meteor);
+	void RenderEnemy(glm::mat4 &projection, glm::mat4 &view, Shader &shader, Enemy* enemy);
 private:
 	bool _debug = false;
 	Sphere _sphere; 

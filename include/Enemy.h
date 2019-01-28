@@ -22,7 +22,6 @@ public:
 
 	//Enemy(glm::vec3 position);
 	~Enemy();
-	void Render(glm::mat4 &projection, glm::mat4 &view);
 	void SetRandomPosition();
 	static uint32_t GetNumberPositions();
 	static vec3 GetEnemyPosition(uint32_t index);

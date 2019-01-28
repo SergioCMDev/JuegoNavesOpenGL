@@ -55,20 +55,8 @@ void Meteor::SetRandomPosition()
 	SetPosition(positionInitial);
 }
 
-
-
-void Meteor::Render(glm::mat4 &projection, glm::mat4 &view)
-{
-	glm::mat4 model = mat4(1.0f);
-	_shader.Use();
-	model = glm::translate(model, GetPosition());
-	model = glm::scale(model, _scale);
-	float angle = glm::radians((40 + glm::cos(45.0f) + glm::sin(90.0f)));
-	model = glm::rotate(model, (float)glfwGetTime() *  angle, vec3(1.0f, 1.0f, 0.0f));
-	_shader.Set("projection", projection);
-	_shader.Set("view", view);
-	_shader.Set("model", model);
-	GetModel().Draw(_shader);
+vec3 Meteor::GetScale() {
+	return _scale;
 }
 
 void Meteor::Mover(const float& deltaTime)

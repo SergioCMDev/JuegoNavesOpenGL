@@ -19,12 +19,7 @@ vec3 Enemy::GetEnemyPosition(uint32_t index)
 	return EnemyShipOriginPositions[index];
 }
 
-Enemy::Enemy() {
-
-}
-
-
-
+Enemy::Enemy() {}
 
 bool Enemy::Shooting()
 {
@@ -68,20 +63,6 @@ Enemy::~Enemy() {
 }
 
 
-void Enemy::Render(glm::mat4 &projection, glm::mat4 &view)
-{
-	glm::mat4 model = mat4(1.0f);
-
-	_shader.Use();
-	model = glm::translate(model, GetPosition());
-
-	model = glm::scale(model, GetScale());
-
-	_shader.Set("projection", projection);
-	_shader.Set("view", view);
-	_shader.Set("model", model);
-	GetModel().Draw(_shader);
-}
 
 void Enemy::SetRandomPosition()
 {

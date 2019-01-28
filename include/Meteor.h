@@ -16,13 +16,11 @@ public:
 	Meteor(Shader & shader);
 	Meteor(glm::vec3 position);
 	Meteor(Shader & shader, glm::vec3 position);
-
 	~Meteor();
-	void Render(glm::mat4 &projection, glm::mat4 &view);
 	static uint32_t GetNumberPositions();
 	static vec3 GetMeteorPosition(uint32_t index);
 	void SetRandomPosition();
-
+	vec3 GetScale();
 	//vec3 GetScale();
 private:
 

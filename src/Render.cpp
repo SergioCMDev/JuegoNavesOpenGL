@@ -129,6 +129,50 @@ void Render::RenderGame(Node * _root, Shader &shaderModels, Shader& depthShader,
 	RenderGameObjects(_root, shaderModels);
 }
 
+void Render::RenderPlayer(glm::mat4 &projection, glm::mat4 &view, Shader &shader, Player* player)
+{
+	glm::mat4 model = mat4(1.0f);
+	model = glm::translate(model, player->GetPosition());
+	//model = glm::rotate(model, (float)glm::radians(0.0f), vec3(0.0f, 1.0f, 0.0f));
+
+	model = glm::scale(model, player->GetScale());
+
+	shader.Set("projection", projection);
+	shader.Set("view", view);
+	shader.Set("model", model);
+	player->GetModel().Draw(shader);
+}
+
+
+void Render::RenderMeteor(glm::mat4 &projection, glm::mat4 &view, Shader &shader, Meteor* meteor)
+{
+	glm::mat4 model = mat4(1.0f);
+	//meteor->_shader.Use();
+	model = glm::translate(model, meteor->GetPosition());
+	model = glm::scale(model, meteor->GetScale());
+	float angle = glm::radians((40 + glm::cos(45.0f) + glm::sin(90.0f)));
+	model = glm::rotate(model, (float)glfwGetTime() *  angle, vec3(1.0f, 1.0f, 0.0f));
+	shader.Set("projection", projection);
+	shader.Set("view", view);
+	shader.Set("model", model);
+	meteor->GetModel().Draw(shader);
+}
+
+void Render::RenderEnemy(glm::mat4 &projection, glm::mat4 &view, Shader &shader, Enemy* enemy)
+{
+	glm::mat4 model = mat4(1.0f);
+
+	//enemy->_shader.Use();
+	model = glm::translate(model, enemy->GetPosition());
+
+	model = glm::scale(model, enemy->GetScale());
+
+	shader.Set("projection", projection);
+	shader.Set("view", view);
+	shader.Set("model", model);
+	enemy->GetModel().Draw(shader);
+}
+
 void Render::RenderGameObjects(Node * _root, Shader &shader) {
 	glm::mat4 view = _camera->GetViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(_camera->GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
@@ -150,7 +194,7 @@ void Render::RenderGameObjects(Node * _root, Shader &shader) {
 				GameObject *g = _root->GetGameObject();
 				Player* player = static_cast<Player*>(g);
 				if (player->Active()) {
-					player->Render(projection, view);
+					RenderPlayer(projection, view, shader, player);
 				}
 				//cout << "Player " << endl;
 			}
@@ -160,7 +204,7 @@ void Render::RenderGameObjects(Node * _root, Shader &shader) {
 				//cout << "Meteor " << endl;
 				Meteor* meteor = static_cast<Meteor*>(g);
 				if (meteor->Active()) {
-					meteor->Render(projection, view);
+					RenderMeteor(projection, view, shader, meteor);
 				}
 			}
 			else if (_root->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
@@ -169,7 +213,7 @@ void Render::RenderGameObjects(Node * _root, Shader &shader) {
 
 				Enemy* enemyShip = static_cast<Enemy*>(g);
 				if (enemyShip->Active()) {
-					enemyShip->Render(projection, view);
+					RenderEnemy(projection, view, shader, enemyShip);
 
 					enemyShip->Disparar();
 				}
