@@ -60,7 +60,6 @@ void Player::Disparar() {
 			Missile* missile = static_cast<Missile*>(missileGameObject);
 			missile->SetPosition(this->GetPosition());
 			missile->Activate();
-			//SumLastMissileUsed();
 		}
 	}
 }

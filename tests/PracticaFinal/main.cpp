@@ -380,11 +380,8 @@ int main(int argc, char* argv[]) {
 		control.MoveObjects(deltaTime);
 		control.ActivacionGameObjects(currentFrame, deltaTime);
 
-		render.RenderGame(&root, shaderModels, shaderDepth, fboRes);//Intento de pasar el metodo Render a la clase Render Render pero la nave player se vuelve invisible
-		//control.RenderGame(&root, shaderModels, shaderDepth, fboRes);
+		render.RenderGame(&root, shaderModels, shaderDepth, fboRes);
 		render.RenderScene(quadSuelo, sphere, cubeClasss);
-
-
 
 		glfwSwapBuffers(window.GetWindow());
 		glfwPollEvents();
