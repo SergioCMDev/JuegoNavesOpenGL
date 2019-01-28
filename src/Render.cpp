@@ -133,7 +133,6 @@ void Render::RenderPlayer(glm::mat4 &projection, glm::mat4 &view, Shader &shader
 {
 	glm::mat4 model = mat4(1.0f);
 	model = glm::translate(model, player->GetPosition());
-	//model = glm::rotate(model, (float)glm::radians(0.0f), vec3(0.0f, 1.0f, 0.0f));
 
 	model = glm::scale(model, player->GetScale());
 
@@ -147,7 +146,6 @@ void Render::RenderPlayer(glm::mat4 &projection, glm::mat4 &view, Shader &shader
 void Render::RenderMeteor(glm::mat4 &projection, glm::mat4 &view, Shader &shader, Meteor* meteor)
 {
 	glm::mat4 model = mat4(1.0f);
-	//meteor->_shader.Use();
 	model = glm::translate(model, meteor->GetPosition());
 	model = glm::scale(model, meteor->GetScale());
 	float angle = glm::radians((40 + glm::cos(45.0f) + glm::sin(90.0f)));
@@ -162,7 +160,6 @@ void Render::RenderEnemy(glm::mat4 &projection, glm::mat4 &view, Shader &shader,
 {
 	glm::mat4 model = mat4(1.0f);
 
-	//enemy->_shader.Use();
 	model = glm::translate(model, enemy->GetPosition());
 
 	model = glm::scale(model, enemy->GetScale());

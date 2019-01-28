@@ -22,6 +22,7 @@ public:
 	void ActivacionGameObjects(const float deltaTime, const float frame);
 	uint32_t GetPuntuacion();
 private:
+	bool GeneracionGameObjects(const float deltaTime, const float frame);
 	void GameObjectDestroyed(GameObject* ship);
 	void PlayerKilled();
 	bool CheckCollisionsGameObjects(GameObject* x, GameObject* y);

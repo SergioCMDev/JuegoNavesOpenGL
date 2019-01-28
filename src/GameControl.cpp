@@ -216,7 +216,7 @@ void GameControl::MoveMissiles(const double deltaTime)
 	}
 }
 
-bool GeneracionGameObjects(const float deltaTime, const float frame) {
+bool GameControl::GeneracionGameObjects(const float deltaTime, const float frame) {
 	srand(rand());
 	uint32_t valueGeneration = (rand() * deltaTime) / frame;
 	if (valueGeneration % 2 == 0) {

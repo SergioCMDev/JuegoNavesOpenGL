@@ -20,7 +20,6 @@ public:
 	void Disparar();
 	GameObject * GetUsableMissile();
 
-	//Enemy(glm::vec3 position);
 	~Enemy();
 	void SetRandomPosition();
 	static uint32_t GetNumberPositions();
