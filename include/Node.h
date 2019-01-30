@@ -23,7 +23,6 @@ public:
 	uint32_t GetNumberChildren();
 	void ResetChildren();
 	Node* GetParent();
-	bool Seen();
 private:
 	Node* _childrens[10];
 	uint32_t _lastChildren = 0;

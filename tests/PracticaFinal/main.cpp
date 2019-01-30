@@ -118,7 +118,6 @@ void AccionesJugador(Player* player) {
 	}
 }
 
-
 void HandlerInput(const double deltaTime, Node* node) {
 	MovimientoCamara(deltaTime);
 	if (node->GetChildren(0)->GetGameObject()->GetType() == Constants::TIPO_PLAYER) {
@@ -132,7 +131,6 @@ void HandlerInput(const double deltaTime, Node* node) {
 	}
 }
 #pragma endregion
-
 
 int Inicializacion() {
 	if (!glfwInit()) {

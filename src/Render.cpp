@@ -170,6 +170,26 @@ void Render::RenderEnemy(glm::mat4 &projection, glm::mat4 &view, Shader &shader,
 	enemy->GetModel().Draw(shader);
 }
 
+
+
+void Render::RenderMissile(glm::mat4 &projection, glm::mat4 &view, Shader &shader, Missile* missile)
+{
+	glm::mat4 _modelMatrix = mat4(1.0f);
+
+	//shader.Use();
+	_modelMatrix = glm::translate(_modelMatrix, missile->GetPosition());
+
+	_modelMatrix = glm::scale(_modelMatrix, missile->GetScale());
+	if (missile->GetActualNode()->GetParent()->GetParent()->GetGameObject()->GetType() == Constants::TIPO_ENEMIGO) {
+		missile->Rotate(_modelMatrix);
+	}
+	shader.Set("projection", projection);
+	shader.Set("view", view);
+	shader.Set("model", _modelMatrix);
+	missile->GetModel().Draw(shader);
+}
+
+
 void Render::RenderGameObjects(Node * _root, Shader &shader) {
 	glm::mat4 view = _camera->GetViewMatrix();
 	glm::mat4 projection = glm::perspective(glm::radians(_camera->GetFOV()), screen_width / screen_height, 0.1f, 60.0f);
@@ -220,6 +240,7 @@ void Render::RenderGameObjects(Node * _root, Shader &shader) {
 				Missile* missile = static_cast<Missile*>(g);
 				//cout << "Missil " << endl;
 				if (missile->Active()) {
+					//RenderMissile(projection, view, shader, missile);
 					missile->Render(projection, view);
 				}
 			}

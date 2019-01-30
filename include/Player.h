@@ -24,7 +24,6 @@ public:
 	Player(Shader & shader, glm::vec3 position);
 	~Player();
 	bool Shooting();
-	void Render(glm::mat4 &projection, glm::mat4 &view);
 	void NoShooting();
 private:
 	bool _disparando = false;

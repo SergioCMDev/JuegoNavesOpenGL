@@ -26,6 +26,8 @@ public:
 	void RenderPlayer(glm::mat4 &projection, glm::mat4 &view, Shader &shader, Player* player);
 	void RenderMeteor(glm::mat4 &projection, glm::mat4 &view, Shader &shader, Meteor* meteor);
 	void RenderEnemy(glm::mat4 &projection, glm::mat4 &view, Shader &shader, Enemy* enemy);
+	void RenderMissile(glm::mat4 &projection, glm::mat4 &view, Shader &shader, Missile* missile);
+
 private:
 	bool _debug = false;
 	Sphere _sphere; 
@@ -33,7 +35,5 @@ private:
 	Node* _node;
 	Node* _player;
 	Camera* _camera;
-	//Player* GetPlayerReference(GameObject* objectPlayer);
-
 };
 #endif
